@@ -1,0 +1,19 @@
+# Arquivos temporários do Word/Office
+~$*
+*.tmp
+
+# Sistema operacional
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+.vs/
+
+# Dependências e builds (quando o código começar)
+node_modules/
+dist/
+build/
+.env

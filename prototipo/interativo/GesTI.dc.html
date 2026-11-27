@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#f2f2f0;color:#1b1b1f;font-family:'Geist',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+a{color:#1b1b1f;text-decoration:none}a:hover{color:#000;text-decoration:underline}
+input,select,textarea,button{font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#b9b9b4 !important;box-shadow:0 0 0 3px rgba(27,27,31,.06) !important}
+::placeholder{color:#a3a3aa}
+</style>
+</helmet>
+<div style="display:grid;grid-template-columns:244px minmax(0,1fr);height:100vh;background:#f2f2f0">
+<aside style="display:flex;flex-direction:column;gap:14px;padding:18px 14px;overflow:auto">
+<div style="display:flex;align-items:center;gap:10px;padding:4px 6px">
+<div style="position:relative;width:30px;height:30px;border-radius:9px;background:#1b1b1f;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px">G<span style="position:absolute;right:5px;top:5px;width:6px;height:6px;border-radius:50%;background:#e8622c"></span></div>
+<div style="font-size:16px;font-weight:600;letter-spacing:-0.01em">GesTI</div>
+</div>
+<div style="display:flex;align-items:center;gap:10px;padding:10px;background:#fff;border:1px solid #ebebe8;border-radius:12px;box-shadow:0 1px 2px rgba(20,20,25,.04);cursor:pointer">
+<div style="width:32px;height:32px;border-radius:8px;background:#e8622c;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600">NH</div>
+<div style="flex:1;min-width:0"><div style="font-size:11px;color:#8b8b93">Empresa</div><div style="font-size:13px;font-weight:500">NexaHertz</div></div>
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"></path></svg>
+</div>
+<div style="border-top:1px dashed #dcdcd8;margin:2px 4px"></div>
+<nav style="display:flex;flex-direction:column;gap:2px">
+<div onClick="{{ go.dashboard }}" style="display:flex;align-items:center;gap:10px;height:36px;padding:0 10px;border-radius:9px;font-size:13.5px;cursor:pointer;background:{{ nv.dashboard.bg }};color:{{ nv.dashboard.fg }};box-shadow:{{ nv.dashboard.sh }}"><svg style="color:{{ nv.dashboard.ic }}" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1.5"></rect><rect x="14" y="3" width="7" height="5" rx="1.5"></rect><rect x="14" y="12" width="7" height="9" rx="1.5"></rect><rect x="3" y="16" width="7" height="5" rx="1.5"></rect></svg><span style="flex:1">Dashboard</span></div>
+<div onClick="{{ go.clientes }}" style="display:flex;align-items:center;gap:10px;height:36px;padding:0 10px;border-radius:9px;font-size:13.5px;cursor:pointer;background:{{ nv.clientes.bg }};color:{{ nv.clientes.fg }};box-shadow:{{ nv.clientes.sh }}"><svg style="color:{{ nv.clientes.ic }}" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span style="flex:1">Clientes</span></div>
+<div onClick="{{ go.orcamentos }}" style="display:flex;align-items:center;gap:10px;height:36px;padding:0 10px;border-radius:9px;font-size:13.5px;cursor:pointer;background:{{ nv.orcamentos.bg }};color:{{ nv.orcamentos.fg }};box-shadow:{{ nv.orcamentos.sh }}"><svg style="color:{{ nv.orcamentos.ic }}" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6M8 13h8M8 17h5"></path></svg><span style="flex:1">Orçamentos</span><span style="font-size:11.5px;color:#8b8b93">{{ navCount.orc }}</span></div>
+<div onClick="{{ go.os }}" style="display:flex;align-items:center;gap:10px;height:36px;padding:0 10px;border-radius:9px;font-size:13.5px;cursor:pointer;background:{{ nv.os.bg }};color:{{ nv.os.fg }};box-shadow:{{ nv.os.sh }}"><svg style="color:{{ nv.os.ic }}" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg><span style="flex:1">Ordens de Serviço</span><span style="font-size:11.5px;color:#8b8b93">{{ navCount.os }}</span></div>
+<div onClick="{{ go.estoque }}" style="display:flex;align-items:center;gap:10px;height:36px;padding:0 10px;border-radius:9px;font-size:13.5px;cursor:pointer;background:{{ nv.estoque.bg }};color:{{ nv.estoque.fg }};box-shadow:{{ nv.estoque.sh }}"><svg style="color:{{ nv.estoque.ic }}" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8 12 3 3 8v8l9 5 9-5z"></path><path d="m3 8 9 5 9-5M12 13v8"></path></svg><span style="flex:1">Estoque</span></div>
+<div onClick="{{ go.financeiro }}" style="display:flex;align-items:center;gap:10px;height:36px;padding:0 10px;border-radius:9px;font-size:13.5px;cursor:pointer;background:{{ nv.financeiro.bg }};color:{{ nv.financeiro.fg }};box-shadow:{{ nv.financeiro.sh }}"><svg style="color:{{ nv.financeiro.ic }}" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="15" rx="2"></rect><path d="M2 10h20M16 15h2"></path></svg><span style="flex:1">Financeiro</span></div>
+<div onClick="{{ go.relatorios }}" style="display:flex;align-items:center;gap:10px;height:36px;padding:0 10px;border-radius:9px;font-size:13.5px;cursor:pointer;background:{{ nv.relatorios.bg }};color:{{ nv.relatorios.fg }};box-shadow:{{ nv.relatorios.sh }}"><svg style="color:{{ nv.relatorios.ic }}" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18M8 17v-5M13 17V8M18 17v-9"></path></svg><span style="flex:1">Relatórios</span></div>
+<div onClick="{{ go.config }}" style="display:flex;align-items:center;gap:10px;height:36px;padding:0 10px;border-radius:9px;font-size:13.5px;cursor:pointer;background:{{ nv.config.bg }};color:{{ nv.config.fg }};box-shadow:{{ nv.config.sh }}"><svg style="color:{{ nv.config.ic }}" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"></path></svg><span style="flex:1">Configurações</span></div>
+</nav>
+<div style="flex:1"></div>
+<div style="display:flex;align-items:center;gap:10px;padding:10px;border-top:1px solid #e6e6e3">
+<div style="width:30px;height:30px;border-radius:50%;background:#e4e4e0;color:#46464c;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:600">RN</div>
+<div style="min-width:0"><div style="font-size:13px;font-weight:500">Rodrigo Nunes</div><div style="font-size:11.5px;color:#8b8b93">Administrador</div></div>
+</div>
+</aside>
+<div style="padding:10px 10px 10px 0;min-width:0;display:flex">
+<div style="flex:1;min-width:0;background:#fff;border:1px solid #e7e7e4;border-radius:16px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 3px rgba(20,20,25,.04)">
+<div style="height:56px;flex:none;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 24px;border-bottom:1px solid #ebebe8">
+<div style="display:flex;align-items:center;gap:8px;font-size:13px;min-width:0">
+<sc-for list="{{ crumbs }}" as="c" hint-placeholder-count="1">
+<sc-if value="{{ c.sep }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c4c4c8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg></sc-if>
+<span onClick="{{ c.onClick }}" style="white-space:nowrap;color:{{ c.color }};cursor:{{ c.cursor }}">{{ c.label }}</span>
+</sc-for>
+</div>
+<div style="display:flex;align-items:center;gap:8px">
+<div style="position:relative;width:280px;max-width:32vw">
+<svg style="position:absolute;left:11px;top:9px" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9b9ba3" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+<input placeholder="Buscar clientes, OS, orçamentos…" style="height:33px;width:100%;padding:0 44px 0 33px;border:1px solid #e3e3e0;border-radius:9px;background:#fafaf9;font-size:13px">
+<span style="position:absolute;right:8px;top:7px;font:500 11px 'Geist Mono',monospace;color:#8b8b93;padding:2px 5px;border:1px solid #e3e3e0;border-radius:5px;background:#fff">⌘K</span>
+</div>
+<button style="width:33px;height:33px;border-radius:9px;border:1px solid #e3e3e0;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5f5f67" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg></button>
+</div>
+</div>
+<div ref="{{ mainRef }}" style="flex:1;overflow:auto;min-height:0">
+<div style="padding:28px 32px 140px;max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:20px">
+<sc-if value="{{ is.dashboard }}" hint-placeholder-val="{{ true }}">
+<div data-screen-label="Dashboard" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+<div><h1 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-0.02em">Dashboard</h1><div style="margin-top:4px;font-size:13px;color:#7a7a82">{{ dash.hoje }}</div></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button onClick="{{ go.clienteNovo }}" style="display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:9px;border:1px solid #e3e3e0;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer;box-shadow:0 1px 2px rgba(20,20,25,.04)" style-hover="background:#f7f7f5">+ Novo cliente</button>
+<button onClick="{{ go.orcamentoNovo }}" style="display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:9px;border:1px solid #e3e3e0;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer;box-shadow:0 1px 2px rgba(20,20,25,.04)" style-hover="background:#f7f7f5">+ Novo orçamento</button>
+<button onClick="{{ go.novaOs }}" style="display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer" style-hover="background:#34343a">+ Nova ordem de serviço</button>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px">
+<div onClick="{{ go.os }}" style="background:#f6f6f4;border-radius:12px;padding:16px 18px;cursor:pointer" style-hover="background:#f1f1ee"><div style="font-size:13px;color:#6b6b73">Ordens de serviço abertas</div><div style="margin-top:10px;font-size:28px;font-weight:600;letter-spacing:-0.02em">{{ dash.kOs }}</div><div style="margin-top:2px;font-size:12.5px;color:#7a7a82">{{ dash.kOsSub }}</div></div>
+<div onClick="{{ go.orcamentos }}" style="background:#f6f6f4;border-radius:12px;padding:16px 18px;cursor:pointer" style-hover="background:#f1f1ee"><div style="font-size:13px;color:#6b6b73">Orçamentos aguardando aprovação</div><div style="margin-top:10px;font-size:28px;font-weight:600;letter-spacing:-0.02em">{{ dash.kOrc }}</div><div style="margin-top:2px;font-size:12.5px;color:#7a7a82">{{ dash.kOrcSub }}</div></div>
+<div onClick="{{ go.financeiro }}" style="background:#f6f6f4;border-radius:12px;padding:16px 18px;cursor:pointer" style-hover="background:#f1f1ee"><div style="font-size:13px;color:#6b6b73">Contas a receber</div><div style="margin-top:10px;font-size:28px;font-weight:600;letter-spacing:-0.02em">{{ dash.kRec }}</div><div style="margin-top:2px;font-size:12.5px;color:#7a7a82">{{ dash.kRecSub }}</div></div>
+<div onClick="{{ go.estoque }}" style="background:#f6f6f4;border-radius:12px;padding:16px 18px;cursor:pointer" style-hover="background:#f1f1ee"><div style="font-size:13px;color:#6b6b73">Itens com estoque baixo</div><div style="margin-top:10px;font-size:28px;font-weight:600;letter-spacing:-0.02em">{{ dash.kEst }}</div><div style="margin-top:2px;font-size:12.5px;color:#7a7a82">{{ dash.kEstSub }}</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,460px),1fr));gap:16px">
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:6px 6px 8px">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px 10px"><div style="font-size:14px;font-weight:600">Ordens de serviço recentes</div><span onClick="{{ go.os }}" style="font-size:12.5px;color:#6b6b73;cursor:pointer">Ver todas →</span></div>
+<sc-for list="{{ dash.os }}" as="r" hint-placeholder-count="5">
+<div onClick="{{ r.open }}" style="display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 14px;border-radius:9px;cursor:pointer" style-hover="background:#f7f7f5">
+<span style="font:500 12px 'Geist Mono',monospace;color:#6b6b73">{{ r.id }}</span>
+<div style="min-width:0"><div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.servico }}</div><div style="font-size:12px;color:#8b8b93;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cliente }} · {{ r.resp }}</div></div>
+<span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap;background:{{ r.badge.bg }};color:{{ r.badge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ r.badge.dot }}"></span>{{ r.badge.label }}</span>
+</div>
+</sc-for>
+</div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;justify-content:space-between;align-items:center"><div style="font-size:14px;font-weight:600">Resumo financeiro · setembro</div><span onClick="{{ go.financeiro }}" style="font-size:12.5px;color:#6b6b73;cursor:pointer">Abrir financeiro →</span></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#ebebe8;border:1px solid #ebebe8;border-radius:10px;overflow:hidden">
+<div style="background:#fff;padding:14px 16px"><div style="font-size:12.5px;color:#7a7a82">A receber</div><div style="margin-top:6px;font-size:19px;font-weight:600;letter-spacing:-0.01em">{{ dash.fin.receber }}</div></div>
+<div style="background:#fff;padding:14px 16px"><div style="font-size:12.5px;color:#7a7a82">Recebido no mês</div><div style="margin-top:6px;font-size:19px;font-weight:600;letter-spacing:-0.01em;color:#1f7a3d">{{ dash.fin.recebido }}</div></div>
+<div style="background:#fff;padding:14px 16px"><div style="font-size:12.5px;color:#7a7a82">A pagar</div><div style="margin-top:6px;font-size:19px;font-weight:600;letter-spacing:-0.01em">{{ dash.fin.pagar }}</div></div>
+<div style="background:#fff;padding:14px 16px"><div style="font-size:12.5px;color:#7a7a82">Em atraso</div><div style="margin-top:6px;font-size:19px;font-weight:600;letter-spacing:-0.01em;color:#b42323">{{ dash.fin.atraso }}</div></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="height:8px;border-radius:99px;background:#efefec;overflow:hidden"><div style="height:100%;border-radius:99px;background:#2f9e55;width:{{ dash.fin.pct }}"></div></div>
+<div style="font-size:12px;color:#7a7a82">{{ dash.fin.pctTxt }}</div>
+</div>
+</div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:6px 6px 8px">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px 10px"><div style="font-size:14px;font-weight:600">Orçamentos recentes</div><span onClick="{{ go.orcamentos }}" style="font-size:12.5px;color:#6b6b73;cursor:pointer">Ver todos →</span></div>
+<sc-for list="{{ dash.orc }}" as="r" hint-placeholder-count="5">
+<div onClick="{{ r.open }}" style="display:grid;grid-template-columns:78px minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 14px;border-radius:9px;cursor:pointer" style-hover="background:#f7f7f5">
+<span style="font:500 12px 'Geist Mono',monospace;color:#6b6b73">{{ r.id }}</span>
+<div style="min-width:0"><div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.desc }}</div><div style="font-size:12px;color:#8b8b93;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cliente }}</div></div>
+<span style="font-size:13px;font-variant-numeric:tabular-nums">{{ r.valor }}</span>
+<span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap;background:{{ r.badge.bg }};color:{{ r.badge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ r.badge.dot }}"></span>{{ r.badge.label }}</span>
+</div>
+</sc-for>
+</div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:6px 6px 8px">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px 10px"><div style="font-size:14px;font-weight:600">Alertas de estoque</div><span onClick="{{ go.estoque }}" style="font-size:12.5px;color:#6b6b73;cursor:pointer">Ver estoque →</span></div>
+<sc-for list="{{ dash.alert }}" as="r" hint-placeholder-count="4">
+<div onClick="{{ r.open }}" style="display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:10px 14px;border-radius:9px;cursor:pointer" style-hover="background:#f7f7f5">
+<div style="min-width:0"><div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.nome }}</div><div style="font:400 11.5px 'Geist Mono',monospace;color:#8b8b93">{{ r.sku }}</div></div>
+<span style="font-size:12.5px;color:#6b6b73;white-space:nowrap">{{ r.qtyTxt }}</span>
+<span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap;background:{{ r.badge.bg }};color:{{ r.badge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ r.badge.dot }}"></span>{{ r.badge.label }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ is.clientes }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Clientes" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+<div style="display:flex;align-items:baseline;gap:10px"><h1 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-0.02em">Clientes</h1><span style="font-size:20px;color:#a3a3aa;font-weight:500">{{ cl.count }}</span></div>
+<button onClick="{{ go.clienteNovo }}" style="display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer" style-hover="background:#34343a">+ Novo cliente</button>
+</div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:14px">
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-bottom:14px">
+<div style="position:relative;flex:1 1 240px;max-width:320px"><svg style="position:absolute;left:11px;top:10px" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9b9ba3" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input value="{{ cl.q }}" onChange="{{ cl.onQ }}" placeholder="Buscar por nome, CPF/CNPJ ou e-mail" style="height:35px;width:100%;padding:0 12px 0 33px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px"></div>
+<div style="position:relative"><select value="{{ cl.status }}" onChange="{{ cl.onStatus }}" style="appearance:none;height:35px;padding:0 32px 0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer"><option value="">Status: Todos</option><option value="Ativo">Ativo</option><option value="Inativo">Inativo</option></select><svg style="position:absolute;right:10px;top:11px;pointer-events:none" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+<div style="position:relative"><select value="{{ cl.cidade }}" onChange="{{ cl.onCidade }}" style="appearance:none;height:35px;padding:0 32px 0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer"><option value="">Cidade: Todas</option><sc-for list="{{ cl.cidades }}" as="cid" hint-placeholder-count="0"><option value="{{ cid }}">{{ cid }}</option></sc-for></select><svg style="position:absolute;right:10px;top:11px;pointer-events:none" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+<button onClick="{{ cl.clear }}" style="display:inline-flex;align-items:center;gap:6px;height:35px;padding:0 12px;border-radius:9px;border:1px solid #e3e3e0;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5f5f67" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h18M7 12h10M10 18h4"></path></svg>Filtros</button>
+<span style="margin-left:auto;font-size:12.5px;color:#8b8b93">{{ cl.shown }}</span>
+</div>
+<div style="overflow-x:auto"><div style="min-width:820px">
+<div style="display:grid;grid-template-columns:minmax(220px,2.2fr) minmax(170px,1.5fr) 130px 90px 100px;gap:16px;align-items:center;height:38px;padding:0 14px;background:#f6f6f4;border-radius:8px;font-size:12px;color:#7a7a82;font-weight:500"><span>Cliente</span><span>Contato</span><span>Último atendimento</span><span>OS abertas</span><span>Status</span></div>
+<sc-for list="{{ cl.rows }}" as="r" hint-placeholder-count="8">
+<div onClick="{{ r.open }}" style="display:grid;grid-template-columns:minmax(220px,2.2fr) minmax(170px,1.5fr) 130px 90px 100px;gap:16px;align-items:center;min-height:58px;padding:8px 14px;border-bottom:1px solid #f0f0ed;font-size:13px;cursor:pointer" style-hover="background:#fafaf8">
+<div style="display:flex;align-items:center;gap:10px;min-width:0"><div style="flex:none;width:32px;height:32px;border-radius:8px;background:#f1f1ef;color:#46464c;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:600">{{ r.ini }}</div><div style="min-width:0"><div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.nome }}</div><div style="font-size:12px;color:#8b8b93">{{ r.doc }} · {{ r.local }}</div></div></div>
+<div style="min-width:0"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.contato }}</div><div style="font-size:12px;color:#8b8b93">{{ r.tel }}</div></div>
+<span style="color:#46464c">{{ r.ultimo }}</span>
+<span style="font-variant-numeric:tabular-nums;color:{{ r.osColor }}">{{ r.osAbertas }}</span>
+<span><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap;background:{{ r.badge.bg }};color:{{ r.badge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ r.badge.dot }}"></span>{{ r.badge.label }}</span></span>
+</div>
+</sc-for>
+<sc-if value="{{ cl.empty }}" hint-placeholder-val="{{ false }}"><div style="padding:40px;text-align:center;font-size:13px;color:#8b8b93">Nenhum cliente encontrado com esses filtros.</div></sc-if>
+</div></div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ is.clienteNovo }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Novo cliente" style="display:flex;flex-direction:column;gap:8px;max-width:980px">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-bottom:12px">
+<div><h1 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-0.02em">{{ cfv.title }}</h1><div style="margin-top:4px;font-size:13px;color:#7a7a82">{{ cfv.sub }}</div></div>
+<sc-if value="{{ cfv.isNew }}" hint-placeholder-val="{{ true }}"><button onClick="{{ cfv.fill }}" style="height:30px;padding:0 10px;border-radius:8px;border:1px dashed #d6d6d2;background:#fafaf9;color:#5f5f67;font-size:12.5px;cursor:pointer">Preencher com dados de exemplo</button></sc-if>
+</div>
+<div style="display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:32px;padding:24px 0;border-top:1px solid #ebebe8">
+<div><div style="font-size:14px;font-weight:600">Identificação</div><div style="margin-top:4px;font-size:12.5px;color:#7a7a82;line-height:1.5">Dados usados em orçamentos, ordens de serviço e cobranças.</div></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px">
+<label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Nome / Razão social *<input value="{{ cf.nome }}" onChange="{{ f.nome }}" placeholder="Ex.: TechHouse Ltda." style="height:36px;width:100%;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">CPF / CNPJ<input value="{{ cf.doc }}" onChange="{{ f.doc }}" placeholder="00.000.000/0000-00" style="height:36px;width:100%;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"></label>
+<div style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Status<div style="display:flex;gap:2px;padding:3px;background:#f1f1ef;border-radius:9px;width:max-content"><button onClick="{{ cfv.setAtivo }}" style="height:28px;padding:0 14px;border:none;border-radius:7px;font-size:12.5px;font-weight:500;cursor:pointer;color:#1b1b1f;background:{{ cfv.ativoBg }};box-shadow:{{ cfv.ativoSh }}">Ativo</button><button onClick="{{ cfv.setInativo }}" style="height:28px;padding:0 14px;border:none;border-radius:7px;font-size:12.5px;font-weight:500;cursor:pointer;color:#1b1b1f;background:{{ cfv.inativoBg }};box-shadow:{{ cfv.inativoSh }}">Inativo</button></div></div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:32px;padding:24px 0;border-top:1px solid #ebebe8">
+<div><div style="font-size:14px;font-weight:600">Contato</div><div style="margin-top:4px;font-size:12.5px;color:#7a7a82;line-height:1.5">Pessoa responsável e canais para envio de orçamentos.</div></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px">
+<label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Pessoa de contato<input value="{{ cf.contato }}" onChange="{{ f.contato }}" placeholder="Ex.: João Almeida" style="height:36px;width:100%;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">E-mail<input value="{{ cf.email }}" onChange="{{ f.email }}" placeholder="nome@empresa.com.br" style="height:36px;width:100%;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Telefone<input value="{{ cf.tel }}" onChange="{{ f.tel }}" placeholder="(11) 90000-0000" style="height:36px;width:100%;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"></label>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:32px;padding:24px 0;border-top:1px solid #ebebe8">
+<div><div style="font-size:14px;font-weight:600">Endereço</div><div style="margin-top:4px;font-size:12.5px;color:#7a7a82;line-height:1.5">Digite o CEP para preencher o endereço automaticamente.</div></div>
+<div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px">
+<label style="grid-column:span 2;display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">CEP<input value="{{ cf.cep }}" onChange="{{ f.cep }}" placeholder="00000-000" style="height:36px;width:100%;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"></label>
+<div style="grid-column:span 4;display:flex;align-items:flex-end;padding-bottom:9px"><sc-if value="{{ cfv.hasCep }}" hint-placeholder-val="{{ false }}"><span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#1f7a3d"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>{{ cfv.cepHint }}</span></sc-if></div>
+<label style="grid-column:span 4;display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Endereço<input value="{{ cf.endereco }}" onChange="{{ f.endereco }}" placeholder="Rua, avenida…" style="height:36px;width:100%;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"></label>
+<label style="grid-column:span 2;display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Número<input value="{{ cf.numero }}" onChange="{{ f.numero }}" style="height:36px;width:100%;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"></label>
+<label style="grid-column:span 2;display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Complemento<input value="{{ cf.complemento }}" onChange="{{ f.complemento }}" placeholder="Sala, apto…" style="height:36px;width:100%;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"></label>
+<label style="grid-column:span 3;display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Cidade<input value="{{ cf.cidade }}" onChange="{{ f.cidade }}" style="height:36px;width:100%;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"></label>
+<label style="grid-column:span 1;display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Estado<select value="{{ cf.uf }}" onChange="{{ f.uf }}" style="height:36px;width:100%;padding:0 8px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"><option value="">UF</option><sc-for list="{{ cfv.ufs }}" as="u" hint-placeholder-count="0"><option value="{{ u }}">{{ u }}</option></sc-for></select></label>
+</div>
+</div>
+<div style="display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:18px 0;border-top:1px solid #ebebe8">
+<sc-if value="{{ cfv.hasErr }}" hint-placeholder-val="{{ false }}"><span style="margin-right:auto;font-size:12.5px;color:#b42323">{{ cfv.err }}</span></sc-if>
+<button onClick="{{ cfv.cancel }}" style="height:36px;padding:0 14px;border-radius:9px;border:1px solid #e3e3e0;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer">Cancelar</button>
+<button onClick="{{ cfv.save }}" style="height:36px;padding:0 16px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer" style-hover="background:#34343a">{{ cfv.saveLabel }}</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ is.cliente }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Detalhes do cliente" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+<div style="display:flex;align-items:center;gap:14px;min-width:0">
+<div style="flex:none;width:48px;height:48px;border-radius:12px;background:#f1f1ef;color:#46464c;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600">{{ cd.ini }}</div>
+<div style="min-width:0"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><h1 style="margin:0;font-size:22px;font-weight:600;letter-spacing:-0.02em">{{ cd.nome }}</h1><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;background:{{ cd.badge.bg }};color:{{ cd.badge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ cd.badge.dot }}"></span>{{ cd.badge.label }}</span></div>
+<div style="margin-top:4px;font-size:13px;color:#7a7a82">{{ cd.doc }} · {{ cd.local }} · Cliente desde {{ cd.desde }}</div></div>
+</div>
+<div style="display:flex;gap:8px">
+<button onClick="{{ cd.edit }}" style="height:34px;padding:0 12px;border-radius:9px;border:1px solid #e3e3e0;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer" style-hover="background:#f7f7f5">Editar cliente</button>
+<button onClick="{{ cd.novoOrc }}" style="height:34px;padding:0 14px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer" style-hover="background:#34343a">+ Novo orçamento</button>
+</div>
+</div>
+<div style="display:flex;gap:24px;border-bottom:1px solid #ebebe8;overflow-x:auto">
+<sc-for list="{{ cd.tabs }}" as="t" hint-placeholder-count="4">
+<div onClick="{{ t.onClick }}" style="display:flex;align-items:center;gap:6px;height:40px;font-size:13.5px;font-weight:500;cursor:pointer;white-space:nowrap;margin-bottom:-1px;color:{{ t.fg }};border-bottom:2px solid {{ t.bd }}">{{ t.label }}<span style="font-size:12px;color:#a3a3aa">{{ t.count }}</span></div>
+</sc-for>
+</div>
+<sc-if value="{{ cd.tOverview }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px">
+<div style="background:#f6f6f4;border-radius:12px;padding:14px 16px"><div style="font-size:12.5px;color:#6b6b73">Orçamentos</div><div style="margin-top:6px;font-size:22px;font-weight:600">{{ cd.sOrc }}</div></div>
+<div style="background:#f6f6f4;border-radius:12px;padding:14px 16px"><div style="font-size:12.5px;color:#6b6b73">OS abertas</div><div style="margin-top:6px;font-size:22px;font-weight:600">{{ cd.sOs }}</div></div>
+<div style="background:#f6f6f4;border-radius:12px;padding:14px 16px"><div style="font-size:12.5px;color:#6b6b73">Total recebido</div><div style="margin-top:6px;font-size:22px;font-weight:600">{{ cd.sFat }}</div></div>
+<div style="background:#f6f6f4;border-radius:12px;padding:14px 16px"><div style="font-size:12.5px;color:#6b6b73">Em aberto</div><div style="margin-top:6px;font-size:22px;font-weight:600">{{ cd.sAberto }}</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:16px;align-items:start">
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px">
+<div style="font-size:14px;font-weight:600;margin-bottom:14px">Histórico de relacionamento</div>
+<sc-for list="{{ cd.timeline }}" as="e" hint-placeholder-count="5">
+<div onClick="{{ e.open }}" style="display:grid;grid-template-columns:14px minmax(0,1fr) auto;gap:12px;padding:9px 6px;border-radius:8px;cursor:pointer" style-hover="background:#f7f7f5">
+<span style="width:8px;height:8px;border-radius:50%;margin-top:5px;background:{{ e.dot }}"></span>
+<div style="min-width:0"><div style="font-size:13px;font-weight:500">{{ e.t }}</div><div style="font-size:12px;color:#8b8b93;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ e.d }}</div></div>
+<span style="font-size:12px;color:#8b8b93;white-space:nowrap">{{ e.dataTxt }}</span>
+</div>
+</sc-for>
+</div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:14px;font-weight:600;margin-bottom:2px">Dados de contato</div>
+<div style="display:grid;grid-template-columns:110px minmax(0,1fr);gap:8px 12px;font-size:13px">
+<span style="color:#8b8b93">Contato</span><span>{{ cd.contato }}</span>
+<span style="color:#8b8b93">E-mail</span><span style="word-break:break-all">{{ cd.email }}</span>
+<span style="color:#8b8b93">Telefone</span><span>{{ cd.tel }}</span>
+<span style="color:#8b8b93">Endereço</span><span>{{ cd.endereco }}</span>
+<span style="color:#8b8b93">Cidade</span><span>{{ cd.local }}</span>
+<span style="color:#8b8b93">CEP</span><span>{{ cd.cep }}</span>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ cd.tOrc }}" hint-placeholder-val="{{ false }}">
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:12px;overflow-x:auto"><div style="min-width:720px">
+<div style="display:grid;grid-template-columns:100px minmax(200px,2fr) 120px 100px 180px;gap:16px;align-items:center;height:38px;padding:0 14px;background:#f6f6f4;border-radius:8px;font-size:12px;color:#7a7a82;font-weight:500"><span>Orçamento</span><span>Descrição</span><span>Valor</span><span>Data</span><span>Status</span></div>
+<sc-for list="{{ cd.orc }}" as="r" hint-placeholder-count="2">
+<div onClick="{{ r.open }}" style="display:grid;grid-template-columns:100px minmax(200px,2fr) 120px 100px 180px;gap:16px;align-items:center;min-height:52px;padding:8px 14px;border-bottom:1px solid #f0f0ed;font-size:13px;cursor:pointer" style-hover="background:#fafaf8">
+<span style="font:500 12.5px 'Geist Mono',monospace">{{ r.id }}</span><span>{{ r.desc }}</span><span style="font-variant-numeric:tabular-nums">{{ r.valor }}</span><span style="color:#46464c">{{ r.data }}</span>
+<span><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap;background:{{ r.badge.bg }};color:{{ r.badge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ r.badge.dot }}"></span>{{ r.badge.label }}</span></span>
+</div>
+</sc-for>
+<sc-if value="{{ cd.noOrc }}" hint-placeholder-val="{{ false }}"><div style="padding:32px;text-align:center;font-size:13px;color:#8b8b93">Nenhum orçamento para este cliente ainda.</div></sc-if>
+</div></div>
+</sc-if>
+<sc-if value="{{ cd.tOs }}" hint-placeholder-val="{{ false }}">
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:12px;overflow-x:auto"><div style="min-width:720px">
+<div style="display:grid;grid-template-columns:90px minmax(200px,2fr) 130px 100px 110px 130px;gap:16px;align-items:center;height:38px;padding:0 14px;background:#f6f6f4;border-radius:8px;font-size:12px;color:#7a7a82;font-weight:500"><span>OS</span><span>Serviço</span><span>Responsável</span><span>Data</span><span>Valor</span><span>Status</span></div>
+<sc-for list="{{ cd.os }}" as="r" hint-placeholder-count="2">
+<div onClick="{{ r.open }}" style="display:grid;grid-template-columns:90px minmax(200px,2fr) 130px 100px 110px 130px;gap:16px;align-items:center;min-height:52px;padding:8px 14px;border-bottom:1px solid #f0f0ed;font-size:13px;cursor:pointer" style-hover="background:#fafaf8">
+<span style="font:500 12.5px 'Geist Mono',monospace">{{ r.id }}</span><span>{{ r.servico }}</span><span style="color:#46464c">{{ r.resp }}</span><span style="color:#46464c">{{ r.data }}</span><span style="font-variant-numeric:tabular-nums">{{ r.valor }}</span>
+<span><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap;background:{{ r.badge.bg }};color:{{ r.badge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ r.badge.dot }}"></span>{{ r.badge.label }}</span></span>
+</div>
+</sc-for>
+<sc-if value="{{ cd.noOs }}" hint-placeholder-val="{{ false }}"><div style="padding:32px;text-align:center;font-size:13px;color:#8b8b93">Nenhuma ordem de serviço para este cliente ainda.</div></sc-if>
+</div></div>
+</sc-if>
+<sc-if value="{{ cd.tFin }}" hint-placeholder-val="{{ false }}">
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:12px;overflow-x:auto"><div style="min-width:720px">
+<div style="display:grid;grid-template-columns:90px minmax(220px,2fr) 110px 120px 130px;gap:16px;align-items:center;height:38px;padding:0 14px;background:#f6f6f4;border-radius:8px;font-size:12px;color:#7a7a82;font-weight:500"><span>Título</span><span>Descrição</span><span>Vencimento</span><span>Valor</span><span>Status</span></div>
+<sc-for list="{{ cd.fin }}" as="r" hint-placeholder-count="2">
+<div style="display:grid;grid-template-columns:90px minmax(220px,2fr) 110px 120px 130px;gap:16px;align-items:center;min-height:52px;padding:8px 14px;border-bottom:1px solid #f0f0ed;font-size:13px">
+<span style="font:500 12.5px 'Geist Mono',monospace">{{ r.id }}</span><span>{{ r.desc }}</span><span style="color:#46464c">{{ r.venc }}</span><span style="font-variant-numeric:tabular-nums">{{ r.valor }}</span>
+<span><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap;background:{{ r.badge.bg }};color:{{ r.badge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ r.badge.dot }}"></span>{{ r.badge.label }}</span></span>
+</div>
+</sc-for>
+<sc-if value="{{ cd.noFin }}" hint-placeholder-val="{{ false }}"><div style="padding:32px;text-align:center;font-size:13px;color:#8b8b93">Nenhum lançamento financeiro para este cliente.</div></sc-if>
+</div></div>
+</sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ is.orcamentos }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Orçamentos" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+<div><div style="display:flex;align-items:baseline;gap:10px"><h1 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-0.02em">Orçamentos</h1><span style="font-size:20px;color:#a3a3aa;font-weight:500">{{ ol.count }}</span></div><div style="margin-top:4px;font-size:13px;color:#7a7a82">{{ ol.nAg }} aguardando aprovação · {{ ol.totalAg }}</div></div>
+<button onClick="{{ go.orcamentoNovo }}" style="height:34px;padding:0 14px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer" style-hover="background:#34343a">+ Novo orçamento</button>
+</div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:14px">
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-bottom:14px">
+<div style="position:relative;flex:1 1 240px;max-width:320px"><svg style="position:absolute;left:11px;top:10px" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9b9ba3" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input value="{{ ol.q }}" onChange="{{ ol.onQ }}" placeholder="Buscar orçamento ou cliente" style="height:35px;width:100%;padding:0 12px 0 33px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px"></div>
+<div style="position:relative"><select value="{{ ol.status }}" onChange="{{ ol.onStatus }}" style="appearance:none;height:35px;padding:0 32px 0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer"><option value="">Status: Todos</option><sc-for list="{{ ol.statuses }}" as="o" hint-placeholder-count="0"><option value="{{ o }}">{{ o }}</option></sc-for></select><svg style="position:absolute;right:10px;top:11px;pointer-events:none" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+<div style="position:relative"><select value="{{ ol.periodo }}" onChange="{{ ol.onPeriodo }}" style="appearance:none;height:35px;padding:0 32px 0 34px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer"><option value="">Qualquer data</option><option value="7">Últimos 7 dias</option><option value="30">Últimos 30 dias</option><option value="90">Últimos 90 dias</option></select><svg style="position:absolute;left:11px;top:10px;pointer-events:none" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5f5f67" stroke-width="1.7" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg><svg style="position:absolute;right:10px;top:11px;pointer-events:none" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+<button onClick="{{ ol.clear }}" style="display:inline-flex;align-items:center;gap:6px;height:35px;padding:0 12px;border-radius:9px;border:1px solid #e3e3e0;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5f5f67" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h18M7 12h10M10 18h4"></path></svg>Filtros</button>
+</div>
+<div style="overflow-x:auto"><div style="min-width:940px">
+<div style="display:grid;grid-template-columns:96px minmax(150px,1.3fr) minmax(200px,2fr) 110px 92px 92px 176px;gap:16px;align-items:center;height:38px;padding:0 14px;background:#f6f6f4;border-radius:8px;font-size:12px;color:#7a7a82;font-weight:500"><span>Orçamento</span><span>Cliente</span><span>Descrição</span><span>Valor</span><span>Data</span><span>Validade</span><span>Status</span></div>
+<sc-for list="{{ ol.rows }}" as="r" hint-placeholder-count="7">
+<div onClick="{{ r.open }}" style="display:grid;grid-template-columns:96px minmax(150px,1.3fr) minmax(200px,2fr) 110px 92px 92px 176px;gap:16px;align-items:center;min-height:54px;padding:8px 14px;border-bottom:1px solid #f0f0ed;font-size:13px;cursor:pointer" style-hover="background:#fafaf8">
+<span style="font:500 12.5px 'Geist Mono',monospace">{{ r.id }}</span><span style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cliente }}</span><span style="color:#46464c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.desc }}</span><span style="font-variant-numeric:tabular-nums">{{ r.valor }}</span><span style="color:#46464c">{{ r.data }}</span><span style="color:#46464c">{{ r.validade }}</span>
+<span><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap;background:{{ r.badge.bg }};color:{{ r.badge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ r.badge.dot }}"></span>{{ r.badge.label }}</span></span>
+</div>
+</sc-for>
+<sc-if value="{{ ol.empty }}" hint-placeholder-val="{{ false }}"><div style="padding:40px;text-align:center;font-size:13px;color:#8b8b93">Nenhum orçamento encontrado.</div></sc-if>
+</div></div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ is.orcamentoNovo }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Novo orçamento" style="display:flex;flex-direction:column;gap:20px">
+<div><h1 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-0.02em">Novo orçamento</h1><div style="margin-top:4px;font-size:13px;color:#7a7a82">Selecione o cliente e adicione serviços e peças do estoque.</div></div>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;gap:10px"><span style="width:22px;height:22px;border-radius:50%;background:#1b1b1f;color:#fff;font-size:11.5px;font-weight:600;display:flex;align-items:center;justify-content:center">1</span><span style="font-size:14px;font-weight:600">Cliente</span></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<div style="position:relative;flex:1 1 280px"><select value="{{ nw.clienteId }}" onChange="{{ nw.onCliente }}" style="appearance:none;height:38px;width:100%;padding:0 32px 0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;color:#1b1b1f;font-size:13px;cursor:pointer"><option value="">Selecione um cliente cadastrado…</option><sc-for list="{{ nw.clientes }}" as="o" hint-placeholder-count="0"><option value="{{ o.id }}">{{ o.nome }}</option></sc-for><option value="__new">+ Cadastrar novo cliente</option></select><svg style="position:absolute;right:11px;top:13px;pointer-events:none" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+<button onClick="{{ nw.novoCliente }}" style="height:38px;padding:0 12px;border-radius:9px;border:1px solid #e3e3e0;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer">+ Novo cliente</button>
+</div>
+<sc-if value="{{ nw.hasCliente }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#f6f6f4;border-radius:10px">
+<div style="flex:none;width:34px;height:34px;border-radius:8px;background:#fff;border:1px solid #ebebe8;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#46464c">{{ nw.cli.ini }}</div>
+<div style="min-width:0;flex:1"><div style="font-size:13px;font-weight:500">{{ nw.cli.nome }}</div><div style="font-size:12px;color:#7a7a82">{{ nw.cli.doc }} · {{ nw.cli.contato }} · {{ nw.cli.tel }} · {{ nw.cli.local }}</div></div>
+<span style="font-size:11.5px;color:#1f7a3d;display:inline-flex;align-items:center;gap:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>Dados do cadastro</span>
+</div>
+</sc-if>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Descrição do orçamento<input value="{{ nw.titulo }}" onChange="{{ nw.onTitulo }}" placeholder="Ex.: Manutenção de notebook" style="height:36px;width:100%;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"></label>
+</div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap"><div style="display:flex;align-items:center;gap:10px"><span style="width:22px;height:22px;border-radius:50%;background:#1b1b1f;color:#fff;font-size:11.5px;font-weight:600;display:flex;align-items:center;justify-content:center">2</span><span style="font-size:14px;font-weight:600">Serviços e peças</span></div><span style="font-size:12.5px;color:#8b8b93">{{ nw.nItens }}</span></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<div style="position:relative;flex:1 1 220px"><select value="" onChange="{{ nw.addServico }}" style="appearance:none;height:36px;width:100%;padding:0 32px 0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer"><option value="">+ Adicionar serviço</option><sc-for list="{{ nw.servicos }}" as="o" hint-placeholder-count="0"><option value="{{ o.id }}">{{ o.label }}</option></sc-for></select><svg style="position:absolute;right:11px;top:12px;pointer-events:none" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+<div style="position:relative;flex:1 1 220px"><select value="" onChange="{{ nw.addPeca }}" style="appearance:none;height:36px;width:100%;padding:0 32px 0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer"><option value="">+ Adicionar peça do estoque</option><sc-for list="{{ nw.pecas }}" as="o" hint-placeholder-count="0"><option value="{{ o.id }}">{{ o.label }}</option></sc-for></select><svg style="position:absolute;right:11px;top:12px;pointer-events:none" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+<button onClick="{{ nw.addLivre }}" style="height:36px;padding:0 12px;border-radius:9px;border:1px dashed #d6d6d2;background:#fafaf9;color:#5f5f67;font-size:13px;cursor:pointer">Item avulso</button>
+</div>
+<div style="overflow-x:auto"><div style="min-width:620px">
+<div style="display:grid;grid-template-columns:minmax(200px,1fr) 70px 110px 110px 28px;gap:12px;align-items:center;height:34px;padding:0 12px;background:#f6f6f4;border-radius:8px;font-size:12px;color:#7a7a82;font-weight:500"><span>Descrição</span><span>Quantidade</span><span>Valor unitário</span><span style="text-align:right">Subtotal</span><span></span></div>
+<sc-for list="{{ nw.lines }}" as="l" hint-placeholder-count="0">
+<div style="display:grid;grid-template-columns:minmax(200px,1fr) 70px 110px 110px 28px;gap:12px;align-items:center;padding:10px 12px;border-bottom:1px solid #f0f0ed">
+<div style="display:flex;flex-direction:column;gap:5px;min-width:0"><input value="{{ l.desc }}" onChange="{{ l.onDesc }}" placeholder="Descrição do item" style="height:32px;width:100%;padding:0 10px;border:1px solid #e3e3e0;border-radius:8px;font-size:13px;color:#1b1b1f"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-flex;align-items:center;height:18px;padding:0 6px;border-radius:5px;font-size:11px;font-weight:500;background:{{ l.tipo.bg }};color:{{ l.tipo.fg }}">{{ l.tipo.label }}</span><span style="font-size:11.5px;color:#8b8b93">{{ l.stock }}</span></div></div>
+<input value="{{ l.qty }}" onChange="{{ l.onQty }}" inputmode="numeric" style="height:32px;width:100%;padding:0 10px;border:1px solid #e3e3e0;border-radius:8px;font-size:13px;align-self:start">
+<input value="{{ l.unit }}" onChange="{{ l.onUnit }}" inputmode="decimal" style="height:32px;width:100%;padding:0 10px;border:1px solid #e3e3e0;border-radius:8px;font-size:13px;align-self:start">
+<span style="text-align:right;font-size:13px;font-weight:500;font-variant-numeric:tabular-nums;align-self:start;padding-top:7px">{{ l.sub }}</span>
+<button onClick="{{ l.remove }}" title="Remover" style="width:28px;height:28px;border:none;background:transparent;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;align-self:start;margin-top:2px" style-hover="background:#f3f3f1"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="1.8" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button>
+</div>
+</sc-for>
+<sc-if value="{{ nw.noLines }}" hint-placeholder-val="{{ true }}"><div style="padding:28px;text-align:center;font-size:13px;color:#8b8b93;border-bottom:1px solid #f0f0ed">Adicione serviços e peças usando os campos acima.</div></sc-if>
+</div></div>
+</div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:grid;grid-template-columns:200px minmax(0,1fr);gap:14px">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Validade do orçamento<select value="{{ nw.validade }}" onChange="{{ nw.onValidade }}" style="height:36px;width:100%;padding:0 10px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"><option value="7">7 dias</option><option value="15">15 dias</option><option value="30">30 dias</option></select><span style="font-weight:400;color:#8b8b93">{{ nw.validadeData }}</span></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Observações<textarea value="{{ nw.obs }}" onChange="{{ nw.onObs }}" rows="3" placeholder="Condições, prazo de execução, garantia…" style="width:100%;padding:9px 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f;resize:vertical"></textarea></label>
+</div>
+</div>
+<div style="position:sticky;top:0;background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:14px;font-weight:600">Resumo</div>
+<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#6b6b73">Subtotal</span><span style="font-variant-numeric:tabular-nums">{{ nw.subtotal }}</span></div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px"><span style="color:#6b6b73">Desconto (R$)</span><input value="{{ nw.desconto }}" onChange="{{ nw.onDesconto }}" placeholder="0,00" inputmode="decimal" style="height:30px;width:100px;padding:0 10px;border:1px solid #e3e3e0;border-radius:8px;font-size:13px;text-align:right"></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:12px;border-top:1px solid #ebebe8"><span style="font-size:13px;font-weight:500">Total</span><span style="font-size:22px;font-weight:600;letter-spacing:-0.01em;font-variant-numeric:tabular-nums">{{ nw.total }}</span></div>
+<sc-if value="{{ nw.hasErr }}" hint-placeholder-val="{{ false }}"><div style="font-size:12.5px;color:#b42323;background:#fdeeee;border-radius:8px;padding:8px 10px">{{ nw.err }}</div></sc-if>
+<button onClick="{{ nw.create }}" style="height:38px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer" style-hover="background:#34343a">Criar orçamento</button>
+<button onClick="{{ nw.draft }}" style="height:38px;border-radius:9px;border:1px solid #e3e3e0;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer">Salvar rascunho</button>
+<button onClick="{{ nw.cancel }}" style="height:30px;border:none;background:transparent;color:#7a7a82;font-size:12.5px;cursor:pointer">Cancelar</button>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ is.orcamento }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Detalhes do orçamento" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
+<div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="font:500 13px 'Geist Mono',monospace;color:#7a7a82">{{ od.id }}</span><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;background:{{ od.badge.bg }};color:{{ od.badge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ od.badge.dot }}"></span>{{ od.badge.label }}</span></div>
+<h1 style="margin:6px 0 0;font-size:22px;font-weight:600;letter-spacing:-0.02em">{{ od.desc }}</h1>
+<div style="margin-top:4px;font-size:13px;color:#7a7a82">Criado em {{ od.data }} · Válido até {{ od.validade }} <span style="color:#8f5c0a">{{ od.validadeRest }}</span></div></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<sc-if value="{{ od.isDraft }}" hint-placeholder-val="{{ false }}"><button onClick="{{ od.send }}" style="height:34px;padding:0 14px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer">Enviar para aprovação</button></sc-if>
+<sc-if value="{{ od.isWait }}" hint-placeholder-val="{{ false }}"><button onClick="{{ od.refuse }}" style="height:34px;padding:0 12px;border-radius:9px;border:1px solid #e3e3e0;background:#fff;color:#b42323;font-size:13px;font-weight:500;cursor:pointer">Recusado</button><button onClick="{{ od.approve }}" style="height:34px;padding:0 14px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>Marcar como aprovado</button></sc-if>
+<sc-if value="{{ od.isClosed }}" hint-placeholder-val="{{ false }}"><button onClick="{{ od.reopen }}" style="height:34px;padding:0 12px;border-radius:9px;border:1px solid #e3e3e0;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer">Reabrir como rascunho</button></sc-if>
+</div>
+</div>
+<div style="display:flex;align-items:flex-start;padding:18px 20px;border:1px solid #ebebe8;border-radius:14px;overflow-x:auto">
+<sc-for list="{{ od.steps }}" as="p" hint-placeholder-count="5">
+<div style="flex:1 1 0;min-width:120px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;align-items:center;gap:8px">
+<span style="flex:none;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:600;background:{{ p.bg }};border:1.5px solid {{ p.bd }};color:{{ p.fg }}"><sc-if value="{{ p.done }}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></sc-if><sc-if value="{{ p.notDone }}" hint-placeholder-val="{{ true }}">{{ p.n }}</sc-if></span>
+<sc-if value="{{ p.hasLine }}" hint-placeholder-val="{{ true }}"><span style="flex:1;height:1.5px;margin-right:8px;background:{{ p.line }}"></span></sc-if>
+</div>
+<span style="font-size:12.5px;font-weight:500;color:{{ p.lfg }}">{{ p.label }}</span>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{ od.isApprovedNoOs }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:18px 20px;background:#ebf6ee;border:1px solid #cfe9d6;border-radius:14px">
+<div><div style="font-size:14px;font-weight:600;color:#14532d">Orçamento aprovado pelo cliente</div><div style="margin-top:3px;font-size:13px;color:#1f7a3d">Próximo passo: gerar a ordem de serviço. Cliente, serviços, peças e valores serão reaproveitados.</div></div>
+<button onClick="{{ od.gerar }}" style="height:40px;padding:0 18px;border-radius:10px;border:1px solid #14532d;background:#14532d;color:#fff;font-size:13.5px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:8px" style-hover="background:#0f3f22">Gerar ordem de serviço<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+</div>
+</sc-if>
+<sc-if value="{{ od.hasOs }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ od.openOs }}" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 18px;border:1px solid #ebebe8;border-radius:14px;cursor:pointer" style-hover="background:#fafaf8">
+<span style="font-size:12.5px;color:#7a7a82">Ordem de serviço vinculada</span>
+<span style="font:500 13px 'Geist Mono',monospace">{{ od.osId }}</span>
+<span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;background:{{ od.osBadge.bg }};color:{{ od.osBadge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ od.osBadge.dot }}"></span>{{ od.osBadge.label }}</span>
+<span style="font-size:13px;color:#46464c">{{ od.osResp }} · {{ od.osValor }}</span>
+<span style="margin-left:auto;font-size:13px;font-weight:500">Abrir ordem de serviço →</span>
+</div>
+</sc-if>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;align-items:start">
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:12px;overflow-x:auto"><div style="min-width:560px">
+<div style="display:flex;justify-content:space-between;padding:6px 8px 12px"><span style="font-size:14px;font-weight:600">Itens</span><span style="font-size:12.5px;color:#8b8b93">{{ od.nItens }} itens</span></div>
+<div style="display:grid;grid-template-columns:minmax(200px,1fr) 70px 110px 110px;gap:12px;align-items:center;height:34px;padding:0 12px;background:#f6f6f4;border-radius:8px;font-size:12px;color:#7a7a82;font-weight:500"><span>Descrição</span><span>Qtd.</span><span>Valor unitário</span><span style="text-align:right">Subtotal</span></div>
+<sc-for list="{{ od.items }}" as="i" hint-placeholder-count="2">
+<div style="display:grid;grid-template-columns:minmax(200px,1fr) 70px 110px 110px;gap:12px;align-items:center;min-height:50px;padding:8px 12px;border-bottom:1px solid #f0f0ed;font-size:13px">
+<div style="display:flex;align-items:center;gap:8px;min-width:0"><span style="flex:none;display:inline-flex;align-items:center;height:18px;padding:0 6px;border-radius:5px;font-size:11px;font-weight:500;background:{{ i.tipo.bg }};color:{{ i.tipo.fg }}">{{ i.tipo.label }}</span><span>{{ i.desc }}</span></div>
+<span>{{ i.qty }}</span><span style="font-variant-numeric:tabular-nums">{{ i.unit }}</span><span style="text-align:right;font-weight:500;font-variant-numeric:tabular-nums">{{ i.sub }}</span>
+</div>
+</sc-for>
+<div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;padding:14px 12px 4px;font-size:13px">
+<div style="display:flex;gap:24px"><span style="color:#6b6b73">Subtotal</span><span style="min-width:110px;text-align:right;font-variant-numeric:tabular-nums">{{ od.subtotal }}</span></div>
+<div style="display:flex;gap:24px"><span style="color:#6b6b73">Desconto</span><span style="min-width:110px;text-align:right;font-variant-numeric:tabular-nums">{{ od.desconto }}</span></div>
+<div style="display:flex;gap:24px;align-items:baseline"><span style="font-weight:500">Total</span><span style="min-width:110px;text-align:right;font-size:18px;font-weight:600;font-variant-numeric:tabular-nums">{{ od.total }}</span></div>
+</div>
+</div></div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:14px;font-weight:600">Cliente</span><span onClick="{{ od.openCliente }}" style="font-size:12.5px;color:#6b6b73;cursor:pointer">Ver cadastro →</span></div>
+<div style="display:flex;align-items:center;gap:10px"><div style="flex:none;width:34px;height:34px;border-radius:8px;background:#f1f1ef;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#46464c">{{ od.cliIni }}</div><div style="min-width:0"><div style="font-size:13px;font-weight:500">{{ od.cliente }}</div><div style="font-size:12px;color:#8b8b93">{{ od.cliDoc }}</div></div></div>
+<div style="display:grid;grid-template-columns:70px minmax(0,1fr);gap:6px 10px;font-size:12.5px"><span style="color:#8b8b93">Contato</span><span>{{ od.cliContato }}</span><span style="color:#8b8b93">Telefone</span><span>{{ od.cliTel }}</span><span style="color:#8b8b93">E-mail</span><span style="word-break:break-all">{{ od.cliEmail }}</span></div>
+</div>
+<sc-if value="{{ od.hasObs }}" hint-placeholder-val="{{ false }}"><div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px"><div style="font-size:14px;font-weight:600;margin-bottom:8px">Observações</div><div style="font-size:13px;color:#46464c;line-height:1.5">{{ od.obs }}</div></div></sc-if>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ is.os }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Ordens de Serviço" style="display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+<div style="display:flex;align-items:baseline;gap:10px"><h1 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-0.02em">Ordens de Serviço</h1><span style="font-size:20px;color:#a3a3aa;font-weight:500">{{ osl.count }}</span></div>
+<button onClick="{{ go.novaOs }}" style="height:34px;padding:0 14px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer" style-hover="background:#34343a">+ Nova ordem de serviço</button>
+</div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+<div style="display:flex;gap:2px;padding:3px;background:#f1f1ef;border-radius:10px">
+<button onClick="{{ osl.toList }}" style="display:inline-flex;align-items:center;gap:6px;height:29px;padding:0 12px;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;background:{{ osl.listBg }};box-shadow:{{ osl.listSh }};color:{{ osl.listFg }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"></path></svg>Lista</button>
+<button onClick="{{ osl.toBoard }}" style="display:inline-flex;align-items:center;gap:6px;height:29px;padding:0 12px;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;background:{{ osl.boardBg }};box-shadow:{{ osl.boardSh }};color:{{ osl.boardFg }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M9 3v18M15 3v18"></path></svg>Quadro</button>
+</div>
+<div style="position:relative;flex:1 1 220px;max-width:300px"><svg style="position:absolute;left:11px;top:10px" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9b9ba3" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input value="{{ osl.q }}" onChange="{{ osl.onQ }}" placeholder="Buscar OS, cliente ou serviço" style="height:35px;width:100%;padding:0 12px 0 33px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px"></div>
+<sc-if value="{{ osl.isList }}" hint-placeholder-val="{{ false }}"><div style="position:relative"><select value="{{ osl.status }}" onChange="{{ osl.onStatus }}" style="appearance:none;height:35px;padding:0 32px 0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer"><option value="">Status: Todos</option><option value="Aberta">Aberta</option><option value="Em andamento">Em andamento</option><option value="Aguardando">Aguardando</option><option value="Concluída">Concluída</option></select><svg style="position:absolute;right:10px;top:11px;pointer-events:none" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></div></sc-if>
+<div style="position:relative"><select value="{{ osl.resp }}" onChange="{{ osl.onResp }}" style="appearance:none;height:35px;padding:0 32px 0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer"><option value="">Responsável: Todos</option><sc-for list="{{ osl.resps }}" as="o" hint-placeholder-count="0"><option value="{{ o }}">{{ o }}</option></sc-for></select><svg style="position:absolute;right:10px;top:11px;pointer-events:none" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+<sc-if value="{{ osl.isBoard }}" hint-placeholder-val="{{ true }}"><span style="margin-left:auto;font-size:12.5px;color:#8b8b93">Arraste os cartões para mudar o status</span></sc-if>
+</div>
+<sc-if value="{{ osl.isBoard }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(4,minmax(240px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px;align-items:start">
+<sc-for list="{{ osl.cols }}" as="col" hint-placeholder-count="4">
+<div onDragOver="{{ col.over }}" onDrop="{{ col.drop }}" style="background:#f6f6f4;border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:320px">
+<div style="display:flex;align-items:center;gap:8px;padding:4px 6px 6px"><span style="width:8px;height:8px;border-radius:50%;background:{{ col.dot }}"></span><span style="font-size:13px;font-weight:600">{{ col.name }}</span><span style="font-size:11.5px;color:#7a7a82;background:#fff;border:1px solid #e6e6e3;border-radius:6px;padding:1px 6px">{{ col.count }}</span><span style="margin-left:auto;font-size:12px;color:#8b8b93">{{ col.total }}</span></div>
+<sc-for list="{{ col.cards }}" as="k" hint-placeholder-count="2">
+<div draggable="true" onDragStart="{{ k.onDragStart }}" onClick="{{ k.open }}" style="background:#fff;border:1px solid #ebebe8;border-radius:11px;padding:12px;display:flex;flex-direction:column;gap:8px;cursor:pointer;box-shadow:0 1px 2px rgba(20,20,25,.04)" style-hover="border-color:#d3d3cf">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="font:500 11.5px 'Geist Mono',monospace;color:#7a7a82">{{ k.id }}</span><span style="font-size:12.5px;font-weight:500;font-variant-numeric:tabular-nums">{{ k.valor }}</span></div>
+<div style="font-size:13.5px;font-weight:500;line-height:1.35">{{ k.servico }}</div>
+<div style="font-size:12.5px;color:#6b6b73">{{ k.cliente }}</div>
+<div style="display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px dashed #ebebe8">
+<span style="display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 7px;background:#f6f6f4;border-radius:6px;font-size:11.5px;color:#5f5f67"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4M8 2v4M3 10h18"></path></svg>{{ k.dataS }}</span>
+<span title="{{ k.resp }}" style="width:22px;height:22px;border-radius:50%;background:#ecebe7;color:#46464c;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center">{{ k.respIni }}</span>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ osl.isList }}" hint-placeholder-val="{{ false }}">
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:12px;overflow-x:auto"><div style="min-width:900px">
+<div style="display:grid;grid-template-columns:86px minmax(150px,1.3fr) minmax(190px,2fr) 130px 90px 110px 130px;gap:16px;align-items:center;height:38px;padding:0 14px;background:#f6f6f4;border-radius:8px;font-size:12px;color:#7a7a82;font-weight:500"><span>OS</span><span>Cliente</span><span>Serviço</span><span>Responsável</span><span>Data</span><span>Valor</span><span>Status</span></div>
+<sc-for list="{{ osl.rows }}" as="r" hint-placeholder-count="6">
+<div onClick="{{ r.open }}" style="display:grid;grid-template-columns:86px minmax(150px,1.3fr) minmax(190px,2fr) 130px 90px 110px 130px;gap:16px;align-items:center;min-height:54px;padding:8px 14px;border-bottom:1px solid #f0f0ed;font-size:13px;cursor:pointer" style-hover="background:#fafaf8">
+<span style="font:500 12.5px 'Geist Mono',monospace">{{ r.id }}</span><span style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.cliente }}</span><span style="color:#46464c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.servico }}</span>
+<span style="display:flex;align-items:center;gap:8px;color:#46464c"><span style="flex:none;width:22px;height:22px;border-radius:50%;background:#ecebe7;font-size:10px;font-weight:600;display:flex;align-items:center;justify-content:center">{{ r.respIni }}</span>{{ r.resp }}</span>
+<span style="color:#46464c">{{ r.data }}</span><span style="font-variant-numeric:tabular-nums">{{ r.valor }}</span>
+<span><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap;background:{{ r.badge.bg }};color:{{ r.badge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ r.badge.dot }}"></span>{{ r.badge.label }}</span></span>
+</div>
+</sc-for>
+<sc-if value="{{ osl.empty }}" hint-placeholder-val="{{ false }}"><div style="padding:40px;text-align:center;font-size:13px;color:#8b8b93">Nenhuma ordem de serviço encontrada.</div></sc-if>
+</div></div>
+</sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ is.osDetalhe }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Detalhes da OS" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
+<div style="min-width:0"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="font:500 13px 'Geist Mono',monospace;color:#7a7a82">{{ ox.id }}</span><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;background:{{ ox.badge.bg }};color:{{ ox.badge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ ox.badge.dot }}"></span>{{ ox.badge.label }}</span><sc-if value="{{ ox.hasOrc }}" hint-placeholder-val="{{ false }}"><span onClick="{{ ox.openOrc }}" style="font-size:12.5px;color:#6b6b73;cursor:pointer;border-bottom:1px solid #d6d6d2">Origem: {{ ox.orcId }}</span></sc-if></div>
+<h1 style="margin:6px 0 0;font-size:22px;font-weight:600;letter-spacing:-0.02em">{{ ox.servico }}</h1>
+<div style="margin-top:4px;font-size:13px;color:#7a7a82"><span onClick="{{ ox.openCliente }}" style="cursor:pointer;color:#1b1b1f;font-weight:500">{{ ox.cliente }}</span> · Aberta em {{ ox.abertura }} · {{ ox.resp }}</div></div>
+<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+<div style="display:flex;gap:2px;padding:3px;background:#f1f1ef;border-radius:10px">
+<sc-for list="{{ ox.statuses }}" as="b" hint-placeholder-count="4"><button onClick="{{ b.onClick }}" style="display:inline-flex;align-items:center;gap:6px;height:29px;padding:0 11px;border:none;border-radius:8px;font-size:12.5px;font-weight:500;background:{{ b.bg }};box-shadow:{{ b.sh }};color:{{ b.fg }};cursor:{{ b.cursor }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ b.dot }}"></span>{{ b.label }}</button></sc-for>
+</div>
+<sc-if value="{{ ox.unlocked }}" hint-placeholder-val="{{ true }}"><button onClick="{{ ox.finish }}" style="height:35px;padding:0 14px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer;display:inline-flex;align-items:center;gap:6px" style-hover="background:#34343a"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>Finalizar ordem de serviço</button></sc-if>
+</div>
+</div>
+<sc-if value="{{ ox.hasCr }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 18px;background:#ebf6ee;border:1px solid #cfe9d6;border-radius:14px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1f7a3d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg>
+<div style="flex:1;min-width:220px"><div style="font-size:13.5px;font-weight:600;color:#14532d">OS finalizada · conta a receber {{ ox.crId }} gerada</div><div style="font-size:12.5px;color:#1f7a3d">{{ ox.crValor }} · vencimento {{ ox.crVenc }}</div></div>
+<span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;background:#fff;color:{{ ox.crBadge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ ox.crBadge.dot }}"></span>{{ ox.crBadge.label }}</span>
+<button onClick="{{ ox.openFin }}" style="height:34px;padding:0 14px;border-radius:9px;border:1px solid #14532d;background:#14532d;color:#fff;font-size:13px;font-weight:500;cursor:pointer">Abrir no Financeiro →</button>
+</div>
+</sc-if>
+<sc-if value="{{ ox.noCrLocked }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 18px;background:#fcf3e1;border:1px solid #f1dfb8;border-radius:14px"><div style="flex:1;font-size:13px;color:#8f5c0a">OS concluída sem conta a receber vinculada.</div><button onClick="{{ ox.gerarCr }}" style="height:34px;padding:0 14px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer">Gerar conta a receber</button></div>
+</sc-if>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:14px">
+<div style="font-size:14px;font-weight:600">Equipamento</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Tipo<input value="{{ ox.eqTipo }}" onChange="{{ ox.onTipo }}" style="height:34px;width:100%;padding:0 10px;border:1px solid #e3e3e0;border-radius:8px;font-size:13px;color:#1b1b1f"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Marca / modelo<input value="{{ ox.eqModelo }}" onChange="{{ ox.onModelo }}" placeholder="Ex.: Dell Inspiron 15" style="height:34px;width:100%;padding:0 10px;border:1px solid #e3e3e0;border-radius:8px;font-size:13px;color:#1b1b1f"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Nº de série<input value="{{ ox.eqSerie }}" onChange="{{ ox.onSerie }}" style="height:34px;width:100%;padding:0 10px;border:1px solid #e3e3e0;border-radius:8px;font-size:13px;color:#1b1b1f"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Acessórios<input value="{{ ox.eqAcess }}" onChange="{{ ox.onAcess }}" placeholder="Carregador, bolsa…" style="height:34px;width:100%;padding:0 10px;border:1px solid #e3e3e0;border-radius:8px;font-size:13px;color:#1b1b1f"></label>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:600">Problema relatado</div><textarea value="{{ ox.problema }}" onChange="{{ ox.onProblema }}" rows="4" placeholder="Descreva o problema informado pelo cliente" style="width:100%;padding:9px 12px;border:1px solid #e3e3e0;border-radius:9px;font-size:13px;line-height:1.5;color:#1b1b1f;resize:vertical"></textarea></div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:600">Serviço realizado</div><textarea value="{{ ox.realizado }}" onChange="{{ ox.onRealizado }}" rows="4" placeholder="Registre o que foi feito no equipamento" style="width:100%;padding:9px 12px;border:1px solid #e3e3e0;border-radius:9px;font-size:13px;line-height:1.5;color:#1b1b1f;resize:vertical"></textarea></div>
+</div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span style="font-size:14px;font-weight:600">Serviços</span>
+<sc-if value="{{ ox.unlocked }}" hint-placeholder-val="{{ true }}"><div style="position:relative"><select value="" onChange="{{ ox.addServ }}" style="appearance:none;height:32px;padding:0 30px 0 10px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;color:#1b1b1f;font-size:12.5px;font-weight:500;cursor:pointer"><option value="">+ Adicionar serviço</option><sc-for list="{{ ox.servOpts }}" as="o" hint-placeholder-count="0"><option value="{{ o.id }}">{{ o.label }}</option></sc-for></select><svg style="position:absolute;right:10px;top:10px;pointer-events:none" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></div></sc-if></div>
+<sc-for list="{{ ox.servicos }}" as="l" hint-placeholder-count="1">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 60px 100px 100px 28px;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0ed;font-size:13px"><span>{{ l.desc }}</span><span style="color:#6b6b73">{{ l.qty }} ×</span><span style="color:#6b6b73;font-variant-numeric:tabular-nums">{{ l.unit }}</span><span style="text-align:right;font-weight:500;font-variant-numeric:tabular-nums">{{ l.sub }}</span>
+<sc-if value="{{ ox.unlocked }}" hint-placeholder-val="{{ true }}"><button onClick="{{ l.remove }}" style="width:26px;height:26px;border:none;background:transparent;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#f3f3f1"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="1.8" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button></sc-if></div>
+</sc-for>
+</div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:14px;font-weight:600">Peças utilizadas</span><span style="font-size:12px;color:#8b8b93">Baixa automática no estoque</span></div>
+<sc-for list="{{ ox.pecas }}" as="p" hint-placeholder-count="1">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 60px 100px 100px 28px;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0ed;font-size:13px">
+<div style="min-width:0"><div>{{ p.desc }}</div><div style="font-size:11.5px;color:#8b8b93"><span style="font-family:'Geist Mono',monospace">{{ p.sku }}</span> · {{ p.saldo }}</div></div>
+<span style="color:#6b6b73">{{ p.qty }} ×</span><span style="color:#6b6b73;font-variant-numeric:tabular-nums">{{ p.unit }}</span><span style="text-align:right;font-weight:500;font-variant-numeric:tabular-nums">{{ p.sub }}</span>
+<sc-if value="{{ ox.unlocked }}" hint-placeholder-val="{{ true }}"><button onClick="{{ p.remove }}" title="Remover e devolver ao estoque" style="width:26px;height:26px;border:none;background:transparent;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#f3f3f1"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="1.8" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"></path></svg></button></sc-if>
+</div>
+</sc-for>
+<sc-if value="{{ ox.noPecas }}" hint-placeholder-val="{{ false }}"><div style="padding:14px 0;font-size:13px;color:#8b8b93">Nenhuma peça utilizada até o momento.</div></sc-if>
+<sc-if value="{{ ox.unlocked }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px;background:#f6f6f4;border-radius:10px">
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<div style="position:relative;flex:1 1 240px"><select value="{{ ox.apItem }}" onChange="{{ ox.onApItem }}" style="appearance:none;height:34px;width:100%;padding:0 30px 0 10px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;color:#1b1b1f;font-size:13px;cursor:pointer"><option value="">Selecione um item do estoque…</option><sc-for list="{{ ox.apOpts }}" as="o" hint-placeholder-count="0"><option value="{{ o.id }}" disabled="{{ o.disabled }}">{{ o.label }}</option></sc-for></select><svg style="position:absolute;right:10px;top:11px;pointer-events:none" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+<input value="{{ ox.apQty }}" onChange="{{ ox.onApQty }}" inputmode="numeric" style="height:34px;width:64px;padding:0 10px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;font-size:13px">
+<button onClick="{{ ox.addPart }}" style="height:34px;padding:0 14px;border-radius:8px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer">+ Adicionar peça</button>
+</div>
+<div style="font-size:12px;color:#7a7a82">{{ ox.apInfo }}</div>
+</div>
+</sc-if>
+</div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:10px"><div style="font-size:14px;font-weight:600">Observações</div><textarea value="{{ ox.obs }}" onChange="{{ ox.onObs }}" rows="3" placeholder="Anotações internas" style="width:100%;padding:9px 12px;border:1px solid #e3e3e0;border-radius:9px;font-size:13px;line-height:1.5;color:#1b1b1f;resize:vertical"></textarea></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:14px;font-weight:600">Cliente</span><span onClick="{{ ox.openCliente }}" style="font-size:12.5px;color:#6b6b73;cursor:pointer">Ver cadastro →</span></div>
+<div style="display:flex;align-items:center;gap:10px"><div style="flex:none;width:34px;height:34px;border-radius:8px;background:#f1f1ef;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#46464c">{{ ox.cliIni }}</div><div style="min-width:0"><div style="font-size:13px;font-weight:500">{{ ox.cliente }}</div><div style="font-size:12px;color:#8b8b93">{{ ox.cliDoc }}</div></div></div>
+<div style="display:grid;grid-template-columns:70px minmax(0,1fr);gap:6px 10px;font-size:12.5px"><span style="color:#8b8b93">Contato</span><span>{{ ox.cliContato }}</span><span style="color:#8b8b93">Telefone</span><span>{{ ox.cliTel }}</span><span style="color:#8b8b93">Cidade</span><span>{{ ox.cliLocal }}</span></div>
+</div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:14px;font-weight:600">Responsável e datas</div>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Responsável<select value="{{ ox.resp }}" onChange="{{ ox.onResp }}" style="height:34px;width:100%;padding:0 10px;border:1px solid #e3e3e0;border-radius:8px;background:#fff;font-size:13px;color:#1b1b1f"><sc-for list="{{ ox.resps }}" as="o" hint-placeholder-count="0"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+<div style="display:grid;grid-template-columns:90px minmax(0,1fr);gap:8px 10px;font-size:12.5px;align-items:center"><span style="color:#8b8b93">Abertura</span><span>{{ ox.abertura }}</span><span style="color:#8b8b93">Previsão</span><input type="date" value="{{ ox.previsao }}" onChange="{{ ox.onPrevisao }}" style="height:30px;padding:0 8px;border:1px solid #e3e3e0;border-radius:7px;font-size:12.5px;color:#1b1b1f"><span style="color:#8b8b93">Conclusão</span><span>{{ ox.conclusao }}</span></div>
+</div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:10px">
+<div style="font-size:14px;font-weight:600">Valores</div>
+<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#6b6b73">Serviços</span><span style="font-variant-numeric:tabular-nums">{{ ox.totServ }}</span></div>
+<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#6b6b73">Peças</span><span style="font-variant-numeric:tabular-nums">{{ ox.totPecas }}</span></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:10px;border-top:1px solid #ebebe8"><span style="font-size:13px;font-weight:500">Total</span><span style="font-size:20px;font-weight:600;font-variant-numeric:tabular-nums">{{ ox.total }}</span></div>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ is.estoque }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Estoque" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+<div><h1 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-0.02em">Estoque</h1><div style="margin-top:4px;font-size:13px;color:#7a7a82">Valor total em estoque: {{ st.valor }}</div></div>
+<button onClick="{{ st.novo }}" style="height:34px;padding:0 14px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer" style-hover="background:#34343a">+ Novo item</button>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+<div onClick="{{ st.fAll }}" style="background:#f6f6f4;border-radius:12px;padding:16px 18px;cursor:pointer"><div style="font-size:13px;color:#6b6b73">Itens cadastrados</div><div style="margin-top:10px;font-size:28px;font-weight:600">{{ st.total }}</div></div>
+<div onClick="{{ st.fBaixo }}" style="background:#f6f6f4;border-radius:12px;padding:16px 18px;cursor:pointer"><div style="font-size:13px;color:#6b6b73">Estoque baixo</div><div style="margin-top:10px;font-size:28px;font-weight:600;color:#8f5c0a">{{ st.baixo }}</div></div>
+<div onClick="{{ st.fSem }}" style="background:#f6f6f4;border-radius:12px;padding:16px 18px;cursor:pointer"><div style="font-size:13px;color:#6b6b73">Sem estoque</div><div style="margin-top:10px;font-size:28px;font-weight:600;color:#b42323">{{ st.sem }}</div></div>
+</div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:14px">
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-bottom:10px">
+<div style="position:relative;flex:1 1 240px;max-width:320px"><svg style="position:absolute;left:11px;top:10px" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9b9ba3" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input value="{{ st.q }}" onChange="{{ st.onQ }}" placeholder="Buscar produto ou SKU" style="height:35px;width:100%;padding:0 12px 0 33px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px"></div>
+<div style="position:relative"><select value="{{ st.status }}" onChange="{{ st.onStatus }}" style="appearance:none;height:35px;padding:0 32px 0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer"><option value="">Status: Todos</option><option value="Em estoque">Em estoque</option><option value="Estoque baixo">Estoque baixo</option><option value="Sem estoque">Sem estoque</option></select><svg style="position:absolute;right:10px;top:11px;pointer-events:none" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;padding-bottom:14px">
+<sc-for list="{{ st.chips }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.onClick }}" style="height:28px;padding:0 11px;border-radius:99px;font-size:12.5px;font-weight:500;cursor:pointer;background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.bd }}">{{ c.label }}</button></sc-for>
+</div>
+<div style="overflow-x:auto"><div style="min-width:860px">
+<div style="display:grid;grid-template-columns:minmax(240px,2.4fr) 130px 130px 140px 110px 130px;gap:16px;align-items:center;height:38px;padding:0 14px;background:#f6f6f4;border-radius:8px;font-size:12px;color:#7a7a82;font-weight:500"><span>Produto</span><span>Categoria</span><span>SKU</span><span>Quantidade</span><span>Estoque mínimo</span><span>Status</span></div>
+<sc-for list="{{ st.rows }}" as="r" hint-placeholder-count="8">
+<div onClick="{{ r.open }}" style="display:grid;grid-template-columns:minmax(240px,2.4fr) 130px 130px 140px 110px 130px;gap:16px;align-items:center;min-height:54px;padding:8px 14px;border-bottom:1px solid #f0f0ed;font-size:13px;cursor:pointer" style-hover="background:#fafaf8">
+<div style="min-width:0"><div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.nome }}</div><div style="font-size:12px;color:#8b8b93">{{ r.preco }} / un.</div></div>
+<span style="color:#46464c">{{ r.cat }}</span><span style="font:400 12px 'Geist Mono',monospace;color:#46464c">{{ r.sku }}</span>
+<div style="display:flex;align-items:center;gap:10px"><span style="min-width:22px;font-weight:500;font-variant-numeric:tabular-nums;color:{{ r.qtyColor }}">{{ r.qty }}</span><span style="flex:1;max-width:70px;height:4px;border-radius:99px;background:#efefec;overflow:hidden"><span style="display:block;height:100%;border-radius:99px;width:{{ r.bar }};background:{{ r.barC }}"></span></span></div>
+<span style="color:#46464c">{{ r.min }}</span>
+<span><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap;background:{{ r.badge.bg }};color:{{ r.badge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ r.badge.dot }}"></span>{{ r.badge.label }}</span></span>
+</div>
+</sc-for>
+<sc-if value="{{ st.empty }}" hint-placeholder-val="{{ false }}"><div style="padding:40px;text-align:center;font-size:13px;color:#8b8b93">Nenhum item encontrado.</div></sc-if>
+</div></div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ is.estoqueItem }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Item de estoque" style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
+<div><div style="display:flex;align-items:center;gap:10px"><span style="font:500 13px 'Geist Mono',monospace;color:#7a7a82">{{ si.sku }}</span><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;background:{{ si.badge.bg }};color:{{ si.badge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ si.badge.dot }}"></span>{{ si.badge.label }}</span></div><h1 style="margin:6px 0 0;font-size:22px;font-weight:600;letter-spacing:-0.02em">{{ si.nome }}</h1><div style="margin-top:4px;font-size:13px;color:#7a7a82">{{ si.cat }} · Fornecedor: {{ si.forn }} · Usado em {{ si.usedIn }} OS</div></div>
+<button onClick="{{ si.back }}" style="height:34px;padding:0 12px;border-radius:9px;border:1px solid #e3e3e0;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer">← Voltar ao estoque</button>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px">
+<div style="background:#f6f6f4;border-radius:12px;padding:14px 16px"><div style="font-size:12.5px;color:#6b6b73">Saldo atual</div><div style="margin-top:6px;font-size:24px;font-weight:600">{{ si.qty }} <span style="font-size:13px;color:#8b8b93;font-weight:400">un.</span></div></div>
+<div style="background:#f6f6f4;border-radius:12px;padding:14px 16px"><div style="font-size:12.5px;color:#6b6b73">Estoque mínimo</div><div style="margin-top:6px;font-size:24px;font-weight:600">{{ si.min }}</div></div>
+<div style="background:#f6f6f4;border-radius:12px;padding:14px 16px"><div style="font-size:12.5px;color:#6b6b73">Preço de venda</div><div style="margin-top:6px;font-size:24px;font-weight:600">{{ si.preco }}</div></div>
+<div style="background:#f6f6f4;border-radius:12px;padding:14px 16px"><div style="font-size:12.5px;color:#6b6b73">Valor em estoque</div><div style="margin-top:6px;font-size:24px;font-weight:600">{{ si.valor }}</div></div>
+</div>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:20px;align-items:start">
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:12px;overflow-x:auto"><div style="min-width:560px">
+<div style="padding:6px 8px 12px;font-size:14px;font-weight:600">Histórico de movimentações</div>
+<div style="display:grid;grid-template-columns:96px 110px minmax(160px,1fr) 70px 60px;gap:12px;align-items:center;height:34px;padding:0 12px;background:#f6f6f4;border-radius:8px;font-size:12px;color:#7a7a82;font-weight:500"><span>Data</span><span>Tipo</span><span>Referência</span><span style="text-align:right">Qtd.</span><span style="text-align:right">Saldo</span></div>
+<sc-for list="{{ si.hist }}" as="h" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:96px 110px minmax(160px,1fr) 70px 60px;gap:12px;align-items:center;min-height:46px;padding:6px 12px;border-bottom:1px solid #f0f0ed;font-size:13px">
+<span style="color:#46464c">{{ h.data }}</span>
+<span><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;background:{{ h.tipo.bg }};color:{{ h.tipo.fg }}">{{ h.tipo.label }}</span></span>
+<span style="min-width:0"><sc-if value="{{ h.isOs }}" hint-placeholder-val="{{ false }}"><span onClick="{{ h.openRef }}" style="font-family:'Geist Mono',monospace;font-size:12.5px;cursor:pointer;border-bottom:1px solid #d6d6d2">{{ h.ref }}</span></sc-if><sc-if value="{{ h.notOs }}" hint-placeholder-val="{{ true }}"><span style="color:#46464c">{{ h.ref }}</span></sc-if></span>
+<span style="text-align:right;font-weight:500;font-variant-numeric:tabular-nums;color:{{ h.qtyColor }}">{{ h.qty }}</span>
+<span style="text-align:right;color:#46464c;font-variant-numeric:tabular-nums">{{ h.saldo }}</span>
+</div>
+</sc-for>
+<sc-if value="{{ si.noHist }}" hint-placeholder-val="{{ false }}"><div style="padding:28px;text-align:center;font-size:13px;color:#8b8b93">Sem movimentações.</div></sc-if>
+</div></div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:14px;font-weight:600">Registrar movimentação</div>
+<div style="display:flex;gap:2px;padding:3px;background:#f1f1ef;border-radius:10px">
+<sc-for list="{{ mv.tipos }}" as="t" hint-placeholder-count="3"><button onClick="{{ t.onClick }}" style="flex:1;height:29px;padding:0 6px;border:none;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap;background:{{ t.bg }};box-shadow:{{ t.sh }};color:{{ t.fg }}">{{ t.label }}</button></sc-for>
+</div>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">{{ mv.qtyLabel }}<input value="{{ mv.qty }}" onChange="{{ mv.onQty }}" inputmode="numeric" placeholder="0" style="height:36px;width:100%;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;font-size:13px;color:#1b1b1f"><span style="font-weight:400;color:#8b8b93">{{ mv.hint }}</span></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Motivo / documento<input value="{{ mv.motivo }}" onChange="{{ mv.onMotivo }}" placeholder="Ex.: NF 4590 · Kingston" style="height:36px;width:100%;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;font-size:13px;color:#1b1b1f"></label>
+<div style="padding:10px 12px;background:#f6f6f4;border-radius:9px;font-size:12.5px;color:#46464c">{{ mv.preview }}</div>
+<button onClick="{{ mv.register }}" style="height:38px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer">Registrar</button>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ is.financeiro }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Financeiro" style="display:flex;flex-direction:column;gap:20px">
+<div><h1 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-0.02em">Financeiro</h1><div style="margin-top:4px;font-size:13px;color:#7a7a82">Contas geradas automaticamente a partir das ordens de serviço concluídas.</div></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+<div style="background:#f6f6f4;border-radius:12px;padding:16px 18px"><div style="font-size:13px;color:#6b6b73">A receber</div><div style="margin-top:10px;font-size:24px;font-weight:600;letter-spacing:-0.01em">{{ fn.kRec }}</div><div style="margin-top:2px;font-size:12.5px;color:#7a7a82">{{ fn.kRecSub }}</div></div>
+<div style="background:#f6f6f4;border-radius:12px;padding:16px 18px"><div style="font-size:13px;color:#6b6b73">A pagar</div><div style="margin-top:10px;font-size:24px;font-weight:600;letter-spacing:-0.01em">{{ fn.kPag }}</div><div style="margin-top:2px;font-size:12.5px;color:#7a7a82">{{ fn.kPagSub }}</div></div>
+<div style="background:#f6f6f4;border-radius:12px;padding:16px 18px"><div style="font-size:13px;color:#6b6b73">Recebido este mês</div><div style="margin-top:10px;font-size:24px;font-weight:600;letter-spacing:-0.01em;color:#1f7a3d">{{ fn.kRecebido }}</div><div style="margin-top:2px;font-size:12.5px;color:#7a7a82">{{ fn.kRecebidoSub }}</div></div>
+<div style="background:#f6f6f4;border-radius:12px;padding:16px 18px"><div style="font-size:13px;color:#6b6b73">Em atraso</div><div style="margin-top:10px;font-size:24px;font-weight:600;letter-spacing:-0.01em;color:#b42323">{{ fn.kAtr }}</div><div style="margin-top:2px;font-size:12.5px;color:#7a7a82">{{ fn.kAtrSub }}</div></div>
+</div>
+<div style="display:flex;gap:24px;border-bottom:1px solid #ebebe8">
+<sc-for list="{{ fn.tabs }}" as="t" hint-placeholder-count="2"><div onClick="{{ t.onClick }}" style="display:flex;align-items:center;gap:6px;height:40px;font-size:13.5px;font-weight:500;cursor:pointer;margin-bottom:-1px;color:{{ t.fg }};border-bottom:2px solid {{ t.bd }}">{{ t.label }}<span style="font-size:12px;color:#a3a3aa">{{ t.count }}</span></div></sc-for>
+</div>
+<div style="background:#fff;border:1px solid #ebebe8;border-radius:14px;padding:14px">
+<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding-bottom:14px">
+<div style="position:relative;flex:1 1 240px;max-width:320px"><svg style="position:absolute;left:11px;top:10px" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9b9ba3" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input value="{{ fn.q }}" onChange="{{ fn.onQ }}" placeholder="Buscar descrição, cliente ou fornecedor" style="height:35px;width:100%;padding:0 12px 0 33px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px"></div>
+<div style="position:relative"><select value="{{ fn.status }}" onChange="{{ fn.onStatus }}" style="appearance:none;height:35px;padding:0 32px 0 12px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer"><option value="">Status: Todos</option><option value="Pendente">Pendente</option><option value="Pago">Pago</option><option value="Em atraso">Em atraso</option></select><svg style="position:absolute;right:10px;top:11px;pointer-events:none" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></div>
+<span style="margin-left:auto;font-size:12.5px;color:#8b8b93">Total filtrado: {{ fn.total }}</span>
+</div>
+<div style="overflow-x:auto"><div style="min-width:900px">
+<div style="display:grid;grid-template-columns:minmax(220px,2fr) minmax(160px,1.3fr) 104px 116px 110px 150px;gap:16px;align-items:center;height:38px;padding:0 14px;background:#f6f6f4;border-radius:8px;font-size:12px;color:#7a7a82;font-weight:500"><span>Descrição</span><span>Cliente / Fornecedor</span><span>Vencimento</span><span>Valor</span><span>Status</span><span></span></div>
+<sc-for list="{{ fn.rows }}" as="r" hint-placeholder-count="6">
+<div style="display:grid;grid-template-columns:minmax(220px,2fr) minmax(160px,1.3fr) 104px 116px 110px 150px;gap:16px;align-items:center;min-height:56px;padding:8px 14px;border-bottom:1px solid #f0f0ed;font-size:13px;background:{{ r.hi }}">
+<div style="min-width:0"><div style="display:flex;align-items:center;gap:8px"><span style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.desc }}</span><sc-if value="{{ r.isNew }}" hint-placeholder-val="{{ false }}"><span style="flex:none;font-size:10.5px;font-weight:600;color:#8f5c0a;background:#fcf3e1;border-radius:5px;padding:2px 6px">NOVA</span></sc-if></div><div style="font-size:12px;color:#8b8b93"><span style="font-family:'Geist Mono',monospace">{{ r.id }}</span><sc-if value="{{ r.hasOrigem }}" hint-placeholder-val="{{ false }}"> · Origem: <span onClick="{{ r.openOrigem }}" style="font-family:'Geist Mono',monospace;color:#1b1b1f;cursor:pointer;border-bottom:1px solid #d6d6d2">{{ r.origem }}</span></sc-if></div></div>
+<span style="color:#46464c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.parte }}</span>
+<span style="color:#46464c">{{ r.venc }}</span>
+<span style="font-weight:500;font-variant-numeric:tabular-nums">{{ r.valor }}</span>
+<span><span style="display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;white-space:nowrap;background:{{ r.badge.bg }};color:{{ r.badge.fg }}"><span style="width:6px;height:6px;border-radius:50%;background:{{ r.badge.dot }}"></span>{{ r.badge.label }}</span></span>
+<span style="text-align:right"><sc-if value="{{ r.canPay }}" hint-placeholder-val="{{ false }}"><button onClick="{{ r.pay }}" style="height:30px;padding:0 10px;border-radius:8px;border:1px solid #e3e3e0;background:#fff;color:#1b1b1f;font-size:12.5px;font-weight:500;cursor:pointer" style-hover="background:#f7f7f5">Marcar como pago</button></sc-if><sc-if value="{{ r.paid }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:#8b8b93">{{ r.pagoEm }}</span></sc-if></span>
+</div>
+</sc-for>
+<sc-if value="{{ fn.empty }}" hint-placeholder-val="{{ false }}"><div style="padding:40px;text-align:center;font-size:13px;color:#8b8b93">Nenhum lançamento encontrado.</div></sc-if>
+</div></div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ is.relatorios }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:8px"><h1 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-0.02em">Relatórios</h1><div style="padding:48px;border:1px dashed #dcdcd8;border-radius:14px;text-align:center;font-size:13px;color:#8b8b93;margin-top:12px">Relatórios não fazem parte deste protótipo — o foco é o fluxo integrado entre módulos.</div></div></sc-if>
+<sc-if value="{{ is.config }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-direction:column;gap:8px"><h1 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-0.02em">Configurações</h1><div style="padding:48px;border:1px dashed #dcdcd8;border-radius:14px;text-align:center;font-size:13px;color:#8b8b93;margin-top:12px">Configurações não fazem parte deste protótipo.</div></div></sc-if>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<sc-if value="{{ fm.open }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;inset:0;background:rgba(20,20,25,.28);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px">
+<div style="width:460px;max-width:100%;background:#fff;border-radius:16px;box-shadow:0 20px 50px rgba(20,20,25,.2);display:flex;flex-direction:column">
+<div style="padding:20px 22px 0"><div style="font-size:16px;font-weight:600">{{ fm.title }}</div><div style="margin-top:4px;font-size:13px;color:#7a7a82"><span style="font-family:'Geist Mono',monospace">{{ fm.id }}</span> · {{ fm.cliente }}</div></div>
+<div style="padding:18px 22px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:#f6f6f4;border-radius:10px"><div><div style="font-size:13px;font-weight:500">{{ fm.servico }}</div><div style="font-size:12px;color:#7a7a82">{{ fm.nServ }} serviço(s) · {{ fm.nPecas }} peça(s)</div></div><div style="font-size:18px;font-weight:600;font-variant-numeric:tabular-nums">{{ fm.total }}</div></div>
+<div onClick="{{ fm.toggle }}" style="display:flex;gap:10px;align-items:flex-start;cursor:pointer">
+<span style="flex:none;width:18px;height:18px;border-radius:5px;margin-top:1px;display:flex;align-items:center;justify-content:center;background:{{ fm.boxBg }};border:1.5px solid {{ fm.boxBd }}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+<div><div style="font-size:13px;font-weight:500">Gerar conta a receber automaticamente</div><div style="font-size:12px;color:#7a7a82">O valor total da OS será lançado em Financeiro › Contas a receber.</div></div>
+</div>
+<sc-if value="{{ fm.gerar }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Vencimento<select value="{{ fm.dias }}" onChange="{{ fm.onDias }}" style="height:36px;padding:0 10px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"><option value="0">À vista (hoje)</option><option value="10">10 dias</option><option value="30">30 dias</option></select><span style="font-weight:400;color:#8b8b93">{{ fm.venc }}</span></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Forma de pagamento<select value="{{ fm.forma }}" onChange="{{ fm.onForma }}" style="height:36px;padding:0 10px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"><option>Pix</option><option>Boleto</option><option>Cartão de crédito</option><option>Transferência</option></select></label>
+</div>
+</sc-if>
+</div>
+<div style="display:flex;justify-content:flex-end;gap:8px;padding:14px 22px;border-top:1px solid #ebebe8">
+<button onClick="{{ fm.cancel }}" style="height:36px;padding:0 14px;border-radius:9px;border:1px solid #e3e3e0;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer">Cancelar</button>
+<button onClick="{{ fm.confirm }}" style="height:36px;padding:0 16px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer">{{ fm.confirmLabel }}</button>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ noM.open }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;inset:0;background:rgba(20,20,25,.28);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px">
+<div style="width:440px;max-width:100%;background:#fff;border-radius:16px;box-shadow:0 20px 50px rgba(20,20,25,.2)">
+<div style="padding:20px 22px 0"><div style="font-size:16px;font-weight:600">Nova ordem de serviço</div><div style="margin-top:4px;font-size:13px;color:#7a7a82">Abertura rápida, sem orçamento prévio.</div></div>
+<div style="padding:18px 22px;display:flex;flex-direction:column;gap:12px">
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Cliente<select value="{{ noM.clienteId }}" onChange="{{ noM.onCliente }}" style="height:36px;padding:0 10px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"><option value="">Selecione…</option><sc-for list="{{ noM.clientes }}" as="o" hint-placeholder-count="0"><option value="{{ o.id }}">{{ o.nome }}</option></sc-for></select></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Serviço<select value="{{ noM.servId }}" onChange="{{ noM.onServ }}" style="height:36px;padding:0 10px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"><sc-for list="{{ noM.servs }}" as="o" hint-placeholder-count="0"><option value="{{ o.id }}">{{ o.label }}</option></sc-for></select></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Responsável<select value="{{ noM.resp }}" onChange="{{ noM.onResp }}" style="height:36px;padding:0 10px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"><sc-for list="{{ noM.resps }}" as="o" hint-placeholder-count="0"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+</div>
+<div style="display:flex;justify-content:flex-end;gap:8px;padding:14px 22px;border-top:1px solid #ebebe8">
+<button onClick="{{ noM.cancel }}" style="height:36px;padding:0 14px;border-radius:9px;border:1px solid #e3e3e0;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer">Cancelar</button>
+<button onClick="{{ noM.create }}" style="height:36px;padding:0 16px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer">Abrir OS</button>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ ni.open }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;inset:0;background:rgba(20,20,25,.28);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px">
+<div style="width:480px;max-width:100%;background:#fff;border-radius:16px;box-shadow:0 20px 50px rgba(20,20,25,.2)">
+<div style="padding:20px 22px 0;font-size:16px;font-weight:600">Novo item de estoque</div>
+<div style="padding:18px 22px;display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Produto<input value="{{ ni.nome }}" onChange="{{ ni.onNome }}" placeholder="Ex.: SSD 1 TB NVMe" style="height:36px;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;font-size:13px;color:#1b1b1f"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Categoria<select value="{{ ni.categoria }}" onChange="{{ ni.onCat }}" style="height:36px;padding:0 10px;border:1px solid #e3e3e0;border-radius:9px;background:#fff;font-size:13px;color:#1b1b1f"><sc-for list="{{ ni.cats }}" as="o" hint-placeholder-count="0"><option value="{{ o }}">{{ o }}</option></sc-for></select></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">SKU<input value="{{ ni.sku }}" onChange="{{ ni.onSku }}" placeholder="Gerado se vazio" style="height:36px;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;font-size:13px;color:#1b1b1f"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Quantidade inicial<input value="{{ ni.qty }}" onChange="{{ ni.onQty }}" inputmode="numeric" style="height:36px;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;font-size:13px;color:#1b1b1f"></label>
+<label style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Estoque mínimo<input value="{{ ni.min }}" onChange="{{ ni.onMin }}" inputmode="numeric" style="height:36px;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;font-size:13px;color:#1b1b1f"></label>
+<label style="grid-column:1 / -1;display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:500;color:#5f5f67">Preço de venda (R$)<input value="{{ ni.preco }}" onChange="{{ ni.onPreco }}" inputmode="decimal" placeholder="0,00" style="height:36px;padding:0 12px;border:1px solid #e3e3e0;border-radius:9px;font-size:13px;color:#1b1b1f"></label>
+</div>
+<div style="display:flex;justify-content:flex-end;gap:8px;padding:14px 22px;border-top:1px solid #ebebe8">
+<button onClick="{{ ni.cancel }}" style="height:36px;padding:0 14px;border-radius:9px;border:1px solid #e3e3e0;background:#fff;color:#1b1b1f;font-size:13px;font-weight:500;cursor:pointer">Cancelar</button>
+<button onClick="{{ ni.save }}" style="height:36px;padding:0 16px;border-radius:9px;border:1px solid #1b1b1f;background:#1b1b1f;color:#fff;font-size:13px;font-weight:500;cursor:pointer">Salvar item</button>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:60;display:flex;align-items:center;gap:10px;padding:11px 16px 11px 12px;background:#1b1b1f;color:#fff;border-radius:12px;box-shadow:0 10px 30px rgba(20,20,25,.25);max-width:560px">
+<span style="flex:none;width:22px;height:22px;border-radius:50%;background:#2f9e55;display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span>
+<div><div style="font-size:13px;font-weight:500">{{ toast.msg }}</div><div style="font-size:12px;color:#b4b4ba">{{ toast.sub }}</div></div>
+</div>
+</sc-if>
+<sc-if value="{{ guide.show }}" hint-placeholder-val="{{ true }}">
+<div style="position:fixed;right:22px;bottom:22px;z-index:40;width:300px;background:#fff;border:1px solid #e7e7e4;border-radius:14px;box-shadow:0 12px 32px rgba(20,20,25,.12)">
+<div onClick="{{ guide.toggle }}" style="display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer">
+<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600">Roteiro da demonstração</div><div style="display:flex;align-items:center;gap:8px;margin-top:6px"><span style="flex:1;height:4px;border-radius:99px;background:#efefec;overflow:hidden"><span style="display:block;height:100%;background:#1b1b1f;border-radius:99px;width:{{ guide.pct }}"></span></span><span style="font-size:11.5px;color:#7a7a82">{{ guide.done }}/{{ guide.total }}</span></div></div>
+<sc-if value="{{ guide.open }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"></path></svg></sc-if>
+<sc-if value="{{ guide.closed }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8b8b93" stroke-width="2" stroke-linecap="round"><path d="m18 15-6-6-6 6"></path></svg></sc-if>
+</div>
+<sc-if value="{{ guide.open }}" hint-placeholder-val="{{ true }}">
+<div style="padding:0 8px 8px;display:flex;flex-direction:column;gap:1px;border-top:1px solid #f0f0ed;padding-top:6px">
+<sc-for list="{{ guide.steps }}" as="g" hint-placeholder-count="8">
+<div onClick="{{ g.go }}" style="display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:8px;cursor:pointer;background:{{ g.rowBg }}" style-hover="background:#f6f6f4">
+<sc-if value="{{ g.done }}" hint-placeholder-val="{{ false }}"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:#1b1b1f;display:flex;align-items:center;justify-content:center"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg></span></sc-if>
+<sc-if value="{{ g.notDone }}" hint-placeholder-val="{{ true }}"><span style="flex:none;width:18px;height:18px;border-radius:50%;border:1.5px solid #d6d6d2;font-size:10px;font-weight:600;color:#8b8b93;display:flex;align-items:center;justify-content:center">{{ g.n }}</span></sc-if>
+<span style="flex:1;font-size:12.5px;color:{{ g.fg }};text-decoration:{{ g.deco }}">{{ g.t }}</span>
+<sc-if value="{{ g.isNext }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;font-weight:500;color:#1b1b1f">Ir →</span></sc-if>
+</div>
+</sc-for>
+<button onClick="{{ guide.reset }}" style="margin-top:4px;height:28px;border:none;background:transparent;color:#8b8b93;font-size:11.5px;cursor:pointer">Reiniciar dados da demonstração</button>
+</div>
+</sc-if>
+</div>
+</sc-if></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showGuide&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;startPage&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Dashboard&quot;,&quot;Clientes&quot;,&quot;Orçamentos&quot;,&quot;Ordens de Serviço&quot;,&quot;Estoque&quot;,&quot;Financeiro&quot;],&quot;default&quot;:&quot;Dashboard&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const TODAY='2026-09-24';
+const brl=v=>(+v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const fd=iso=>{if(!iso)return '—';const[y,m,d]=iso.split('-');return d+'/'+m+'/'+y;};
+const MES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const fds=iso=>{if(!iso)return '—';const[,m,d]=iso.split('-');return (+d)+' '+MES[+m-1];};
+const addDays=(iso,n)=>{const d=new Date(iso+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10);};
+const STOP=['de','da','do','das','dos','e','&','ltda.','ltda','me','s.a.','dra.','dr.'];
+const ini=n=>(n||'').split(/\s+/).filter(w=>w&&!STOP.includes(w.toLowerCase())).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+const TONES={green:{bg:'#ebf6ee',fg:'#1f7a3d',dot:'#2f9e55'},amber:{bg:'#fcf3e1',fg:'#8f5c0a',dot:'#d99413'},red:{bg:'#fdeeee',fg:'#b42323',dot:'#dc4444'},blue:{bg:'#eaf1fc',fg:'#1f5fb8',dot:'#3b82e0'},gray:{bg:'#f1f1ef',fg:'#5d5d63',dot:'#a8a8ae'},violet:{bg:'#f1eefc',fg:'#5a45b8',dot:'#7c66e0'}};
+const TONE_OF={'Ativo':'green','Inativo':'gray','Rascunho':'gray','Aguardando aprovação':'amber','Aprovado':'green','Recusado':'red','Expirado':'gray','Aberta':'violet','Em andamento':'blue','Aguardando':'amber','Concluída':'green','Pendente':'amber','Pago':'green','Em atraso':'red','Em estoque':'green','Estoque baixo':'amber','Sem estoque':'red','Entrada':'green','Saída':'blue','Ajuste':'amber','Serviço':'violet','Peça':'blue'};
+const badge=s=>({label:s,...(TONES[TONE_OF[s]]||TONES.gray)});
+const SERVICOS=[{id:'s1',desc:'Diagnóstico técnico',unit:80},{id:'s2',desc:'Manutenção de notebook',unit:180},{id:'s3',desc:'Troca de SSD 480 GB (mão de obra)',unit:160},{id:'s4',desc:'Formatação e instalação do Windows 11',unit:150},{id:'s5',desc:'Limpeza interna e troca de pasta térmica',unit:120},{id:'s6',desc:'Configuração de rede e roteador',unit:250},{id:'s7',desc:'Backup e migração de dados',unit:160}];
+const S=id=>SERVICOS.find(s=>s.id===id);
+const RESP=['Ana Ribeiro','Bruno Tavares','Carlos Mendes'];
+const CEPS={'05422030':{endereco:'Rua dos Pinheiros',cidade:'São Paulo',uf:'SP'},'01310100':{endereco:'Av. Paulista',cidade:'São Paulo',uf:'SP'},'13015100':{endereco:'Rua Barão de Jaguara',cidade:'Campinas',uf:'SP'},'80020000':{endereco:'Rua XV de Novembro',cidade:'Curitiba',uf:'PR'},'30130110':{endereco:'Av. Afonso Pena',cidade:'Belo Horizonte',uf:'MG'}};
+const stStatus=e=>e.qty<=0?'Sem estoque':(e.qty<=e.min?'Estoque baixo':'Em estoque');
+const finSt=r=>r.status==='Pago'?'Pago':(r.venc<TODAY?'Em atraso':'Pendente');
+const lineSum=a=>a.reduce((s,i)=>s+(+i.qty||0)*(+i.unit||0),0);
+const orcTotal=o=>Math.max(0,lineSum(o.itens)-(+o.desconto||0));
+const osTotal=o=>lineSum(o.servicos)+lineSum(o.pecas);
+const sum=(a,fn)=>a.reduce((x,y)=>x+fn(y),0);
+const blankCf=()=>({nome:'',doc:'',contato:'',email:'',tel:'',cep:'',endereco:'',numero:'',complemento:'',cidade:'',uf:'',status:'Ativo'});
+const blankOf=()=>({clienteId:'',titulo:'',itens:[],desconto:'',validade:'15',obs:''});
+const PAGES=['dashboard','clientes','clienteNovo','cliente','orcamentos','orcamentoNovo','orcamento','os','osDetalhe','estoque','estoqueItem','financeiro','relatorios','config'];
+const NAVKEY={dashboard:'dashboard',clientes:'clientes',clienteNovo:'clientes',cliente:'clientes',orcamentos:'orcamentos',orcamentoNovo:'orcamentos',orcamento:'orcamentos',os:'os',osDetalhe:'os',estoque:'estoque',estoqueItem:'estoque',financeiro:'financeiro',relatorios:'relatorios',config:'config'};
+const NAV=['dashboard','clientes','orcamentos','os','estoque','financeiro','relatorios','config'];
+const TITLE={dashboard:'Dashboard',clientes:'Clientes',orcamentos:'Orçamentos',os:'Ordens de Serviço',estoque:'Estoque',financeiro:'Financeiro',relatorios:'Relatórios',config:'Configurações'};
+
+function seed(){
+ const clientes=[
+ {id:'c1',nome:'TechHouse Ltda.',doc:'12.345.678/0001-90',contato:'João Almeida',email:'joao.almeida@techhouse.com.br',tel:'(11) 98765-4321',cep:'01310-100',endereco:'Av. Paulista',numero:'1578',complemento:'Conj. 82',cidade:'São Paulo',uf:'SP',status:'Ativo',desde:'2024-03-12'},
+ {id:'c2',nome:'Mariana Costa',doc:'348.912.556-07',contato:'Mariana Costa',email:'mariana.costa@gmail.com',tel:'(19) 99812-3340',cep:'13015-100',endereco:'Rua Barão de Jaguara',numero:'845',complemento:'Apto 41',cidade:'Campinas',uf:'SP',status:'Ativo',desde:'2025-06-02'},
+ {id:'c3',nome:'Padaria Pão Dourado ME',doc:'23.456.789/0001-12',contato:'Sérgio Nunes',email:'contato@paodourado.com.br',tel:'(13) 3222-4510',cep:'11010-000',endereco:'Rua XV de Novembro',numero:'112',complemento:'',cidade:'Santos',uf:'SP',status:'Ativo',desde:'2025-01-20'},
+ {id:'c4',nome:'Clínica Vida Plena',doc:'34.567.890/0001-34',contato:'Dra. Patrícia Lopes',email:'adm@clinicavidaplena.com.br',tel:'(41) 3024-7788',cep:'80020-000',endereco:'Rua XV de Novembro',numero:'1290',complemento:'Sala 304',cidade:'Curitiba',uf:'PR',status:'Ativo',desde:'2024-11-05'},
+ {id:'c5',nome:'Rafael Souza',doc:'219.334.870-55',contato:'Rafael Souza',email:'rafael.souza@outlook.com',tel:'(11) 97123-5566',cep:'04538-132',endereco:'Av. Brigadeiro Faria Lima',numero:'3900',complemento:'',cidade:'São Paulo',uf:'SP',status:'Ativo',desde:'2025-08-14'},
+ {id:'c6',nome:'Moura & Lima Advogados',doc:'45.678.901/0001-56',contato:'Eduardo Moura',email:'eduardo@mouralima.adv.br',tel:'(31) 3261-9040',cep:'30130-110',endereco:'Av. Afonso Pena',numero:'1500',complemento:'10º andar',cidade:'Belo Horizonte',uf:'MG',status:'Ativo',desde:'2023-09-28'},
+ {id:'c7',nome:'Construtora Horizonte S.A.',doc:'56.789.012/0001-78',contato:'Fernanda Reis',email:'ti@horizonte.com.br',tel:'(11) 3456-7000',cep:'01452-000',endereco:'Av. Brasil',numero:'230',complemento:'',cidade:'São Paulo',uf:'SP',status:'Inativo',desde:'2023-04-10'},
+ {id:'c8',nome:'Luciana Ferreira',doc:'402.118.667-20',contato:'Luciana Ferreira',email:'lu.ferreira@gmail.com',tel:'(21) 99654-2210',cep:'22041-001',endereco:'Av. N. Sra. de Copacabana',numero:'680',complemento:'Apto 802',cidade:'Rio de Janeiro',uf:'RJ',status:'Inativo',desde:'2024-07-19'}];
+ const mk=(id,nome,categoria,sku,qty,min,preco,forn,n)=>{const ent=qty+n;return {id,nome,categoria,sku,qty,min,preco,forn,hist:[{data:'2026-09-'+String(3+n*2).padStart(2,'0'),tipo:'Saída',qty:-n,ref:'OS-02'+(18+n),saldo:qty},{data:'2026-08-'+String(10+n).padStart(2,'0'),tipo:'Entrada',qty:ent,ref:'NF '+(4480+n*13)+' · '+forn,saldo:ent}]};};
+ const estoque=[
+ mk('e1','SSD 480 GB Kingston A400','Armazenamento','SSD-480-KA4',12,5,290,'Kingston Distribuidora',4),
+ mk('e2','Memória RAM DDR4 8 GB 3200 MHz','Memória','RAM-D4-8G',3,6,219.9,'Alfa Componentes',5),
+ mk('e3','Fonte ATX 500 W 80 Plus','Energia','FNT-500-80P',0,3,329,'Alfa Componentes',3),
+ mk('e4','Pasta térmica Arctic MX-4 (4 g)','Insumos','PST-MX4-4G',25,10,49.9,'Alfa Componentes',6),
+ mk('e5','Teclado notebook Dell Inspiron 15','Periféricos','TEC-DL-I15',2,3,159,'NotePeças Brasil',2),
+ mk('e6','Bateria notebook Lenovo IdeaPad 3','Energia','BAT-LN-IP3',4,3,389,'NotePeças Brasil',1),
+ mk('e7','Cabo HDMI 2.0 — 2 m','Periféricos','CAB-HDMI-2M',40,15,34.9,'Alfa Componentes',8),
+ mk('e8','Roteador TP-Link Archer C6','Redes','RTR-TPL-C6',6,4,279,'Distribuidora Conecta',2),
+ mk('e9','Tela 15,6" LED HD 30 pinos','Telas','TLA-156-30P',1,2,469,'NotePeças Brasil',1),
+ mk('e10','HD externo 1 TB USB 3.0','Armazenamento','HDE-1TB-U3',0,2,349,'Kingston Distribuidora',2)];
+ const E=id=>estoque.find(e=>e.id===id);
+ const sv=(id,q)=>({tipo:'servico',desc:S(id).desc,qty:q,unit:S(id).unit});
+ const pc=(id,q)=>({tipo:'peca',itemId:id,desc:E(id).nome,qty:q,unit:E(id).preco});
+ const strip=a=>a.map(({tipo,...r})=>r);
+ const orcamentos=[
+ {id:'ORC-0148',clienteId:'c1',desc:'Troca de SSD 480 GB em 3 notebooks',itens:[sv('s3',3),pc('e1',3)],desconto:0,data:'2026-09-22',validade:'2026-10-07',status:'Aguardando aprovação',obs:'Notebooks do setor comercial. Clonagem do sistema incluída.',osId:null},
+ {id:'ORC-0147',clienteId:'c4',desc:'Configuração de rede da recepção',itens:[sv('s6',1),pc('e8',1)],desconto:0,data:'2026-09-19',validade:'2026-10-04',status:'Aprovado',aprovadoEm:'2026-09-22',obs:'',osId:'OS-0236'},
+ {id:'ORC-0146',clienteId:'c2',desc:'Troca de SSD 480 GB',itens:[sv('s3',1),pc('e1',1)],desconto:0,data:'2026-09-17',validade:'2026-10-02',status:'Aprovado',aprovadoEm:'2026-09-20',obs:'',osId:'OS-0235'},
+ {id:'ORC-0145',clienteId:'c3',desc:'Formatação de 2 computadores do caixa',itens:[sv('s4',2)],desconto:0,data:'2026-09-16',validade:'2026-10-01',status:'Rascunho',obs:'',osId:null},
+ {id:'ORC-0144',clienteId:'c6',desc:'Upgrade de memória — 4 estações',itens:[pc('e2',4),sv('s1',4)],desconto:50,data:'2026-09-10',validade:'2026-09-25',status:'Recusado',obs:'',osId:null},
+ {id:'ORC-0143',clienteId:'c8',desc:'Troca de tela de notebook',itens:[pc('e9',1),sv('s2',1)],desconto:0,data:'2026-08-20',validade:'2026-09-04',status:'Expirado',obs:'',osId:null},
+ {id:'ORC-0142',clienteId:'c1',desc:'Manutenção preventiva — 6 notebooks',itens:[sv('s5',6),pc('e4',6)],desconto:0,data:'2026-09-08',validade:'2026-09-23',status:'Aprovado',aprovadoEm:'2026-09-10',obs:'',osId:'OS-0233'}];
+ const EQ=(tipo,modelo,serie,acessorios)=>({tipo,modelo,serie,acessorios});
+ const ordens=[
+ {id:'OS-0236',clienteId:'c4',orcId:'ORC-0147',servico:'Configuração de rede da recepção',equipamento:EQ('Roteador','TP-Link Archer C6','22384A1','Fonte'),problema:'Sinal Wi-Fi instável na recepção e nos consultórios 1 e 2.',realizado:'',servicos:strip([sv('s6',1)]),pecas:strip([pc('e8',1)]),responsavel:'Bruno Tavares',abertura:'2026-09-23',previsao:'2026-09-26',obs:'Agendar visita fora do horário de atendimento.',status:'Aberta'},
+ {id:'OS-0235',clienteId:'c2',orcId:'ORC-0146',servico:'Troca de SSD 480 GB',equipamento:EQ('Notebook','Dell Inspiron 15 3520','7HK2QX3','Carregador'),problema:'Notebook muito lento para iniciar e abrir programas. Travamentos frequentes.',realizado:'Diagnóstico concluído: HD com setores defeituosos. Clonagem em andamento.',servicos:strip([sv('s3',1)]),pecas:strip([pc('e1',1)]),responsavel:'Ana Ribeiro',abertura:'2026-09-21',previsao:'2026-09-25',status:'Em andamento'},
+ {id:'OS-0234',clienteId:'c5',orcId:null,servico:'Manutenção de notebook',equipamento:EQ('Notebook','Dell Inspiron 15 5510','9FJ3LM1','Carregador'),problema:'Teclas sem resposta após derramamento de líquido.',realizado:'Limpeza da placa realizada. Teclado precisa ser substituído.',servicos:strip([sv('s2',1)]),pecas:[],responsavel:'Carlos Mendes',abertura:'2026-09-18',previsao:'2026-09-29',status:'Aguardando',obs:'Aguardando chegada do teclado (NotePeças Brasil).'},
+ {id:'OS-0233',clienteId:'c1',orcId:'ORC-0142',servico:'Manutenção preventiva — 6 notebooks',equipamento:EQ('Notebook','Lenovo ThinkPad E14 (6 un.)','Diversos',''),problema:'Manutenção preventiva semestral.',realizado:'Limpeza interna, troca de pasta térmica e atualização de drivers nos 6 equipamentos.',servicos:strip([sv('s5',6)]),pecas:strip([pc('e4',6)]),responsavel:'Carlos Mendes',abertura:'2026-09-12',previsao:'2026-09-16',conclusao:'2026-09-16',status:'Concluída',receberId:'CR-0088'},
+ {id:'OS-0232',clienteId:'c3',orcId:null,servico:'Diagnóstico técnico — computador do caixa',equipamento:EQ('Desktop','Positivo Master D580','PM58-22019',''),problema:'Computador desliga sozinho durante o uso.',realizado:'Fonte com defeito identificada.',servicos:strip([sv('s1',1)]),pecas:[],responsavel:'Ana Ribeiro',abertura:'2026-09-08',previsao:'2026-09-09',conclusao:'2026-09-09',status:'Concluída',receberId:'CR-0086'},
+ {id:'OS-0231',clienteId:'c6',orcId:null,servico:'Formatação e instalação do Windows 11',equipamento:EQ('Notebook','HP ProBook 440 G8','5CD1234XYZ','Carregador'),problema:'Sistema corrompido após atualização.',realizado:'Backup dos arquivos concluído.',servicos:strip([sv('s4',1)]),pecas:[],responsavel:'Bruno Tavares',abertura:'2026-09-20',previsao:'2026-09-24',status:'Em andamento'},
+ {id:'OS-0230',clienteId:'c1',orcId:null,servico:'Backup e migração de dados',equipamento:EQ('Notebook','Lenovo ThinkPad E14','PF2K8L0',''),problema:'Migração de dados para o novo equipamento da diretoria.',realizado:'',servicos:strip([sv('s7',1)]),pecas:[],responsavel:'Carlos Mendes',abertura:'2026-09-23',previsao:'2026-09-25',status:'Aberta'},
+ {id:'OS-0229',clienteId:'c4',orcId:null,servico:'Limpeza interna e troca de pasta térmica',equipamento:EQ('Desktop','Dell OptiPlex 3080','3080-88121',''),problema:'Superaquecimento e ruído alto no cooler.',realizado:'Limpeza completa e troca de pasta térmica.',servicos:strip([sv('s5',1)]),pecas:strip([pc('e4',1)]),responsavel:'Ana Ribeiro',abertura:'2026-09-02',previsao:'2026-09-03',conclusao:'2026-09-03',status:'Concluída',receberId:'CR-0084'}];
+ ordens.forEach(o=>{o.conclusao=o.conclusao||null;o.obs=o.obs||'';o.receberId=o.receberId||null;});
+ const receber=[
+ {id:'CR-0088',desc:'Manutenção preventiva — OS-0233',clienteId:'c1',parte:'TechHouse Ltda.',venc:'2026-10-16',valor:1019.4,status:'Pendente',osId:'OS-0233'},
+ {id:'CR-0087',desc:'Contrato de suporte mensal — setembro',clienteId:'c6',parte:'Moura & Lima Advogados',venc:'2026-09-10',valor:890,status:'Pendente'},
+ {id:'CR-0086',desc:'Diagnóstico técnico — OS-0232',clienteId:'c3',parte:'Padaria Pão Dourado ME',venc:'2026-09-19',valor:80,status:'Pago',pagoEm:'2026-09-18',osId:'OS-0232'},
+ {id:'CR-0085',desc:'Configuração de impressora',clienteId:'c5',parte:'Rafael Souza',venc:'2026-09-30',valor:120,status:'Pendente'},
+ {id:'CR-0084',desc:'Limpeza interna — OS-0229',clienteId:'c4',parte:'Clínica Vida Plena',venc:'2026-09-13',valor:169.9,status:'Pago',pagoEm:'2026-09-05',osId:'OS-0229'},
+ {id:'CR-0083',desc:'Contrato de suporte mensal — setembro',clienteId:'c1',parte:'TechHouse Ltda.',venc:'2026-09-05',valor:1450,status:'Pago',pagoEm:'2026-09-04'},
+ {id:'CR-0082',desc:'Instalação de rede — 2ª parcela',clienteId:'c2',parte:'Mariana Costa',venc:'2026-09-15',valor:280,status:'Pendente'}];
+ const pagar=[
+ {id:'CP-0041',desc:'Compra de SSDs — NF 4532',parte:'Kingston Distribuidora',venc:'2026-09-28',valor:2299.2,status:'Pendente'},
+ {id:'CP-0040',desc:'Aluguel da loja — setembro',parte:'Imobiliária Central',venc:'2026-09-10',valor:3200,status:'Pago',pagoEm:'2026-09-09'},
+ {id:'CP-0039',desc:'Internet empresarial',parte:'Vivo Empresas',venc:'2026-09-20',valor:289.9,status:'Pendente'},
+ {id:'CP-0038',desc:'Honorários contábeis',parte:'Silva & Associados Contabilidade',venc:'2026-09-30',valor:750,status:'Pendente'},
+ {id:'CP-0037',desc:'Energia elétrica — agosto',parte:'Enel',venc:'2026-09-12',valor:412.35,status:'Pago',pagoEm:'2026-09-11'}];
+ return {clientes,estoque,orcamentos,ordens,receber,pagar,seq:{cli:9,orc:149,os:237,cr:89,item:11}};
+}
+
+class Component extends DCLogic {
+ state = this.init();
+ mainRef = React.createRef();
+ init(){
+  const p=(this.props&&this.props.startPage)||'Dashboard';
+  const sp={'Dashboard':'dashboard','Clientes':'clientes','Orçamentos':'orcamentos','Ordens de Serviço':'os','Estoque':'estoque','Financeiro':'financeiro'}[p]||'dashboard';
+  return {...seed(),page:sp,cliSel:'c1',orcSel:'ORC-0148',osSel:'OS-0235',itemSel:'e1',
+   cl:{q:'',status:'',cidade:''},cf:blankCf(),cfEdit:null,cfErr:'',cepHint:'',cdTab:'overview',
+   ol:{q:'',status:'',periodo:''},of:blankOf(),ofErr:'',osView:'quadro',osl:{q:'',status:'',resp:''},
+   addPart:{itemId:'',qty:'1'},finModal:null,st:{q:'',cat:'',status:''},mov:{tipo:'Entrada',qty:'',motivo:''},newItem:null,
+   fnTab:'receber',fnf:{q:'',status:''},finHi:null,newOs:null,flow:{},last:{},guideOpen:true,toast:null};
+ }
+ componentWillUnmount(){clearTimeout(this._t);}
+ cli(id){return this.state.clientes.find(c=>c.id===id)||{nome:'—',cidade:'',uf:'',id:''};}
+ go(page,extra){this.setState({page,...(extra||{})});if(this.mainRef.current)this.mainRef.current.scrollTop=0;}
+ toast(msg,sub){clearTimeout(this._t);this.setState({toast:{msg,sub:sub||''}});this._t=setTimeout(()=>this.setState({toast:null}),3800);}
+ flag(k,extra){this.setState(s=>({flow:{...s.flow,[k]:true},...(extra?{last:{...s.last,...extra}}:{})}));}
+ openCf(id){const c=id&&this.cli(id);const cf=blankCf();if(c)Object.keys(cf).forEach(k=>cf[k]=c[k]||'');this.go('clienteNovo',{cf,cfEdit:id||null,cfErr:'',cepHint:''});}
+ openOf(clienteId){this.go('orcamentoNovo',{of:{...blankOf(),clienteId:clienteId||''},ofErr:''});}
+ moveStock(estoque,itemId,delta,tipo,ref){return estoque.map(e=>{if(e.id!==itemId)return e;const q=Math.max(0,e.qty+delta);return {...e,qty:q,hist:[{data:TODAY,tipo,qty:q-e.qty,ref,saldo:q},...e.hist]};});}
+ patchOs(id,patch){this.setState(s=>({ordens:s.ordens.map(o=>o.id===id?{...o,...(typeof patch==='function'?patch(o):patch)}:o)}));}
+ saveCliente(){const s=this.state,cf=s.cf;if(!cf.nome.trim()){this.setState({cfErr:'Informe o nome ou a razão social para continuar.'});return;}
+  if(s.cfEdit){this.setState({clientes:s.clientes.map(c=>c.id===s.cfEdit?{...c,...cf}:c)});this.go('cliente',{cliSel:s.cfEdit});this.toast('Cliente atualizado');return;}
+  const id='c'+s.seq.cli;const c={...cf,id,contato:cf.contato||cf.nome,desde:TODAY};
+  this.setState({clientes:[c,...s.clientes],seq:{...s.seq,cli:s.seq.cli+1}});this.flag('cliente',{cliente:id});
+  this.go('cliente',{cliSel:id,cdTab:'overview'});this.toast('Cliente cadastrado',cf.nome+' já pode ser usado em orçamentos e OS.');}
+ saveOrc(status){const s=this.state,of=s.of;
+  if(!of.clienteId){this.setState({ofErr:'Selecione um cliente.'});return;}
+  if(!of.itens.length){this.setState({ofErr:'Adicione pelo menos um serviço ou peça.'});return;}
+  const id='ORC-'+String(s.seq.orc).padStart(4,'0');const itens=of.itens.map(i=>({...i,qty:+i.qty||0,unit:+String(i.unit).replace(',','.')||0}));
+  const o={id,clienteId:of.clienteId,desc:of.titulo.trim()||itens[0].desc,itens,desconto:+String(of.desconto).replace(',','.')||0,data:TODAY,validade:addDays(TODAY,+of.validade),status,obs:of.obs,osId:null};
+  this.setState({orcamentos:[o,...s.orcamentos],seq:{...s.seq,orc:s.seq.orc+1}});
+  if(status!=='Rascunho')this.flag('orc',{orc:id});else this.setState(st=>({last:{...st.last,orc:id}}));
+  this.go('orcamento',{orcSel:id});this.toast(status==='Rascunho'?'Rascunho salvo':'Orçamento '+id+' criado',status==='Rascunho'?'':'Status: Aguardando aprovação');}
+ setOrcStatus(id,st){this.setState(s=>({orcamentos:s.orcamentos.map(o=>o.id===id?{...o,status:st,aprovadoEm:st==='Aprovado'?TODAY:o.aprovadoEm}:o)}));
+  if(st==='Aprovado')this.flag('aprov',{orc:id});this.toast('Orçamento '+id+': '+st);}
+ gerarOS(orcId){const s=this.state;const o=s.orcamentos.find(x=>x.id===orcId);const id='OS-'+String(s.seq.os).padStart(4,'0');
+  const servicos=o.itens.filter(i=>i.tipo==='servico').map(i=>({desc:i.desc,qty:i.qty,unit:i.unit}));
+  const pecas=o.itens.filter(i=>i.tipo==='peca').map(i=>({itemId:i.itemId,desc:i.desc,qty:i.qty,unit:i.unit}));
+  let estoque=s.estoque;pecas.forEach(p=>{estoque=this.moveStock(estoque,p.itemId,-p.qty,'Saída',id);});
+  const os={id,clienteId:o.clienteId,orcId,servico:o.desc,equipamento:{tipo:'Notebook',modelo:'',serie:'',acessorios:''},problema:o.obs||'',realizado:'',servicos,pecas,responsavel:'Ana Ribeiro',abertura:TODAY,previsao:addDays(TODAY,3),conclusao:null,obs:'',status:'Aberta',receberId:null};
+  this.setState({ordens:[os,...s.ordens],orcamentos:s.orcamentos.map(x=>x.id===orcId?{...x,osId:id}:x),estoque,seq:{...s.seq,os:s.seq.os+1}});
+  this.flag('os',{os:id});this.go('osDetalhe',{osSel:id,addPart:{itemId:'',qty:'1'}});
+  this.toast('Ordem de serviço '+id+' gerada',pecas.length?'Cliente, itens e valores reaproveitados · '+pecas.length+' peça(s) baixada(s) do estoque':'Cliente, itens e valores reaproveitados do orçamento');}
+ setOsStatus(id,st){const o=this.state.ordens.find(x=>x.id===id);if(!o||o.status===st)return;if(o.status==='Concluída'){this.toast('Esta OS já foi finalizada');return;}
+  this.patchOs(id,{status:st});if(st==='Em andamento')this.flag('andamento',{os:id});this.toast(id+' movida para “'+st+'”');}
+ openFinish(id){const o=this.state.ordens.find(x=>x.id===id);this.setState({finModal:{osId:id,gerar:true,dias:'10',forma:'Pix',only:o&&o.status==='Concluída'}});}
+ finalize(){const s=this.state,m=s.finModal,o=s.ordens.find(x=>x.id===m.osId),c=this.cli(o.clienteId);const total=osTotal(o);let receber=s.receber,crId=null,seq=s.seq;
+  if(m.gerar){crId='CR-'+String(seq.cr).padStart(4,'0');receber=[{id:crId,desc:o.servico+' — '+o.id,clienteId:o.clienteId,parte:c.nome,venc:addDays(TODAY,+m.dias),valor:total,status:'Pendente',osId:o.id,forma:m.forma},...receber];seq={...seq,cr:seq.cr+1};}
+  this.setState({ordens:s.ordens.map(x=>x.id===o.id?{...x,status:'Concluída',conclusao:x.conclusao||TODAY,receberId:crId||x.receberId}:x),receber,seq,finModal:null});
+  this.flag('final',crId?{cr:crId,os:o.id}:{os:o.id});
+  this.toast(m.only?'Conta a receber gerada':o.id+' finalizada',crId?'Conta a receber '+crId+' · '+brl(total)+' · vence '+fd(addDays(TODAY,+m.dias)):'Nenhuma conta a receber foi gerada.');}
+ addPartToOs(){const s=this.state,o=s.ordens.find(x=>x.id===s.osSel),{itemId,qty}=s.addPart;const e=s.estoque.find(x=>x.id===itemId);const q=parseInt(qty)||0;
+  if(!e||q<=0){this.toast('Selecione um item e a quantidade');return;}
+  if(q>e.qty){this.toast('Estoque insuficiente',e.nome+': '+e.qty+' disponível(is).');return;}
+  const estoque=this.moveStock(s.estoque,itemId,-q,'Saída',o.id);
+  const ex=o.pecas.find(p=>p.itemId===itemId);const pecas=ex?o.pecas.map(p=>p.itemId===itemId?{...p,qty:p.qty+q}:p):[...o.pecas,{itemId,desc:e.nome,qty:q,unit:e.preco}];
+  this.setState({estoque,ordens:s.ordens.map(x=>x.id===o.id?{...x,pecas}:x),addPart:{itemId:'',qty:'1'}});
+  this.flag('peca',{os:o.id});this.toast('Peça adicionada à '+o.id,e.nome+' · estoque '+e.qty+' → '+(e.qty-q));}
+ removePart(idx){const s=this.state,o=s.ordens.find(x=>x.id===s.osSel),p=o.pecas[idx];
+  this.setState({estoque:this.moveStock(s.estoque,p.itemId,p.qty,'Entrada','Estorno · '+o.id),ordens:s.ordens.map(x=>x.id===o.id?{...x,pecas:x.pecas.filter((_,i)=>i!==idx)}:x)});
+  this.toast('Peça removida',p.qty+' un. devolvida(s) ao estoque');}
+ markPaid(kind,id){this.setState(s=>({[kind]:s[kind].map(r=>r.id===id?{...r,status:'Pago',pagoEm:TODAY}:r)}));if(kind==='receber')this.flag('pago');
+  const r=this.state[kind].find(x=>x.id===id);this.toast('Pagamento registrado',id+' · '+brl(r.valor)+' marcado como “Pago”');}
+ registerMov(){const s=this.state,e=s.estoque.find(x=>x.id===s.itemSel),m=s.mov;const q=parseInt(m.qty);
+  if(isNaN(q)||q<0||(m.tipo!=='Ajuste'&&q===0)){this.toast('Informe uma quantidade válida');return;}
+  const delta=m.tipo==='Entrada'?q:(m.tipo==='Saída'?-Math.min(q,e.qty):q-e.qty);
+  const ref=m.motivo.trim()||({Entrada:'Entrada manual',Saída:'Saída manual',Ajuste:'Ajuste de inventário'})[m.tipo];
+  this.setState({estoque:this.moveStock(s.estoque,e.id,delta,m.tipo,ref),mov:{tipo:m.tipo,qty:'',motivo:''}});
+  this.toast('Movimentação registrada',e.nome+' · saldo '+e.qty+' → '+Math.max(0,e.qty+delta));}
+ saveItem(){const s=this.state,n=s.newItem;if(!n.nome.trim()){this.toast('Informe o nome do produto');return;}
+  const id='e'+s.seq.item,qty=parseInt(n.qty)||0;
+  const it={id,nome:n.nome,categoria:n.categoria,sku:n.sku||('ITM-'+s.seq.item),qty,min:parseInt(n.min)||0,preco:+String(n.preco).replace(',','.')||0,forn:'—',hist:qty?[{data:TODAY,tipo:'Entrada',qty,ref:'Saldo inicial',saldo:qty}]:[]};
+  this.setState({estoque:[it,...s.estoque],seq:{...s.seq,item:s.seq.item+1},newItem:null});this.toast('Item cadastrado',n.nome);}
+ createOs(){const s=this.state,n=s.newOs;if(!n.clienteId){this.toast('Selecione um cliente');return;}const sv=S(n.servId);const id='OS-'+String(s.seq.os).padStart(4,'0');
+  const os={id,clienteId:n.clienteId,orcId:null,servico:sv.desc,equipamento:{tipo:'Notebook',modelo:'',serie:'',acessorios:''},problema:'',realizado:'',servicos:[{desc:sv.desc,qty:1,unit:sv.unit}],pecas:[],responsavel:n.resp,abertura:TODAY,previsao:addDays(TODAY,3),conclusao:null,obs:'',status:'Aberta',receberId:null};
+  this.setState({ordens:[os,...s.ordens],seq:{...s.seq,os:s.seq.os+1},newOs:null,last:{...s.last,os:id}});this.go('osDetalhe',{osSel:id});this.toast('Ordem de serviço '+id+' aberta');}
+
+ renderVals(){
+  const s=this.state,C=id=>this.cli(id);
+  const nk=NAVKEY[s.page]||'dashboard';
+  const nv={};NAV.forEach(k=>{const a=k===nk;nv[k]={bg:a?'#fff':'transparent',fg:a?'#1b1b1f':'#55555c',sh:a?'0 1px 2px rgba(20,20,25,.06), 0 0 0 1px #e9e9e6':'none',ic:a?'#1b1b1f':'#8b8b93'};});
+  const go={};NAV.forEach(k=>go[k]=()=>this.go(k));
+  go.clienteNovo=()=>this.openCf();go.orcamentoNovo=()=>this.openOf();go.novaOs=()=>this.setState({newOs:{clienteId:'',servId:'s2',resp:'Ana Ribeiro'}});
+  const is={};PAGES.forEach(p=>is[p]=s.page===p);
+  const osOpen=s.ordens.filter(o=>o.status!=='Concluída');
+  const orcAg=s.orcamentos.filter(o=>o.status==='Aguardando aprovação');
+  const navCount={os:osOpen.length||'',orc:orcAg.length||''};
+  // crumbs
+  const cr=[{l:TITLE[nk],k:nk}];
+  const selOrc=s.orcamentos.find(x=>x.id===s.orcSel)||s.orcamentos[0];
+  const selOs=s.ordens.find(x=>x.id===s.osSel)||s.ordens[0];
+  const selItem=s.estoque.find(x=>x.id===s.itemSel)||s.estoque[0];
+  if(s.page==='clienteNovo')cr.push({l:s.cfEdit?'Editar cliente':'Novo cliente'});
+  if(s.page==='cliente')cr.push({l:C(s.cliSel).nome});
+  if(s.page==='orcamentoNovo')cr.push({l:'Novo orçamento'});
+  if(s.page==='orcamento')cr.push({l:selOrc.id});
+  if(s.page==='osDetalhe')cr.push({l:selOs.id});
+  if(s.page==='estoqueItem')cr.push({l:selItem.nome});
+  const crumbs=cr.map((c,i)=>{const last=i===cr.length-1;return {label:c.l,sep:i>0,color:last?'#1b1b1f':'#8b8b93',cursor:last?'default':'pointer',onClick:last?undefined:()=>this.go(c.k)};});
+  const osRow=o=>({id:o.id,cliente:C(o.clienteId).nome,servico:o.servico,resp:o.responsavel,respIni:ini(o.responsavel),data:fd(o.abertura),dataS:fds(o.previsao||o.abertura),valor:brl(osTotal(o)),badge:badge(o.status),
+   open:()=>this.go('osDetalhe',{osSel:o.id,addPart:{itemId:'',qty:'1'}}),onDragStart:e=>{this.dragId=o.id;try{e.dataTransfer.setData('text/plain',o.id);e.dataTransfer.effectAllowed='move';}catch(_){}}});
+  const orcRow=o=>({id:o.id,cliente:C(o.clienteId).nome,desc:o.desc,valor:brl(orcTotal(o)),data:fd(o.data),validade:fd(o.validade),badge:badge(o.status),open:()=>this.go('orcamento',{orcSel:o.id})});
+  const recPend=s.receber.filter(r=>r.status!=='Pago'),recAtr=recPend.filter(r=>finSt(r)==='Em atraso');
+  const low=s.estoque.filter(e=>stStatus(e)!=='Em estoque');
+  const recebido=sum(s.receber.filter(r=>r.status==='Pago'&&(r.pagoEm||'').slice(0,7)==='2026-09'),r=>r.valor);
+  const pagPend=s.pagar.filter(p=>p.status!=='Pago');
+  const recPendSum=sum(recPend,r=>r.valor);
+  const dash={kOs:osOpen.length,kOsSub:s.ordens.filter(o=>o.status==='Em andamento').length+' em andamento',kOrc:orcAg.length,kOrcSub:brl(sum(orcAg,orcTotal))+' em negociação',
+   kRec:brl(recPendSum),kRecSub:recPend.length+' títulos · '+recAtr.length+' em atraso',kEst:low.length,kEstSub:low.filter(e=>e.qty<=0).length+' sem estoque',
+   os:s.ordens.slice(0,5).map(osRow),orc:s.orcamentos.slice(0,5).map(orcRow),
+   alert:low.slice(0,5).map(e=>({nome:e.nome,sku:e.sku,qtyTxt:e.qty+' un. · mín. '+e.min,badge:badge(stStatus(e)),open:()=>this.go('estoqueItem',{itemSel:e.id,mov:{tipo:'Entrada',qty:'',motivo:''}})})),
+   fin:{receber:brl(recPendSum),recebido:brl(recebido),pagar:brl(sum(pagPend,p=>p.valor)),atraso:brl(sum(recAtr,r=>r.valor)),pct:Math.round(recebido/Math.max(1,recebido+recPendSum)*100)+'%',pctTxt:Math.round(recebido/Math.max(1,recebido+recPendSum)*100)+'% do previsto no mês já recebido'},
+   hoje:'Visão geral da operação · quinta-feira, 24 de setembro de 2026'};
+  // clientes list
+  const q=s.cl.q.toLowerCase();
+  const cliRows=s.clientes.filter(c=>(!q||(c.nome+' '+c.contato+' '+c.doc+' '+c.email).toLowerCase().includes(q))&&(!s.cl.status||c.status===s.cl.status)&&(!s.cl.cidade||c.cidade===s.cl.cidade)).map(c=>{const os=s.ordens.filter(o=>o.clienteId===c.id);const last=os.map(o=>o.abertura).sort().pop();const ab=os.filter(o=>o.status!=='Concluída').length;
+   return {nome:c.nome,ini:ini(c.nome),doc:c.doc||'—',local:c.cidade?(c.cidade+', '+c.uf):'—',contato:c.contato||'—',tel:c.tel||c.email||'—',ultimo:last?fd(last):'—',osAbertas:ab,osColor:ab?'#1b1b1f':'#a8a8ae',badge:badge(c.status),open:()=>this.go('cliente',{cliSel:c.id,cdTab:'overview'})};});
+  const setCl=k=>e=>{const v=e.target.value;this.setState(st=>({cl:{...st.cl,[k]:v}}));};
+  const cl={count:s.clientes.length,q:s.cl.q,onQ:setCl('q'),status:s.cl.status,onStatus:setCl('status'),cidade:s.cl.cidade,onCidade:setCl('cidade'),cidades:[...new Set(s.clientes.map(c=>c.cidade).filter(Boolean))].sort(),rows:cliRows,empty:!cliRows.length,shown:cliRows.length+' de '+s.clientes.length,
+   clear:()=>this.setState({cl:{q:'',status:'',cidade:''}})};
+  // cliente form
+  const f={};Object.keys(blankCf()).forEach(k=>f[k]=e=>{const v=e.target.value;this.setState(st=>{const cf={...st.cf,[k]:v};let cepHint=st.cepHint;if(k==='cep'){const d=v.replace(/\D/g,'');if(d.length===8&&CEPS[d]){Object.assign(cf,CEPS[d]);cepHint='Endereço preenchido automaticamente a partir do CEP.';}else cepHint='';}return {cf,cepHint,cfErr:''};});});
+  const cfv={title:s.cfEdit?'Editar cliente':'Novo cliente',sub:s.cfEdit?'Atualize os dados cadastrais do cliente.':'Cadastre o cliente uma vez e reutilize os dados em orçamentos, OS e financeiro.',err:s.cfErr,hasErr:!!s.cfErr,cepHint:s.cepHint,hasCep:!!s.cepHint,isNew:!s.cfEdit,
+   saveLabel:s.cfEdit?'Salvar alterações':'Salvar cliente',save:()=>this.saveCliente(),cancel:()=>s.cfEdit?this.go('cliente',{cliSel:s.cfEdit}):this.go('clientes'),
+   fill:()=>this.setState({cf:{nome:'Estúdio Aurora Design Ltda.',doc:'67.890.123/0001-45',contato:'Beatriz Aurora',email:'contato@estudioaurora.com.br',tel:'(11) 97654-3210',cep:'05422-030',endereco:'Rua dos Pinheiros',numero:'870',complemento:'Sala 12',cidade:'São Paulo',uf:'SP',status:'Ativo'},cepHint:'Endereço preenchido automaticamente a partir do CEP.',cfErr:''}),
+   isAtivo:s.cf.status==='Ativo',ativoBg:s.cf.status==='Ativo'?'#fff':'transparent',ativoSh:s.cf.status==='Ativo'?'0 1px 2px rgba(20,20,25,.08)':'none',inativoBg:s.cf.status!=='Ativo'?'#fff':'transparent',inativoSh:s.cf.status!=='Ativo'?'0 1px 2px rgba(20,20,25,.08)':'none',
+   setAtivo:()=>this.setState(st=>({cf:{...st.cf,status:'Ativo'}})),setInativo:()=>this.setState(st=>({cf:{...st.cf,status:'Inativo'}})),
+   ufs:['AC','AL','AM','AP','BA','CE','DF','ES','GO','MA','MG','MS','MT','PA','PB','PE','PI','PR','RJ','RN','RO','RR','RS','SC','SE','SP','TO']};
+  // cliente detail
+  const c=C(s.cliSel);const cOrc=s.orcamentos.filter(o=>o.clienteId===c.id),cOs=s.ordens.filter(o=>o.clienteId===c.id),cRec=s.receber.filter(r=>r.clienteId===c.id);
+  const ev=[{data:c.desde,t:'Cliente cadastrado',d:'Cliente desde '+fd(c.desde),dot:'#a8a8ae'}];
+  cOrc.forEach(o=>{ev.push({data:o.data,t:'Orçamento '+o.id+' criado',d:o.desc+' · '+brl(orcTotal(o)),dot:'#d99413',open:()=>this.go('orcamento',{orcSel:o.id})});if(o.aprovadoEm)ev.push({data:o.aprovadoEm,t:'Orçamento '+o.id+' aprovado',d:brl(orcTotal(o)),dot:'#2f9e55',open:()=>this.go('orcamento',{orcSel:o.id})});});
+  cOs.forEach(o=>{ev.push({data:o.abertura,t:'OS '+o.id+' aberta',d:o.servico+' · '+o.responsavel,dot:'#7c66e0',open:()=>this.go('osDetalhe',{osSel:o.id})});if(o.conclusao)ev.push({data:o.conclusao,t:'OS '+o.id+' concluída',d:brl(osTotal(o)),dot:'#2f9e55',open:()=>this.go('osDetalhe',{osSel:o.id})});});
+  cRec.forEach(r=>{if(r.pagoEm)ev.push({data:r.pagoEm,t:'Pagamento recebido',d:r.desc+' · '+brl(r.valor),dot:'#2f9e55',open:()=>this.go('financeiro',{fnTab:'receber',finHi:r.id})});});
+  ev.sort((a,b)=>b.data<a.data?-1:(b.data>a.data?1:0));
+  const tabDef=[['overview','Visão geral',''],['orc','Orçamentos',cOrc.length],['os','Ordens de serviço',cOs.length],['fin','Financeiro',cRec.length]];
+  const finRow=(r,kind)=>{const st=finSt(r);return {id:r.id,desc:r.desc,parte:r.parte,venc:fd(r.venc),valor:brl(r.valor),badge:badge(st),canPay:st!=='Pago',paid:st==='Pago',pagoEm:r.pagoEm?'Pago em '+fd(r.pagoEm):'',
+   hasOrigem:!!r.osId,origem:r.osId||'',openOrigem:()=>r.osId&&this.go('osDetalhe',{osSel:r.osId}),pay:()=>this.markPaid(kind,r.id),hi:r.id===s.finHi?'#fbf7ec':'transparent',isNew:r.id===s.finHi&&st!=='Pago'};};
+  const cd={nome:c.nome,ini:ini(c.nome),doc:c.doc||'—',local:c.cidade?(c.cidade+', '+c.uf):'—',desde:fd(c.desde),badge:badge(c.status||'Ativo'),contato:c.contato||'—',email:c.email||'—',tel:c.tel||'—',
+   endereco:[c.endereco,c.numero].filter(Boolean).join(', ')+(c.complemento?' — '+c.complemento:'')||'—',cep:c.cep||'—',
+   sOrc:cOrc.length,sOs:cOs.filter(o=>o.status!=='Concluída').length,sFat:brl(sum(cRec.filter(r=>r.status==='Pago'),r=>r.valor)),sAberto:brl(sum(cRec.filter(r=>r.status!=='Pago'),r=>r.valor)),
+   tabs:tabDef.map(([k,l,n])=>({label:l,count:n===''?'':String(n),fg:s.cdTab===k?'#1b1b1f':'#7a7a82',bd:s.cdTab===k?'#1b1b1f':'transparent',onClick:()=>this.setState({cdTab:k})})),
+   tOverview:s.cdTab==='overview',tOrc:s.cdTab==='orc',tOs:s.cdTab==='os',tFin:s.cdTab==='fin',
+   timeline:ev.slice(0,8).map(e=>({...e,dataTxt:fd(e.data)})),orc:cOrc.map(orcRow),os:cOs.map(osRow),fin:cRec.map(r=>finRow(r,'receber')),
+   noOrc:!cOrc.length,noOs:!cOs.length,noFin:!cRec.length,edit:()=>this.openCf(c.id),novoOrc:()=>this.openOf(c.id)};
+  // orçamentos list
+  const oq=s.ol.q.toLowerCase();
+  const olRows=s.orcamentos.filter(o=>(!oq||(o.id+' '+o.desc+' '+C(o.clienteId).nome).toLowerCase().includes(oq))&&(!s.ol.status||o.status===s.ol.status)&&(!s.ol.periodo||o.data>=addDays(TODAY,-(+s.ol.periodo)))).map(orcRow);
+  const setOl=k=>e=>{const v=e.target.value;this.setState(st=>({ol:{...st.ol,[k]:v}}));};
+  const ol={count:s.orcamentos.length,q:s.ol.q,onQ:setOl('q'),status:s.ol.status,onStatus:setOl('status'),periodo:s.ol.periodo,onPeriodo:setOl('periodo'),rows:olRows,empty:!olRows.length,
+   statuses:['Rascunho','Aguardando aprovação','Aprovado','Recusado','Expirado'],clear:()=>this.setState({ol:{q:'',status:'',periodo:''}}),
+   totalAg:brl(sum(orcAg,orcTotal)),nAg:orcAg.length};
+  // novo orçamento
+  const of=s.of,oc=s.clientes.find(x=>x.id===of.clienteId);
+  const setOf=patch=>this.setState(st=>({of:{...st.of,...(typeof patch==='function'?patch(st.of):patch)},ofErr:''}));
+  const ofSub=lineSum(of.itens.map(i=>({qty:i.qty,unit:String(i.unit).replace(',','.')})));const ofDesc=+String(of.desconto).replace(',','.')||0;
+  const nw={clienteId:of.clienteId,onCliente:e=>{const v=e.target.value;if(v==='__new'){this.openCf();return;}setOf({clienteId:v});},
+   clientes:s.clientes.filter(x=>x.status==='Ativo'||x.id===of.clienteId).map(x=>({id:x.id,nome:x.nome})),hasCliente:!!oc,noCliente:!oc,
+   cli:oc?{nome:oc.nome,ini:ini(oc.nome),doc:oc.doc||'—',contato:oc.contato||'—',tel:oc.tel||'—',email:oc.email||'—',local:oc.cidade?(oc.cidade+', '+oc.uf):'—'}:{},
+   novoCliente:()=>this.openCf(),titulo:of.titulo,onTitulo:e=>setOf({titulo:e.target.value}),
+   servicos:SERVICOS.map(x=>({id:x.id,label:x.desc+' — '+brl(x.unit)})),pecas:s.estoque.map(e=>({id:e.id,label:e.nome+' — '+brl(e.preco)+' ('+e.qty+' em estoque)'})),
+   addServico:e=>{const x=S(e.target.value);if(x)setOf(o=>({itens:[...o.itens,{tipo:'servico',desc:x.desc,qty:'1',unit:String(x.unit)}]}));},
+   addPeca:e=>{const it=s.estoque.find(z=>z.id===e.target.value);if(it)setOf(o=>({itens:[...o.itens,{tipo:'peca',itemId:it.id,desc:it.nome,qty:'1',unit:String(it.preco)}]}));},
+   addLivre:()=>setOf(o=>({itens:[...o.itens,{tipo:'servico',desc:'',qty:'1',unit:'0'}]})),
+   lines:of.itens.map((it,i)=>{const upd=k=>e=>{const v=e.target.value;setOf(o=>({itens:o.itens.map((x,j)=>j===i?{...x,[k]:v}:x)}));};const stk=it.itemId&&s.estoque.find(z=>z.id===it.itemId);
+    return {desc:it.desc,qty:String(it.qty),unit:String(it.unit),sub:brl((+it.qty||0)*(+String(it.unit).replace(',','.')||0)),tipo:badge(it.tipo==='peca'?'Peça':'Serviço'),stock:stk?(stk.qty+' em estoque · '+stk.sku):'Mão de obra',onDesc:upd('desc'),onQty:upd('qty'),onUnit:upd('unit'),remove:()=>setOf(o=>({itens:o.itens.filter((_,j)=>j!==i)}))};}),
+   hasLines:of.itens.length>0,noLines:!of.itens.length,subtotal:brl(ofSub),desconto:of.desconto,onDesconto:e=>setOf({desconto:e.target.value}),descTxt:ofDesc?'− '+brl(ofDesc):brl(0),total:brl(Math.max(0,ofSub-ofDesc)),
+   validade:of.validade,onValidade:e=>setOf({validade:e.target.value}),validadeData:'Válido até '+fd(addDays(TODAY,+of.validade)),obs:of.obs,onObs:e=>setOf({obs:e.target.value}),
+   err:s.ofErr,hasErr:!!s.ofErr,draft:()=>this.saveOrc('Rascunho'),create:()=>this.saveOrc('Aguardando aprovação'),cancel:()=>this.go('orcamentos'),nItens:of.itens.length+(of.itens.length===1?' item':' itens')};
+  // orçamento detail
+  const o=selOrc,ocl=C(o.clienteId),oOs=o.osId&&s.ordens.find(x=>x.id===o.osId),oCr=oOs&&oOs.receberId&&s.receber.find(r=>r.id===oOs.receberId);
+  let cur={'Rascunho':0,'Aguardando aprovação':1,'Aprovado':2,'Recusado':1,'Expirado':1}[o.status];if(oOs)cur=3;if(oOs&&oOs.status==='Concluída')cur=4;if(oCr&&oCr.status==='Pago')cur=5;
+  const stepL=['Rascunho','Enviado ao cliente','Aprovado','Ordem de serviço','Faturado'];
+  const daysLeft=Math.round((new Date(o.validade)-new Date(TODAY))/864e5);
+  const od={id:o.id,desc:o.desc,badge:badge(o.status),cliente:ocl.nome,cliIni:ini(ocl.nome),cliDoc:ocl.doc||'—',cliContato:ocl.contato||'—',cliEmail:ocl.email||'—',cliTel:ocl.tel||'—',openCliente:()=>this.go('cliente',{cliSel:ocl.id,cdTab:'overview'}),
+   data:fd(o.data),validade:fd(o.validade),validadeRest:o.status==='Aguardando aprovação'||o.status==='Rascunho'?(daysLeft>=0?'Expira em '+daysLeft+' dias':'Vencido'):'',
+   items:o.itens.map(i=>({desc:i.desc,tipo:badge(i.tipo==='peca'?'Peça':'Serviço'),qty:i.qty,unit:brl(i.unit),sub:brl(i.qty*i.unit)})),subtotal:brl(lineSum(o.itens)),desconto:o.desconto?'− '+brl(o.desconto):brl(0),total:brl(orcTotal(o)),obs:o.obs,hasObs:!!o.obs,
+   isDraft:o.status==='Rascunho',isWait:o.status==='Aguardando aprovação',isApprovedNoOs:o.status==='Aprovado'&&!oOs,hasOs:!!oOs,isClosed:o.status==='Recusado'||o.status==='Expirado',
+   send:()=>this.setOrcStatus(o.id,'Aguardando aprovação'),approve:()=>this.setOrcStatus(o.id,'Aprovado'),refuse:()=>this.setOrcStatus(o.id,'Recusado'),reopen:()=>this.setOrcStatus(o.id,'Rascunho'),
+   gerar:()=>this.gerarOS(o.id),osId:o.osId||'',osBadge:badge(oOs?oOs.status:'Aberta'),osResp:oOs?oOs.responsavel:'',osValor:oOs?brl(osTotal(oOs)):'',openOs:()=>oOs&&this.go('osDetalhe',{osSel:oOs.id}),
+   steps:stepL.map((l,i)=>{const done=i<cur,now=i===cur;return {label:l,done,notDone:!done,n:String(i+1),bg:done?'#1b1b1f':'#fff',bd:done||now?'#1b1b1f':'#dcdcd8',fg:now?'#1b1b1f':'#9b9ba3',lfg:done||now?'#1b1b1f':'#9b9ba3',line:i<cur?'#1b1b1f':'#e3e3e0',hasLine:i<stepL.length-1};}),
+   nItens:o.itens.length};
+  // OS list
+  const sq=s.osl.q.toLowerCase();
+  const osF=s.ordens.filter(x=>(!sq||(x.id+' '+x.servico+' '+C(x.clienteId).nome).toLowerCase().includes(sq))&&(!s.osl.status||x.status===s.osl.status)&&(!s.osl.resp||x.responsavel===s.osl.resp));
+  const setOsl=k=>e=>{const v=e.target.value;this.setState(st=>({osl:{...st.osl,[k]:v}}));};
+  const COLS=[['Aberta','#7c66e0'],['Em andamento','#3b82e0'],['Aguardando','#d99413'],['Concluída','#2f9e55']];
+  const isList=s.osView==='lista';
+  const osl={count:s.ordens.length,q:s.osl.q,onQ:setOsl('q'),status:s.osl.status,onStatus:setOsl('status'),resp:s.osl.resp,onResp:setOsl('resp'),resps:RESP,isList,isBoard:!isList,
+   listBg:isList?'#fff':'transparent',listSh:isList?'0 1px 2px rgba(20,20,25,.08)':'none',listFg:isList?'#1b1b1f':'#7a7a82',boardBg:!isList?'#fff':'transparent',boardSh:!isList?'0 1px 2px rgba(20,20,25,.08)':'none',boardFg:!isList?'#1b1b1f':'#7a7a82',
+   toList:()=>this.setState({osView:'lista'}),toBoard:()=>this.setState({osView:'quadro'}),rows:osF.map(osRow),empty:!osF.length,
+   cols:COLS.map(([st,dot])=>{const cards=osF.filter(x=>x.status===st).map(osRow);return {name:st,dot,count:cards.length,cards,total:brl(sum(osF.filter(x=>x.status===st),osTotal)),
+    over:e=>e.preventDefault(),drop:e=>{e.preventDefault();const id=this.dragId;this.dragId=null;if(!id)return;if(st==='Concluída'){const ox=s.ordens.find(z=>z.id===id);if(ox&&ox.status!=='Concluída')this.openFinish(id);}else this.setOsStatus(id,st);}};})};
+  // OS detail
+  const x=selOs,xc=C(x.clienteId),locked=x.status==='Concluída',xcr=x.receberId&&s.receber.find(r=>r.id===x.receberId);
+  const setEq=k=>e=>{const v=e.target.value;this.patchOs(x.id,oo=>({equipamento:{...oo.equipamento,[k]:v}}));};
+  const setX=k=>e=>{const v=e.target.value;this.patchOs(x.id,{[k]:v});};
+  const apItem=s.estoque.find(z=>z.id===s.addPart.itemId);
+  const ox={id:x.id,servico:x.servico,badge:badge(x.status),cliente:xc.nome,cliIni:ini(xc.nome),cliDoc:xc.doc||'—',cliContato:xc.contato||'—',cliTel:xc.tel||'—',cliEmail:xc.email||'—',cliLocal:xc.cidade?(xc.cidade+', '+xc.uf):'—',openCliente:()=>this.go('cliente',{cliSel:xc.id,cdTab:'overview'}),
+   hasOrc:!!x.orcId,orcId:x.orcId||'',openOrc:()=>x.orcId&&this.go('orcamento',{orcSel:x.orcId}),
+   statuses:['Aberta','Em andamento','Aguardando','Concluída'].map(st=>{const a=st===x.status;return {label:st,bg:a?'#fff':'transparent',sh:a?'0 1px 2px rgba(20,20,25,.1)':'none',fg:a?'#1b1b1f':'#7a7a82',dot:a?badge(st).dot:'#c4c4c8',cursor:locked?'default':'pointer',onClick:()=>{if(locked)return;st==='Concluída'?this.openFinish(x.id):this.setOsStatus(x.id,st);}};}),
+   eqTipo:x.equipamento.tipo,eqModelo:x.equipamento.modelo,eqSerie:x.equipamento.serie,eqAcess:x.equipamento.acessorios,onTipo:setEq('tipo'),onModelo:setEq('modelo'),onSerie:setEq('serie'),onAcess:setEq('acessorios'),
+   problema:x.problema,onProblema:setX('problema'),realizado:x.realizado,onRealizado:setX('realizado'),obs:x.obs,onObs:setX('obs'),resp:x.responsavel,onResp:setX('responsavel'),resps:RESP,respIni:ini(x.responsavel),
+   abertura:fd(x.abertura),previsao:x.previsao||'',onPrevisao:setX('previsao'),conclusao:fd(x.conclusao),
+   servicos:x.servicos.map((l,i)=>({desc:l.desc,qty:l.qty,unit:brl(l.unit),sub:brl(l.qty*l.unit),remove:()=>this.patchOs(x.id,oo=>({servicos:oo.servicos.filter((_,j)=>j!==i)}))})),
+   addServ:e=>{const sv=S(e.target.value);if(sv){this.patchOs(x.id,oo=>({servicos:[...oo.servicos,{desc:sv.desc,qty:1,unit:sv.unit}]}));this.toast('Serviço adicionado',sv.desc);}},servOpts:SERVICOS.map(z=>({id:z.id,label:z.desc+' — '+brl(z.unit)})),
+   pecas:x.pecas.map((p,i)=>{const it=s.estoque.find(z=>z.id===p.itemId);return {desc:p.desc,sku:it?it.sku:'',qty:p.qty,unit:brl(p.unit),sub:brl(p.qty*p.unit),saldo:it?('Saldo atual: '+it.qty+' un.'):'',remove:()=>this.removePart(i)};}),
+   hasPecas:x.pecas.length>0,noPecas:!x.pecas.length,
+   apItem:s.addPart.itemId,apQty:s.addPart.qty,onApItem:e=>{const v=e.target.value;this.setState(st=>({addPart:{...st.addPart,itemId:v}}));},onApQty:e=>{const v=e.target.value;this.setState(st=>({addPart:{...st.addPart,qty:v}}));},
+   apOpts:s.estoque.map(z=>({id:z.id,label:z.nome+' · '+z.qty+' disp.',disabled:z.qty<=0})),apInfo:apItem?(apItem.sku+' · '+brl(apItem.preco)+' / un. · '+apItem.qty+' disponível(is)'):'Os itens vêm do cadastro de estoque. A quantidade usada é baixada automaticamente.',
+   addPart:()=>this.addPartToOs(),
+   totServ:brl(lineSum(x.servicos)),totPecas:brl(lineSum(x.pecas)),total:brl(osTotal(x)),locked,unlocked:!locked,finish:()=>this.openFinish(x.id),
+   hasCr:!!xcr,noCrLocked:locked&&!xcr,crId:xcr?xcr.id:'',crValor:xcr?brl(xcr.valor):'',crVenc:xcr?fd(xcr.venc):'',crBadge:badge(xcr?finSt(xcr):'Pendente'),
+   openFin:()=>this.go('financeiro',{fnTab:'receber',finHi:x.receberId,fnf:{q:'',status:''}}),gerarCr:()=>this.openFinish(x.id)};
+  // finish modal
+  const m=s.finModal,mo=m&&s.ordens.find(z=>z.id===m.osId);
+  const fm={open:!!m,id:mo?mo.id:'',only:!!(m&&m.only),notOnly:!(m&&m.only),title:m&&m.only?'Gerar conta a receber':'Finalizar ordem de serviço',cliente:mo?C(mo.clienteId).nome:'',servico:mo?mo.servico:'',total:mo?brl(osTotal(mo)):'',
+   nServ:mo?mo.servicos.length:0,nPecas:mo?sum(mo.pecas,p=>p.qty):0,gerar:!!(m&&m.gerar),boxBg:m&&m.gerar?'#1b1b1f':'#fff',boxBd:m&&m.gerar?'#1b1b1f':'#cfcfca',
+   toggle:()=>this.setState(st=>({finModal:{...st.finModal,gerar:st.finModal.only?true:!st.finModal.gerar}})),dias:m?m.dias:'10',onDias:e=>{const v=e.target.value;this.setState(st=>({finModal:{...st.finModal,dias:v}}));},
+   forma:m?m.forma:'Pix',onForma:e=>{const v=e.target.value;this.setState(st=>({finModal:{...st.finModal,forma:v}}));},venc:m?fd(addDays(TODAY,+m.dias)):'',
+   confirm:()=>this.finalize(),cancel:()=>this.setState({finModal:null}),confirmLabel:m&&m.only?'Gerar conta a receber':'Finalizar OS'};
+  // estoque
+  const eq=s.st.q.toLowerCase();
+  const cats=[...new Set(s.estoque.map(e=>e.categoria))].sort();
+  const eRows=s.estoque.filter(e=>(!eq||(e.nome+' '+e.sku).toLowerCase().includes(eq))&&(!s.st.cat||e.categoria===s.st.cat)&&(!s.st.status||stStatus(e)===s.st.status)).map(e=>{const stt=stStatus(e);return {nome:e.nome,sku:e.sku,cat:e.categoria,qty:e.qty,min:e.min,preco:brl(e.preco),badge:badge(stt),qtyColor:stt==='Em estoque'?'#1b1b1f':badge(stt).fg,bar:Math.min(100,Math.round(e.qty/Math.max(1,e.min*2)*100))+'%',barC:badge(stt).dot,open:()=>this.go('estoqueItem',{itemSel:e.id,mov:{tipo:'Entrada',qty:'',motivo:''}})};});
+  const setSt=k=>e=>{const v=e.target.value;this.setState(st=>({st:{...st.st,[k]:v}}));};
+  const chip=(label,val)=>{const a=s.st.cat===val;return {label,bg:a?'#1b1b1f':'#fff',fg:a?'#fff':'#46464c',bd:a?'#1b1b1f':'#e3e3e0',onClick:()=>this.setState(st=>({st:{...st.st,cat:val}}))};};
+  const stv={total:s.estoque.length,baixo:s.estoque.filter(e=>stStatus(e)==='Estoque baixo').length,sem:s.estoque.filter(e=>stStatus(e)==='Sem estoque').length,valor:brl(sum(s.estoque,e=>e.qty*e.preco)),
+   q:s.st.q,onQ:setSt('q'),status:s.st.status,onStatus:setSt('status'),chips:[chip('Todas',''),...cats.map(k=>chip(k,k))],rows:eRows,empty:!eRows.length,
+   novo:()=>this.setState({newItem:{nome:'',categoria:cats[0],sku:'',qty:'',min:'',preco:''}}),
+   fBaixo:()=>this.setState(st=>({st:{...st.st,status:'Estoque baixo'}})),fSem:()=>this.setState(st=>({st:{...st.st,status:'Sem estoque'}})),fAll:()=>this.setState(st=>({st:{q:'',cat:'',status:''}}))};
+  const it=selItem,its=stStatus(it);
+  const si={nome:it.nome,sku:it.sku,cat:it.categoria,badge:badge(its),qty:it.qty,min:it.min,preco:brl(it.preco),forn:it.forn,valor:brl(it.qty*it.preco),
+   usedIn:s.ordens.filter(o=>o.pecas.some(p=>p.itemId===it.id)).length,
+   hist:it.hist.map(h=>({data:fd(h.data),tipo:badge(h.tipo),qty:(h.qty>0?'+':'')+h.qty,qtyColor:h.qty>0?'#1f7a3d':(h.qty<0?'#1b1b1f':'#8b8b93'),ref:h.ref,saldo:h.saldo,isOs:/^OS-\d+$/.test(h.ref)&&s.ordens.some(o=>o.id===h.ref),notOs:!(/^OS-\d+$/.test(h.ref)&&s.ordens.some(o=>o.id===h.ref)),openRef:()=>this.go('osDetalhe',{osSel:h.ref})})),
+   noHist:!it.hist.length,back:()=>this.go('estoque')};
+  const mvTipos=[['Entrada','Entrada'],['Saída','Saída'],['Ajuste','Ajuste de inventário']];
+  const mv={tipo:s.mov.tipo,qty:s.mov.qty,motivo:s.mov.motivo,onQty:e=>{const v=e.target.value;this.setState(st=>({mov:{...st.mov,qty:v}}));},onMotivo:e=>{const v=e.target.value;this.setState(st=>({mov:{...st.mov,motivo:v}}));},
+   tipos:mvTipos.map(([k,l])=>{const a=s.mov.tipo===k;return {label:l,bg:a?'#fff':'transparent',sh:a?'0 1px 2px rgba(20,20,25,.1)':'none',fg:a?'#1b1b1f':'#7a7a82',onClick:()=>this.setState(st=>({mov:{...st.mov,tipo:k}}))};}),
+   qtyLabel:s.mov.tipo==='Ajuste'?'Quantidade contada':'Quantidade',hint:s.mov.tipo==='Ajuste'?'O saldo será ajustado para o valor contado.':(s.mov.tipo==='Entrada'?'Soma ao saldo atual.':'Subtrai do saldo atual.'),
+   preview:(()=>{const q=parseInt(s.mov.qty);if(isNaN(q))return 'Saldo atual: '+it.qty+' un.';const n=s.mov.tipo==='Entrada'?it.qty+q:(s.mov.tipo==='Saída'?Math.max(0,it.qty-q):q);return 'Saldo: '+it.qty+' → '+n+' un.';})(),
+   register:()=>this.registerMov()};
+  const n=s.newItem;const setN=k=>e=>{const v=e.target.value;this.setState(st=>({newItem:{...st.newItem,[k]:v}}));};
+  const ni={open:!!n,nome:n?n.nome:'',categoria:n?n.categoria:'',sku:n?n.sku:'',qty:n?n.qty:'',min:n?n.min:'',preco:n?n.preco:'',onNome:setN('nome'),onCat:setN('categoria'),onSku:setN('sku'),onQty:setN('qty'),onMin:setN('min'),onPreco:setN('preco'),cats,save:()=>this.saveItem(),cancel:()=>this.setState({newItem:null})};
+  // financeiro
+  const kind=s.fnTab;const fq=s.fnf.q.toLowerCase();
+  const fRows=s[kind].filter(r=>(!fq||(r.id+' '+r.desc+' '+r.parte).toLowerCase().includes(fq))&&(!s.fnf.status||finSt(r)===s.fnf.status)).map(r=>finRow(r,kind));
+  const pagAtr=s.pagar.filter(p=>finSt(p)==='Em atraso');
+  const setF=k=>e=>{const v=e.target.value;this.setState(st=>({fnf:{...st.fnf,[k]:v}}));};
+  const ftab=(k,l,cnt)=>{const a=kind===k;return {label:l,count:String(cnt),fg:a?'#1b1b1f':'#7a7a82',bd:a?'#1b1b1f':'transparent',onClick:()=>this.setState({fnTab:k,fnf:{q:'',status:''}})};};
+  const fnv={kRec:brl(recPendSum),kRecSub:recPend.length+' títulos em aberto',kPag:brl(sum(pagPend,p=>p.valor)),kPagSub:pagPend.length+' títulos · '+pagAtr.length+' em atraso',kRecebido:brl(recebido),kRecebidoSub:s.receber.filter(r=>r.status==='Pago'&&(r.pagoEm||'').slice(0,7)==='2026-09').length+' pagamentos em setembro',
+   kAtr:brl(sum(recAtr,r=>r.valor)),kAtrSub:recAtr.length+' título(s) de clientes',tabs:[ftab('receber','Contas a receber',s.receber.length),ftab('pagar','Contas a pagar',s.pagar.length)],
+   isRec:kind==='receber',partLabel:kind==='receber'?'Cliente':'Fornecedor',q:s.fnf.q,onQ:setF('q'),status:s.fnf.status,onStatus:setF('status'),rows:fRows,empty:!fRows.length,total:brl(sum(fRows.length?s[kind].filter(r=>fRows.some(f=>f.id===r.id)):[],r=>r.valor))};
+  // nova OS modal
+  const no=s.newOs;const setNo=k=>e=>{const v=e.target.value;this.setState(st=>({newOs:{...st.newOs,[k]:v}}));};
+  const noM={open:!!no,clienteId:no?no.clienteId:'',servId:no?no.servId:'',resp:no?no.resp:'',onCliente:setNo('clienteId'),onServ:setNo('servId'),onResp:setNo('resp'),clientes:s.clientes.filter(z=>z.status==='Ativo').map(z=>({id:z.id,nome:z.nome})),servs:SERVICOS.map(z=>({id:z.id,label:z.desc})),resps:RESP,create:()=>this.createOs(),cancel:()=>this.setState({newOs:null})};
+  // guide
+  const fl=s.flow,L=s.last;
+  const gs=[
+   ['cliente','Cadastrar um novo cliente',()=>this.openCf()],
+   ['orc','Criar orçamento com serviços e peças',()=>this.openOf(L.cliente)],
+   ['aprov','Aprovar o orçamento',()=>L.orc?this.go('orcamento',{orcSel:L.orc}):this.go('orcamentos')],
+   ['os','Gerar a ordem de serviço',()=>L.orc?this.go('orcamento',{orcSel:L.orc}):this.go('orcamentos')],
+   ['peca','Adicionar peça do estoque na OS',()=>L.os?this.go('osDetalhe',{osSel:L.os}):this.go('os')],
+   ['andamento','Mover a OS para “Em andamento”',()=>L.os?this.go('osDetalhe',{osSel:L.os}):this.go('os')],
+   ['final','Finalizar a OS e gerar conta a receber',()=>L.os?this.go('osDetalhe',{osSel:L.os}):this.go('os')],
+   ['pago','Marcar o pagamento como “Pago”',()=>this.go('financeiro',{fnTab:'receber',finHi:L.cr||null,fnf:{q:'',status:''}})]];
+  const nextIdx=gs.findIndex(g=>!fl[g[0]]);const done=gs.filter(g=>fl[g[0]]).length;
+  const guide={show:this.props.showGuide!==false,open:s.guideOpen,closed:!s.guideOpen,toggle:()=>this.setState(st=>({guideOpen:!st.guideOpen})),done,total:gs.length,pct:Math.round(done/gs.length*100)+'%',allDone:done===gs.length,
+   steps:gs.map(([k,t,fn],i)=>({n:String(i+1),t,done:!!fl[k],notDone:!fl[k],isNext:i===nextIdx,fg:fl[k]?'#9b9ba3':(i===nextIdx?'#1b1b1f':'#6b6b73'),deco:fl[k]?'line-through':'none',rowBg:i===nextIdx?'#f6f6f4':'transparent',go:fn})),
+   reset:()=>{this.setState({...seed(),flow:{},last:{},page:'dashboard'});this.toast('Demonstração reiniciada');}};
+  return {is,nv,go,navCount,crumbs,mainRef:this.mainRef,dash,cl,cf:s.cf,f,cfv,cd,ol,nw,od,osl,ox,fm,st:stv,si,mv,ni,fn:fnv,noM,guide,toast:s.toast||{},hasToast:!!s.toast};
+ }
+}
+</script>
+</body>
+</html>
