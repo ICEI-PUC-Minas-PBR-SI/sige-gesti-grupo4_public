@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field_error, csrf %}
+{% block title %}{{ 'Novo cliente' if novo else 'Editar cliente' }}{% endblock %}
+{% block crumbs %}
+<a href="{{ url_for('clientes.lista') }}">Clientes</a><span class="sep">›</span>
+{% if not novo %}<a href="{{ url_for('clientes.detalhe', cliente_id=c.id) }}">{{ c.nome }}</a><span class="sep">›</span>{% endif %}
+<span class="atual">{{ 'Novo cliente' if novo else 'Editar' }}</span>
+{% endblock %}
+{% block content %}
+<form class="form-narrow cliente-form" method="post" novalidate>
+  {{ csrf() }}
+  <div class="page-head" style="margin-bottom:0">
+    <div>
+      <h1>{{ 'Novo cliente' if novo else 'Editar cliente' }}</h1>
+      <p>Cadastre o cliente uma vez e reutilize os dados em orçamentos, OS e financeiro.</p>
+    </div>
+    {% if exemplo %}<button type="button" class="btn btn-dashed btn-sm" data-exemplo='{{ exemplo }}'>Preencher com dados de exemplo</button>{% endif %}
+  </div>
+
+  <div class="form-section" style="margin-top:28px">
+    <div><h3>Identificação</h3><p>Dados usados em orçamentos, ordens de serviço e cobranças.</p></div>
+    <div>
+      <div class="field">
+        <label class="lbl" for="nome">Nome / Razão social *</label>
+        <input class="input {{ 'erro' if erros.nome }}" id="nome" name="nome" value="{{ c.nome or '' }}" placeholder="Ex.: TechHouse Ltda." required>
+        {{ field_error(erros, 'nome') }}
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label class="lbl" for="documento">CPF / CNPJ</label>
+          <input class="input {{ 'erro' if erros.documento }}" id="documento" name="documento" value="{{ c.documento or '' }}" placeholder="00.000.000/0000-00" data-mask="doc" inputmode="numeric">
+          {{ field_error(erros, 'documento') }}
+        </div>
+        <div class="field">
+          <span class="lbl">Status</span>
+          <div class="segmented">
+            <input type="radio" id="st-a" name="status" value="ativo" {{ 'checked' if c.status != 'inativo' }}><label for="st-a">Ativo</label>
+            <input type="radio" id="st-i" name="status" value="inativo" {{ 'checked' if c.status == 'inativo' }}><label for="st-i">Inativo</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div><h3>Contato</h3><p>Pessoa responsável e canais para envio de orçamentos.</p></div>
+    <div>
+      <div class="field">
+        <label class="lbl" for="contato">Pessoa de contato</label>
+        <input class="input" id="contato" name="contato" value="{{ c.contato or '' }}" placeholder="Ex.: João Almeida">
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label class="lbl" for="email">E-mail</label>
+          <input class="input {{ 'erro' if erros.email }}" id="email" name="email" type="email" value="{{ c.email or '' }}" placeholder="nome@empresa.com.br">
+          {{ field_error(erros, 'email') }}
+        </div>
+        <div class="field">
+          <label class="lbl" for="telefone">Telefone</label>
+          <input class="input {{ 'erro' if erros.telefone }}" id="telefone" name="telefone" value="{{ c.telefone|tel if c.telefone else '' }}" placeholder="(11) 90000-0000" data-mask="tel" inputmode="tel">
+          {{ field_error(erros, 'telefone') }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div><h3>Endereço</h3><p>Digite o CEP para preencher o endereço automaticamente.</p></div>
+    <div>
+      <div class="field" style="max-width:320px">
+        <label class="lbl" for="cep">CEP</label>
+        <input class="input {{ 'erro' if erros.cep }}" id="cep" name="cep" value="{{ c.cep|cep if c.cep else '' }}" placeholder="00000-000" data-mask="cep" data-cep inputmode="numeric">
+        {{ field_error(erros, 'cep') }}
+        <div class="hint" id="cep-hint"></div>
+      </div>
+      <div class="grid-2" style="grid-template-columns: 2fr 1fr">
+        <div class="field"><label class="lbl" for="endereco">Endereço</label><input class="input" id="endereco" name="endereco" value="{{ c.endereco or '' }}" placeholder="Rua, avenida…"></div>
+        <div class="field"><label class="lbl" for="numero">Número</label><input class="input" id="numero" name="numero" value="{{ c.numero or '' }}"></div>
+      </div>
+      <div class="grid-3" style="grid-template-columns: 1fr 1.5fr 150px">
+        <div class="field"><label class="lbl" for="complemento">Complemento</label><input class="input" id="complemento" name="complemento" value="{{ c.complemento or '' }}" placeholder="Sala, apto…"></div>
+        <div class="field"><label class="lbl" for="cidade">Cidade</label><input class="input" id="cidade" name="cidade" value="{{ c.cidade or '' }}"></div>
+        <div class="field"><label class="lbl" for="uf">Estado</label>
+          <select class="input {{ 'erro' if erros.uf }}" id="uf" name="uf"><option value="">UF</option>
+            {% for uf in UFS %}<option {{ 'selected' if c.uf == uf }}>{{ uf }}</option>{% endfor %}
+          </select>{{ field_error(erros, 'uf') }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <div><h3>Anotações internas</h3><p>Visíveis apenas para a equipe. Registre só o necessário (LGPD).</p></div>
+    <div class="field"><textarea class="input" name="anotacoes" placeholder="Preferências de atendimento, horários, observações…">{{ c.anotacoes or '' }}</textarea></div>
+  </div>
+
+  <div class="form-actions">
+    <a class="btn" href="{{ url_for('clientes.lista') if novo else url_for('clientes.detalhe', cliente_id=c.id) }}">Cancelar</a>
+    <button class="btn btn-primary">Salvar cliente</button>
+  </div>
+</form>
+{% endblock %}

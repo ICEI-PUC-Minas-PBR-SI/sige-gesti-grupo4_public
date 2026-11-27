@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge %}
+{% block title %}Busca{% endblock %}
+{% block crumbs %}<span class="atual">Busca</span>{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Resultados da busca</h1>
+  <p>{% if q %}“{{ q }}” · {{ clientes|length + oss|length + orcs|length + itens|length }} resultado(s){% else %}Digite algo na busca acima (atalho: Ctrl+K). Dica: “OS-0235” ou “ORC-0148” abre o registro direto.{% endif %}</p></div></div>
+{% if q %}
+<div class="cols-2" style="align-items:start">
+  <section class="card"><h2 style="margin-bottom:10px">Clientes</h2>
+    <div class="lista alertas">{% for c in clientes %}
+      <a href="{{ url_for('clientes.detalhe', cliente_id=c.id) }}"><span class="grp"><div class="t1">{{ c.nome }}</div><div class="t2">{{ c.documento|doc }}{% if c.cidade %} · {{ c.cidade }}, {{ c.uf }}{% endif %}</div></span>
+        <span class="end">{{ badge(STATUS_CLIENTE[c.status]) }}</span></a>
+    {% else %}<div class="muted">Nenhum cliente.</div>{% endfor %}</div></section>
+  <section class="card"><h2 style="margin-bottom:10px">Ordens de serviço</h2>
+    <div class="lista">{% for o in oss %}
+      <a href="{{ url_for('ordens.detalhe', os_id=o.id) }}"><span class="mono muted cod">{{ codigo('OS', o.seq) }}</span>
+        <span class="grp"><div class="t1">{{ o.titulo }}</div><div class="t2">{{ o.cliente }}</div></span><span class="end">{{ badge(STATUS_OS[o.status]) }}</span></a>
+    {% else %}<div class="muted">Nenhuma OS.</div>{% endfor %}</div></section>
+  <section class="card"><h2 style="margin-bottom:10px">Orçamentos</h2>
+    <div class="lista">{% for o in orcs %}
+      <a href="{{ url_for('orcamentos.detalhe', orc_id=o.id) }}"><span class="mono muted cod">{{ codigo('ORC', o.seq) }}</span>
+        <span class="grp"><div class="t1">{{ o.descricao }}</div><div class="t2">{{ o.cliente }} · {{ o.total|moeda }}</div></span><span class="end">{{ badge(STATUS_ORCAMENTO[status_orcamento(o)]) }}</span></a>
+    {% else %}<div class="muted">Nenhum orçamento.</div>{% endfor %}</div></section>
+  <section class="card"><h2 style="margin-bottom:10px">Estoque</h2>
+    <div class="lista alertas">{% for i in itens %}
+      <a href="{{ url_for('estoque.detalhe', item_id=i.id) }}"><span class="grp"><div class="t1">{{ i.descricao }}</div><div class="t2 mono">{{ i.sku }}</div></span>
+        <span class="end"><span class="muted">{{ i.quantidade }} un.</span>{{ badge(STATUS_ESTOQUE[status_estoque(i.quantidade, i.estoque_minimo)]) }}</span></a>
+    {% else %}<div class="muted">Nenhum item.</div>{% endfor %}</div></section>
+</div>
+{% endif %}
+{% endblock %}

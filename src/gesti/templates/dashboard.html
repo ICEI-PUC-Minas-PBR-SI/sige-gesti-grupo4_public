@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge %}
+{% block title %}Dashboard{% endblock %}
+{% block crumbs %}<span class="atual">Dashboard</span>{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Dashboard</h1>
+    <p>Visão geral da operação · {{ hoje_extenso }}</p>
+  </div>
+  <div class="actions">
+    {% if pode('editar_cliente') %}<a class="btn" href="{{ url_for('clientes.novo') }}">+ Novo cliente</a>{% endif %}
+    {% if pode('orcamento') %}<a class="btn" href="{{ url_for('orcamentos.novo') }}">+ Novo orçamento</a>{% endif %}
+    <a class="btn btn-primary" href="{{ url_for('ordens.nova') }}">+ Nova ordem de serviço</a>
+  </div>
+</div>
+
+<div class="kpis">
+  <a class="kpi" href="{{ url_for('ordens.lista') }}">
+    <div class="label">Ordens de serviço abertas</div>
+    <div class="valor">{{ kpi.os_abertas }}</div>
+    <div class="sub">{{ kpi.os_andamento }} em andamento</div>
+  </a>
+  <a class="kpi" href="{{ url_for('orcamentos.lista', status='enviado') }}">
+    <div class="label">Orçamentos aguardando aprovação</div>
+    <div class="valor">{{ kpi.orc_aguardando }}</div>
+    <div class="sub">{{ kpi.orc_valor|moeda }} em negociação</div>
+  </a>
+  {% if pode('financeiro') %}
+  <a class="kpi" href="{{ url_for('financeiro.lista') }}">
+    <div class="label">Contas a receber</div>
+    <div class="valor">{{ fin.a_receber|moeda }}</div>
+    <div class="sub">{{ fin.n_receber }} título(s) · {{ fin.n_receber_atraso }} em atraso</div>
+  </a>
+  {% else %}
+  <div class="kpi"><div class="label">Contas a receber</div><div class="valor muted-2">—</div><div class="sub">Visível para o administrador</div></div>
+  {% endif %}
+  <a class="kpi" href="{{ url_for('estoque.lista', status='alerta') }}">
+    <div class="label">Itens com estoque baixo</div>
+    <div class="valor">{{ kpi.estoque_baixo }}</div>
+    <div class="sub">{{ kpi.sem_estoque }} sem estoque</div>
+  </a>
+</div>
+
+<div class="cols-2">
+  <section class="card">
+    <div class="card-head"><h2>Ordens de serviço recentes</h2><a class="link" href="{{ url_for('ordens.lista') }}">Ver todas →</a></div>
+    <div class="lista">
+      {% for o in os_recentes %}
+      <a href="{{ url_for('ordens.detalhe', os_id=o.id) }}">
+        <span class="mono muted cod">{{ codigo('OS', o.seq) }}</span>
+        <span class="grp"><div class="t1">{{ o.titulo }}</div><div class="t2">{{ o.cliente }}{% if o.responsavel %} · {{ o.responsavel }}{% endif %}</div></span>
+        <span class="end">{{ badge(STATUS_OS[o.status]) }}</span>
+      </a>
+      {% else %}<div class="empty">Nenhuma ordem de serviço ainda.</div>{% endfor %}
+    </div>
+  </section>
+
+  {% if pode('financeiro') %}
+  <section class="card">
+    <div class="card-head"><h2>Resumo financeiro · {{ fin.mes }}</h2><a class="link" href="{{ url_for('financeiro.lista') }}">Abrir financeiro →</a></div>
+    <div class="resumo">
+      <div><div class="muted">A receber</div><div class="v">{{ fin.a_receber|moeda }}</div></div>
+      <div><div class="muted">Recebido no mês</div><div class="v green">{{ fin.recebido_mes|moeda }}</div></div>
+      <div><div class="muted">A pagar</div><div class="v">{{ fin.a_pagar|moeda }}</div></div>
+      <div><div class="muted">Em atraso (a receber)</div><div class="v red">{{ fin.atraso_receber|moeda }}</div></div>
+    </div>
+    <div class="progress"><span style="width: {{ fin.pct }}%"></span></div>
+    <div class="muted small">{{ fin.pct }}% do previsto no mês já recebido</div>
+  </section>
+  {% else %}
+  <section class="card">
+    <div class="card-head"><h2>Minhas ordens de serviço</h2><a class="link" href="{{ url_for('ordens.lista', responsavel=g.user.id) }}">Ver →</a></div>
+    <p class="muted">Use o quadro de OS para acompanhar e atualizar seus atendimentos.</p>
+  </section>
+  {% endif %}
+
+  <section class="card">
+    <div class="card-head"><h2>Orçamentos recentes</h2><a class="link" href="{{ url_for('orcamentos.lista') }}">Ver todos →</a></div>
+    <div class="lista">
+      {% for o in orc_recentes %}
+      <a href="{{ url_for('orcamentos.detalhe', orc_id=o.id) }}">
+        <span class="mono muted cod">{{ codigo('ORC', o.seq) }}</span>
+        <span class="grp"><div class="t1">{{ o.descricao }}</div><div class="t2">{{ o.cliente }}</div></span>
+        <span class="end"><span>{{ o.total|moeda }}</span>{{ badge(STATUS_ORCAMENTO[status_orcamento(o)]) }}</span>
+      </a>
+      {% else %}<div class="empty">Nenhum orçamento ainda.</div>{% endfor %}
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2>Alertas de estoque</h2><a class="link" href="{{ url_for('estoque.lista') }}">Ver estoque →</a></div>
+    <div class="lista alertas">
+      {% for i in alertas %}
+      <a href="{{ url_for('estoque.detalhe', item_id=i.id) }}">
+        <span class="grp"><div class="t1">{{ i.descricao }}</div><div class="t2 mono">{{ i.sku }}</div></span>
+        <span class="end"><span class="muted">{{ i.quantidade }} un. · mín. {{ i.estoque_minimo }}</span>{{ badge(STATUS_ESTOQUE[status_estoque(i.quantidade, i.estoque_minimo)]) }}</span>
+      </a>
+      {% else %}<div class="empty">Nenhum item abaixo do mínimo.</div>{% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock %}

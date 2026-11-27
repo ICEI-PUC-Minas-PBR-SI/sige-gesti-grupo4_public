@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge, csrf %}
+{% block title %}Configurações{% endblock %}
+{% block crumbs %}<span class="atual">Configurações</span>{% endblock %}
+{% block content %}
+<div class="page-head"><div><h1>Configurações</h1><p>Usuários, perfis de acesso e catálogo de serviços.</p></div></div>
+
+<div class="cols-main side-sm">
+  <section class="card">
+    <h2 style="margin-bottom:6px">Usuários</h2>
+    <p class="muted small" style="margin:0 0 16px">Administrador: acesso total. Técnico: OS, estoque e consultas (sem financeiro). Atendente: clientes, orçamentos e OS (sem financeiro).</p>
+    <div class="table-wrap"><table class="t">
+      <thead><tr><th>Usuário</th><th>Perfil</th><th>Situação</th><th></th></tr></thead>
+      <tbody>{% for u in usuarios %}
+        <tr>
+          <td><div class="cel-cli"><span class="avatar round xs" style="width:34px;height:34px">{{ u.nome|iniciais }}</span><div>{{ u.nome }}<div class="sub">{{ u.email }}</div></div></div></td>
+          <td>
+            <form method="post" action="{{ url_for('configuracoes.editar_usuario', uid=u.id) }}">{{ csrf() }}<input type="hidden" name="acao" value="perfil">
+              <select class="input" name="perfil" data-autosubmit style="height:36px; width:auto" {{ 'disabled' if u.id == g.user.id }}>
+                {% for k, nome in PERFIS.items() %}<option value="{{ k }}" {{ 'selected' if u.perfil == k }}>{{ nome }}</option>{% endfor %}</select></form></td>
+          <td>{{ badge(('Ativo', 'green') if u.ativo else ('Inativo', 'gray')) }}</td>
+          <td class="right nowrap">
+            {% if u.id != g.user.id %}
+            <form method="post" action="{{ url_for('configuracoes.editar_usuario', uid=u.id) }}" style="display:inline">{{ csrf() }}<input type="hidden" name="acao" value="ativo">
+              <button class="btn btn-sm">{{ 'Desativar' if u.ativo else 'Reativar' }}</button></form>
+            {% endif %}
+            <button class="btn btn-sm" type="button" data-dialog="dlg-senha" data-action="{{ url_for('configuracoes.editar_usuario', uid=u.id) }}" data-setnome="{{ u.nome }}">Redefinir senha</button>
+          </td>
+        </tr>{% endfor %}</tbody>
+    </table></div>
+  </section>
+  <form class="card" method="post" action="{{ url_for('configuracoes.novo_usuario') }}">{{ csrf() }}
+    <h2 style="margin-bottom:16px">Novo usuário</h2>
+    <div class="field"><label class="lbl">Nome</label><input class="input" name="nome" required></div>
+    <div class="field"><label class="lbl">E-mail</label><input class="input" type="email" name="email" required></div>
+    <div class="field"><label class="lbl">Perfil</label><select class="input" name="perfil">{% for k, nome in PERFIS.items() %}<option value="{{ k }}" {{ 'selected' if k == 'tecnico' }}>{{ nome }}</option>{% endfor %}</select></div>
+    <div class="field"><label class="lbl">Senha inicial</label><input class="input" type="password" name="senha" minlength="8" required autocomplete="new-password"><div class="hint">Mínimo de 8 caracteres. Guardada com hash.</div></div>
+    <button class="btn btn-primary btn-block">Criar usuário</button>
+  </form>
+</div>
+
+<div class="cols-main side-sm" style="margin-top:22px" id="servicos">
+  <section class="card">
+    <h2 style="margin-bottom:16px">Catálogo de serviços</h2>
+    <div class="table-wrap"><table class="t">
+      <thead><tr><th>Serviço</th><th class="num">Preço</th><th>Situação</th><th></th></tr></thead>
+      <tbody>{% for s in servicos %}
+        <tr class="{{ '' if s.ativo else 'muted' }}"><td>{{ s.descricao }}</td><td class="num nowrap">{{ s.preco|moeda }}</td>
+          <td>{{ badge(('Ativo', 'green') if s.ativo else ('Inativo', 'gray')) }}</td>
+          <td class="right"><form method="post" action="{{ url_for('configuracoes.servico') }}">{{ csrf() }}<input type="hidden" name="id" value="{{ s.id }}"><input type="hidden" name="acao" value="ativo">
+            <button class="btn btn-sm">{{ 'Desativar' if s.ativo else 'Reativar' }}</button></form></td></tr>
+      {% endfor %}</tbody>
+    </table></div>
+  </section>
+  <form class="card" method="post" action="{{ url_for('configuracoes.servico') }}">{{ csrf() }}
+    <h2 style="margin-bottom:16px">Novo serviço</h2>
+    <div class="field"><label class="lbl">Descrição</label><input class="input" name="descricao" required placeholder="Ex.: Instalação de antivírus"></div>
+    <div class="field"><label class="lbl">Preço (R$)</label><input class="input" name="preco" inputmode="decimal" required placeholder="0,00"></div>
+    <button class="btn btn-primary btn-block">Adicionar ao catálogo</button>
+  </form>
+</div>
+
+<dialog id="dlg-senha">
+  <form method="post">{{ csrf() }}<input type="hidden" name="acao" value="senha">
+    <h2>Redefinir senha</h2>
+    <p class="muted">Usuário: <span data-bind="nome"></span></p>
+    <div class="field"><label class="lbl">Nova senha</label><input class="input" type="password" name="senha" minlength="8" required autocomplete="new-password"></div>
+    <div class="acoes"><button type="button" class="btn" data-close>Cancelar</button><button class="btn btn-primary">Salvar</button></div>
+  </form>
+</dialog>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge %}
+{% block title %}Ordens de Serviço{% endblock %}
+{% block crumbs %}<span class="atual">Ordens de Serviço</span>{% endblock %}
+{% block content %}
+<div class="page-head" style="margin-bottom:20px">
+  <h1>Ordens de Serviço <span class="count">{{ total }}</span></h1>
+  <a class="btn btn-primary" href="{{ url_for('ordens.nova') }}">+ Nova ordem de serviço</a>
+</div>
+<form class="toolbar" method="get">
+  <input type="hidden" name="modo" value="{{ modo }}">
+  <div class="segmented">
+    <a href="{{ url_for('ordens.lista', modo='lista', q=q or None, responsavel=resp) }}" class="{{ 'on' if modo == 'lista' }}">{{ icon('lista') }} Lista</a>
+    <a href="{{ url_for('ordens.lista', modo='quadro', q=q or None, responsavel=resp) }}" class="{{ 'on' if modo != 'lista' }}">{{ icon('quadro') }} Quadro</a>
+  </div>
+  <div class="search">{{ icon('busca') }}<input class="input" name="q" value="{{ q }}" placeholder="Buscar OS, cliente ou serviço"></div>
+  <select class="input" name="responsavel" data-autosubmit>
+    <option value="">Responsável: Todos</option>
+    {% for t in tecnicos %}<option value="{{ t.id }}" {{ 'selected' if resp == t.id }}>Responsável: {{ t.nome }}</option>{% endfor %}
+  </select>
+  {% if modo == 'lista' %}
+  <select class="input" name="status" data-autosubmit>
+    <option value="">Status: Todos</option>
+    {% for k, par in STATUS_OS.items() %}<option value="{{ k }}" {{ 'selected' if status == k }}>Status: {{ par[0] }}</option>{% endfor %}
+  </select>
+  {% endif %}
+  {% if q or resp or status %}<a class="link" href="{{ url_for('ordens.lista', modo=modo) }}">Limpar filtros</a>{% endif %}
+  {% if modo != 'lista' %}<span class="info">Arraste os cartões para mudar o status</span>{% endif %}
+</form>
+
+{% if modo == 'lista' %}
+<div class="table-card"><div class="table-wrap"><table class="t">
+  <thead><tr><th>OS</th><th>Serviço</th><th>Cliente</th><th>Responsável</th><th>Abertura</th><th>Previsão</th><th class="num">Valor</th><th>Status</th></tr></thead>
+  <tbody>{% for o in ordens %}
+    <tr data-href="{{ url_for('ordens.detalhe', os_id=o.id) }}">
+      <td class="mono"><a href="{{ url_for('ordens.detalhe', os_id=o.id) }}">{{ codigo('OS', o.seq) }}</a></td>
+      <td style="font-weight:500">{{ o.titulo }}</td><td>{{ o.cliente }}</td><td>{{ o.responsavel or '—' }}</td>
+      <td>{{ o.abertura|data }}</td>
+      <td class="{{ 'red' if o.status != 'concluida' and o.previsao and o.previsao < hoje }}">{{ o.previsao|data }}</td>
+      <td class="num nowrap">{{ o.total|moeda }}</td><td>{{ badge(STATUS_OS[o.status]) }}</td></tr>
+  {% else %}<tr><td colspan="8" class="empty">Nenhuma OS encontrada.</td></tr>{% endfor %}</tbody>
+</table></div></div>
+{% else %}
+<div class="kanban" data-status-url="{{ url_for('ordens.mudar_status', os_id=0) }}">
+  {% set cores = {'aberta': 'var(--purple-dot)', 'andamento': 'var(--blue-dot)', 'aguardando': 'var(--amber-dot)', 'concluida': 'var(--green-dot)'} %}
+  {% for st, lista in colunas.items() %}
+  <div class="col" data-status="{{ st }}">
+    <div class="col-head"><span class="pt" style="background: {{ cores[st] }}"></span>{{ STATUS_OS[st][0] }}
+      <span class="n">{{ lista|length }}</span><span class="v">{{ lista|sum(attribute='total')|moeda }}</span></div>
+    {% for o in lista %}
+    <a class="kcard" draggable="true" data-id="{{ o.id }}" href="{{ url_for('ordens.detalhe', os_id=o.id) }}">
+      <div class="h"><span class="mono">{{ codigo('OS', o.seq) }}</span><b>{{ o.total|moeda }}</b></div>
+      <div class="tt">{{ o.titulo }}</div>
+      <div class="cl">{{ o.cliente }}</div>
+      <div class="f">
+        {% set atrasada = st != 'concluida' and o.previsao and o.previsao < hoje %}
+        <span class="dt {{ 'late' if atrasada }}" title="{{ 'Concluída em' if st == 'concluida' else 'Previsão' }}">{{ icon('cal') }} {{ (o.conclusao if st == 'concluida' else o.previsao)|data_curta }}</span>
+        {% if o.responsavel %}<span class="avatar xs" title="{{ o.responsavel }}">{{ o.responsavel|iniciais }}</span>{% endif %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

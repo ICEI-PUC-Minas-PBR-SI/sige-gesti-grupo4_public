@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon %}
+{% block title %}Relatórios{% endblock %}
+{% block crumbs %}<span class="atual">Relatórios</span>{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Relatórios</h1><p>Indicadores dos últimos 6 meses e exportações em planilha (CSV).</p></div>
+  <div class="actions">
+    <a class="btn" href="{{ url_for('financeiro.exportar', tipo='receber') }}">{{ icon('download') }} Contas a receber</a>
+    <a class="btn" href="{{ url_for('financeiro.exportar', tipo='pagar') }}">{{ icon('download') }} Contas a pagar</a>
+    <a class="btn" href="{{ url_for('relatorios.os_csv') }}">{{ icon('download') }} Ordens de serviço</a>
+    <a class="btn" href="{{ url_for('relatorios.estoque_csv') }}">{{ icon('download') }} Estoque</a>
+  </div>
+</div>
+
+<section class="card">
+  <h2 style="margin-bottom:6px">Fluxo de caixa realizado</h2>
+  <p class="muted small" style="margin:0 0 18px">Recebimentos e pagamentos efetivados por mês.
+    <span style="display:inline-flex; gap:14px; margin-left:12px"><span><span class="badge green" style="padding:2px 8px">Recebido</span></span><span><span class="badge red" style="padding:2px 8px">Pago</span></span></span></p>
+  <div class="table-wrap">
+  <table class="t">
+    <thead><tr><th>Mês</th><th style="width:40%"></th><th class="num">Recebido</th><th class="num">Pago</th><th class="num">Saldo</th><th class="num">OS concluídas</th><th class="num">Orçamentos</th></tr></thead>
+    <tbody>{% for l in linhas %}
+      <tr><td class="nowrap">{{ l.mes }}</td>
+        <td><div style="display:flex; flex-direction:column; gap:4px">
+          <span style="display:block; height:8px; border-radius:4px; background:var(--green-dot); width: {{ (100 * l.recebido / maior)|round(1) }}%"></span>
+          <span style="display:block; height:8px; border-radius:4px; background:var(--red-dot); opacity:.75; width: {{ (100 * l.pago / maior)|round(1) }}%"></span></div></td>
+        <td class="num nowrap green">{{ l.recebido|moeda }}</td><td class="num nowrap red">{{ l.pago|moeda }}</td>
+        <td class="num nowrap" style="font-weight:600">{{ l.saldo|moeda }}</td>
+        <td class="num">{{ l.os_concluidas }}</td><td class="num">{{ l.orcamentos }}</td></tr>
+    {% endfor %}</tbody>
+  </table>
+  </div>
+</section>
+
+<div class="cols-2" style="margin-top:22px; align-items:start">
+  <section class="card">
+    <h2 style="margin-bottom:14px">Conversão de orçamentos</h2>
+    {% set tot = conversao.total or 0 %}
+    <div class="kpis k3" style="margin:0">
+      <div class="kpi"><div class="label">Enviados</div><div class="valor">{{ tot }}</div></div>
+      <div class="kpi"><div class="label">Aprovados</div><div class="valor green">{{ conversao.aprovados or 0 }}</div><div class="sub">{{ ((100 * (conversao.aprovados or 0) / tot)|round|int) if tot else 0 }}%</div></div>
+      <div class="kpi"><div class="label">Recusados</div><div class="valor red">{{ conversao.recusados or 0 }}</div></div>
+    </div>
+  </section>
+  <section class="card">
+    <h2 style="margin-bottom:14px">OS por responsável</h2>
+    <table class="t"><thead><tr><th>Técnico</th><th class="num">OS</th><th class="num">Concluídas</th><th class="num">Faturado</th></tr></thead>
+      <tbody>{% for t in por_tecnico %}<tr><td>{{ t.nome }}</td><td class="num">{{ t.n }}</td><td class="num">{{ t.concluidas or 0 }}</td><td class="num nowrap">{{ t.valor|moeda }}</td></tr>{% endfor %}</tbody></table>
+  </section>
+  <section class="card">
+    <h2 style="margin-bottom:14px">Serviços mais faturados</h2>
+    <table class="t"><thead><tr><th>Serviço</th><th class="num">Qtd.</th><th class="num">Valor</th></tr></thead>
+      <tbody>{% for s in top_servicos %}<tr><td>{{ s.descricao }}</td><td class="num">{{ s.qtd|num }}</td><td class="num nowrap">{{ s.valor|moeda }}</td></tr>
+      {% else %}<tr><td colspan="3" class="empty">Sem dados.</td></tr>{% endfor %}</tbody></table>
+  </section>
+  <section class="card">
+    <h2 style="margin-bottom:14px">Peças mais usadas</h2>
+    <table class="t"><thead><tr><th>Peça</th><th class="num">Qtd.</th><th class="num">Valor</th></tr></thead>
+      <tbody>{% for s in top_pecas %}<tr><td>{{ s.descricao }}</td><td class="num">{{ s.qtd|num }}</td><td class="num nowrap">{{ s.valor|moeda }}</td></tr>
+      {% else %}<tr><td colspan="3" class="empty">Sem dados.</td></tr>{% endfor %}</tbody></table>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge, csrf %}
+{% set num = codigo('ORC', orc.seq) %}
+{% set st = status_orcamento(orc) %}
+{% block title %}{{ num }}{% endblock %}
+{% block crumbs %}<a href="{{ url_for('orcamentos.lista') }}">Orçamentos</a><span class="sep">›</span><span class="atual">{{ num }}</span>{% endblock %}
+{% macro form_status(novo, rotulo, classe='btn') -%}
+<form method="post" action="{{ url_for('orcamentos.mudar_status', orc_id=orc.id) }}">{{ csrf() }}
+  <input type="hidden" name="status" value="{{ novo }}"><button class="{{ classe }}">{{ rotulo|safe }}</button></form>
+{%- endmacro %}
+{% block content %}
+<div class="page-head">
+  <div class="titulo-det">
+    <div class="linha"><span class="mono muted">{{ num }}</span>{{ badge(STATUS_ORCAMENTO[st]) }}</div>
+    <h1>{{ orc.descricao }}</h1>
+    <div class="muted">Criado em {{ orc.criado_em|data }} · Válido até {{ orc.validade|data }}
+      {% if orc.status in ('rascunho', 'enviado') %}
+        {% if dias_validade < 0 %}<span class="red">Expirou há {{ -dias_validade }} dia(s)</span>
+        {% elif dias_validade <= 15 %}<span class="amber">Expira {{ 'hoje' if dias_validade == 0 else 'em ' ~ dias_validade ~ ' dia(s)' }}</span>{% endif %}
+      {% endif %}</div>
+  </div>
+  <div class="actions">
+    <a class="btn" href="{{ url_for('orcamentos.imprimir', orc_id=orc.id) }}" target="_blank">{{ icon('print') }} Imprimir / PDF</a>
+    {% if pode('orcamento') %}
+      {% if orc.status in ('rascunho', 'enviado', 'recusado') %}<a class="btn" href="{{ url_for('orcamentos.editar', orc_id=orc.id) }}">Editar</a>{% endif %}
+      {% if orc.status == 'rascunho' %}
+        {{ form_status('enviado', 'Marcar como enviado ao cliente', 'btn btn-primary') }}
+      {% elif st == 'enviado' %}
+        {{ form_status('recusado', 'Recusado', 'btn btn-danger') }}
+        {{ form_status('aprovado', icon('check') ~ ' Marcar como aprovado', 'btn btn-primary') }}
+      {% elif st == 'expirado' or orc.status == 'recusado' %}
+        {{ form_status('rascunho', 'Voltar para rascunho') }}
+      {% endif %}
+    {% endif %}
+    {% if orc.status == 'aprovado' %}
+      <button class="btn btn-primary" type="button" data-dialog="dlg-gerar-os">Gerar ordem de serviço</button>
+    {% elif os_row %}
+      <a class="btn btn-primary" href="{{ url_for('ordens.detalhe', os_id=os_row.id) }}">Ver {{ codigo('OS', os_row.seq) }} →</a>
+    {% endif %}
+  </div>
+</div>
+
+{% set etapas = [('rascunho', 'Rascunho'), ('enviado', 'Enviado ao cliente'), ('aprovado', 'Aprovado'), ('os', 'Ordem de serviço'), ('faturado', 'Faturado')] %}
+{% set ordem = {'rascunho': 0, 'enviado': 1, 'aprovado': 2, 'recusado': 2, 'os': 3, 'faturado': 4} %}
+{% set atual = ordem[orc.status] %}
+<div class="steps">
+  {% for k, nome in etapas %}
+    {% set i = loop.index0 %}
+    {% if orc.status == 'recusado' and k == 'aprovado' %}
+      <div class="step bad"><div class="top"><span class="c">×</span><span class="ln"></span></div><div class="nm">Recusado</div><div class="dt">{{ historico.get('recusado')|data }}</div></div>
+    {% else %}
+      {% set done = i < atual or (i == atual and orc.status in ('faturado',)) %}
+      <div class="step {{ 'done' if done else ('cur' if i == atual else '') }}">
+        <div class="top"><span class="c">{% if done %}✓{% else %}{{ i + 1 }}{% endif %}</span><span class="ln"></span></div>
+        <div class="nm">{{ nome }}</div>
+        {% if historico.get(k) %}<div class="dt">{{ historico[k]|data }}</div>{% endif %}
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+<div class="cols-main side-sm">
+  <section class="card">
+    <div class="card-head"><h2>Itens</h2><span class="muted">{{ itens|length }} {{ 'item' if itens|length == 1 else 'itens' }}</span></div>
+    <div class="table-wrap">
+    <table class="t">
+      <thead><tr><th>Descrição</th><th class="num">Qtd.</th><th class="num">Valor unitário</th><th class="num">Subtotal</th></tr></thead>
+      <tbody>
+      {% for i in itens %}
+        <tr><td><span class="tag {{ i.tipo }}">{{ {'servico': 'Serviço', 'peca': 'Peça', 'avulso': 'Avulso'}[i.tipo] }}</span> {{ i.descricao }}
+          {% if alertas.get(i.id) and orc.status in ('rascunho', 'enviado', 'aprovado') %}<div class="alerta-estoque red">{{ alertas[i.id] }}</div>{% endif %}</td>
+          <td class="num">{{ i.quantidade|num }}</td><td class="num nowrap">{{ i.valor_unitario|moeda }}</td>
+          <td class="num nowrap" style="font-weight:600">{{ (i.quantidade * i.valor_unitario)|moeda }}</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    </div>
+    <div class="tot">
+      <span class="l">Subtotal</span><span class="v">{{ subtotal|moeda }}</span>
+      <span class="l">Desconto</span><span class="v">{{ orc.desconto|moeda }}</span>
+      <span class="l" style="align-self:center; color:var(--ink); font-weight:500">Total</span><span class="v big">{{ orc.total|moeda }}</span>
+    </div>
+  </section>
+  <div class="stack">
+    <section class="card">
+      <div class="card-head"><h2>Cliente</h2><a class="link" href="{{ url_for('clientes.detalhe', cliente_id=cliente.id) }}">Ver cadastro →</a></div>
+      <div class="cel-cli" style="margin-bottom:16px"><span class="avatar">{{ cliente.nome|iniciais }}</span>
+        <div><div style="font-weight:500">{{ cliente.nome }}</div><div class="muted small">{{ cliente.documento|doc }}</div></div></div>
+      <dl class="def" style="grid-template-columns: 100px 1fr">
+        <dt>Contato</dt><dd>{{ cliente.contato or '—' }}</dd>
+        <dt>Telefone</dt><dd>{{ cliente.telefone|tel or '—' }}</dd>
+        <dt>E-mail</dt><dd>{{ cliente.email or '—' }}</dd>
+        {% if equip %}<dt>Equipamento</dt><dd>{{ equip.tipo }}{% if equip.marca_modelo %} · {{ equip.marca_modelo }}{% endif %}</dd>{% endif %}
+      </dl>
+    </section>
+    {% if orc.observacoes or orc.condicoes %}
+    <section class="card">
+      <h2 style="margin-bottom:12px">Observações</h2>
+      {% if orc.observacoes %}<p style="margin:0 0 10px; line-height:1.55; white-space:pre-line">{{ orc.observacoes }}</p>{% endif %}
+      {% if orc.condicoes %}<p class="muted small" style="margin:0">{{ orc.condicoes }}</p>{% endif %}
+    </section>
+    {% endif %}
+  </div>
+</div>
+
+{% if orc.status == 'aprovado' %}
+<dialog id="dlg-gerar-os">
+  <form method="post" action="{{ url_for('orcamentos.gerar_os', orc_id=orc.id) }}">{{ csrf() }}
+    <h2>Gerar ordem de serviço</h2>
+    <p class="muted">Cliente, equipamento, serviços e peças serão copiados do orçamento. As peças são baixadas do estoque agora.</p>
+    <div class="field"><label class="lbl">Responsável técnico</label>
+      <select class="input" name="responsavel_id">{% for t in tecnicos %}<option value="{{ t.id }}">{{ t.nome }}</option>{% endfor %}</select></div>
+    <div class="field"><label class="lbl">Previsão de entrega</label><input class="input" type="date" name="previsao" value="{{ previsao_padrao }}"></div>
+    <div class="acoes"><button type="button" class="btn" data-close>Cancelar</button><button class="btn btn-primary">Gerar OS</button></div>
+  </form>
+</dialog>
+{% endif %}
+{% endblock %}

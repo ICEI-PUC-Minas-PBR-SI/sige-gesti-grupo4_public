@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge %}
+{% block title %}Estoque{% endblock %}
+{% block crumbs %}<span class="atual">Estoque</span>{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Estoque</h1><p>Valor total em estoque: {{ kpi.valor|moeda }}</p></div>
+  {% if pode('estoque_editar') %}<a class="btn btn-primary" href="{{ url_for('estoque.novo') }}">+ Novo item</a>{% endif %}
+</div>
+<div class="kpis k3">
+  <a class="kpi" href="{{ url_for('estoque.lista') }}"><div class="label">Itens cadastrados</div><div class="valor">{{ kpi.n }}</div></a>
+  <a class="kpi" href="{{ url_for('estoque.lista', status='baixo') }}"><div class="label">Estoque baixo</div><div class="valor amber">{{ kpi.baixo or 0 }}</div></a>
+  <a class="kpi" href="{{ url_for('estoque.lista', status='zerado') }}"><div class="label">Sem estoque</div><div class="valor red">{{ kpi.zerado or 0 }}</div></a>
+</div>
+<div class="table-card">
+  <form class="toolbar" method="get">
+    {% if cat %}<input type="hidden" name="categoria" value="{{ cat }}">{% endif %}
+    <div class="search">{{ icon('busca') }}<input class="input" name="q" value="{{ q }}" placeholder="Buscar produto ou SKU"></div>
+    <select class="input" name="status" data-autosubmit>
+      <option value="">Status: Todos</option>
+      <option value="alerta" {{ 'selected' if status == 'alerta' }}>Status: Baixo ou sem estoque</option>
+      {% for k, par in STATUS_ESTOQUE.items() %}<option value="{{ k }}" {{ 'selected' if status == k }}>Status: {{ par[0] }}</option>{% endfor %}
+    </select>
+    {% if q or status or cat %}<a class="link" href="{{ url_for('estoque.lista') }}">Limpar filtros</a>{% endif %}
+    <span class="info">{{ itens|length }} de {{ kpi.n }}</span>
+  </form>
+  <div class="chips">
+    <a class="chip {{ 'on' if not cat }}" href="{{ url_for('estoque.lista', q=q or None, status=status or None) }}">Todas</a>
+    {% for c in categorias %}<a class="chip {{ 'on' if cat == c }}" href="{{ url_for('estoque.lista', categoria=c, q=q or None, status=status or None) }}">{{ c }}</a>{% endfor %}
+  </div>
+  <div class="table-wrap">
+  <table class="t">
+    <thead><tr><th>Produto</th><th>Categoria</th><th>SKU</th><th>Quantidade</th><th>Estoque mínimo</th><th>Status</th></tr></thead>
+    <tbody>
+    {% for i in itens %}
+      {% set st = status_estoque(i.quantidade, i.estoque_minimo) %}
+      {% set ref = [i.estoque_minimo * 2, 1]|max %}
+      <tr data-href="{{ url_for('estoque.detalhe', item_id=i.id) }}">
+        <td><a href="{{ url_for('estoque.detalhe', item_id=i.id) }}">{{ i.descricao }}</a><div class="sub">{{ i.preco|moeda }} / un.</div></td>
+        <td>{{ i.categoria }}</td>
+        <td class="mono">{{ i.sku }}</td>
+        <td class="nowrap"><span class="{{ {'ok': '', 'baixo': 'amber', 'zerado': 'red'}[st] }}" style="display:inline-block; min-width:28px; font-weight:500">{{ i.quantidade }}</span>
+          <span class="barra"><span class="{{ 'green' if st == 'ok' else 'amber' }}" style="width: {{ [100, (100 * i.quantidade / ref)|round|int]|min }}%"></span></span></td>
+        <td>{{ i.estoque_minimo }}</td>
+        <td>{{ badge(STATUS_ESTOQUE[st]) }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="6" class="empty">Nenhum item encontrado.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge, csrf %}
+{% set pref = 'CR' if tipo == 'receber' else 'CP' %}
+{% block title %}Financeiro{% endblock %}
+{% block crumbs %}<span class="atual">Financeiro</span>{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Financeiro</h1><p>Contas a receber geradas automaticamente a partir das ordens de serviço concluídas.</p></div>
+  <div class="actions">
+    <a class="btn" href="{{ url_for('financeiro.exportar', tipo=tipo, q=q or None, status=status or None, mes=mes or None) }}">{{ icon('download') }} Exportar CSV</a>
+    <button class="btn btn-primary" type="button" data-dialog="dlg-nova">+ Nova conta {{ 'a receber' if tipo == 'receber' else 'a pagar' }}</button>
+  </div>
+</div>
+<div class="kpis">
+  <a class="kpi" href="{{ url_for('financeiro.lista', tipo='receber', status='aberto') }}"><div class="label">A receber</div><div class="valor">{{ fin.a_receber|moeda }}</div><div class="sub">{{ fin.n_receber }} título(s) em aberto</div></a>
+  <a class="kpi" href="{{ url_for('financeiro.lista', tipo='pagar', status='aberto') }}"><div class="label">A pagar</div><div class="valor">{{ fin.a_pagar|moeda }}</div><div class="sub">{{ fin.n_pagar }} título(s) · {{ fin.n_pagar_atraso }} em atraso</div></a>
+  <a class="kpi" href="{{ url_for('financeiro.lista', tipo='receber', status='pago') }}"><div class="label">Recebido este mês</div><div class="valor green">{{ fin.recebido_mes|moeda }}</div><div class="sub">{{ fin.n_recebido_mes }} pagamento(s) em {{ fin.mes }}</div></a>
+  <a class="kpi" href="{{ url_for('financeiro.lista', tipo='receber', status='atraso') }}"><div class="label">Em atraso</div><div class="valor red">{{ fin.atraso_receber|moeda }}</div><div class="sub">{{ fin.n_receber_atraso }} título(s) de clientes</div></a>
+</div>
+
+<nav class="tabs">
+  <a href="{{ url_for('financeiro.lista', tipo='receber') }}" class="{{ 'on' if tipo == 'receber' }}">Contas a receber<span class="n">{{ n.receber }}</span></a>
+  <a href="{{ url_for('financeiro.lista', tipo='pagar') }}" class="{{ 'on' if tipo == 'pagar' }}">Contas a pagar<span class="n">{{ n.pagar }}</span></a>
+</nav>
+
+<div class="table-card">
+  <form class="toolbar" method="get">
+    <input type="hidden" name="tipo" value="{{ tipo }}">
+    <div class="search">{{ icon('busca') }}<input class="input" name="q" value="{{ q }}" placeholder="Buscar descrição, cliente ou fornecedor"></div>
+    <select class="input" name="status" data-autosubmit>
+      <option value="">Status: Todos</option>
+      <option value="aberto" {{ 'selected' if status == 'aberto' }}>Status: Em aberto</option>
+      {% for k, par in STATUS_CONTA.items() %}<option value="{{ k }}" {{ 'selected' if status == k }}>Status: {{ par[0] }}</option>{% endfor %}
+    </select>
+    <select class="input" name="mes" data-autosubmit>
+      <option value="">Vencimento: qualquer mês</option>
+      {% for m in meses %}<option value="{{ m }}" {{ 'selected' if mes == m }}>Vencimento: {{ m[5:7] }}/{{ m[:4] }}</option>{% endfor %}
+    </select>
+    {% if q or status or mes %}<a class="link" href="{{ url_for('financeiro.lista', tipo=tipo) }}">Limpar filtros</a>{% endif %}
+    <span class="info">Total filtrado: {{ total|moeda }}</span>
+  </form>
+  <div class="table-wrap">
+  <table class="t">
+    <thead><tr><th>Descrição</th><th>{{ 'Cliente' if tipo == 'receber' else 'Fornecedor' }}</th><th>Vencimento</th><th>Valor</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    {% for c in contas %}
+      {% set st = status_conta(c) %}
+      <tr>
+        <td>{{ c.descricao }}<div class="sub"><span class="mono">{{ codigo(pref, c.seq) }}</span>
+          {% if c.os_id %} · Origem: <a class="mono link-u" href="{{ url_for('ordens.detalhe', os_id=c.os_id) }}">{{ codigo('OS', c.os_seq) }}</a>{% endif %}
+          {% if c.categoria and tipo == 'pagar' %} · {{ c.categoria }}{% endif %}</div></td>
+        <td>{% if c.cliente_id %}<a href="{{ url_for('clientes.detalhe', cliente_id=c.cliente_id) }}">{{ c.cliente }}</a>{% else %}{{ c.fornecedor or '—' }}{% endif %}</td>
+        <td class="{{ 'red' if st == 'atraso' }}">{{ c.vencimento|data }}</td>
+        <td class="nowrap" style="font-weight:600">{{ c.valor|moeda }}</td>
+        <td>{{ badge(STATUS_CONTA[st]) }}</td>
+        <td class="right">
+          {% if c.pago_em %}<span class="muted small nowrap">Pago em {{ c.pago_em|data }}{% if c.forma_pagamento %} · {{ c.forma_pagamento }}{% endif %}</span>
+          {% else %}<button class="btn btn-sm" type="button" data-dialog="dlg-pagar"
+              data-action="{{ url_for('financeiro.pagar', conta_id=c.id) }}"
+              data-setdesc="{{ codigo(pref, c.seq) }} · {{ c.descricao }} · {{ c.valor|moeda }}"
+              data-setforma="{{ c.forma_pagamento or 'Pix' }}">Marcar como pago</button>{% endif %}
+        </td>
+      </tr>
+    {% else %}
+      <tr><td colspan="6" class="empty">Nenhuma conta encontrada com esses filtros.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<dialog id="dlg-pagar">
+  <form method="post">{{ csrf() }}
+    <input type="hidden" name="tipo" value="{{ tipo }}">
+    <input type="hidden" name="voltar" value="{{ request.full_path }}">
+    <h2>{{ 'Registrar recebimento' if tipo == 'receber' else 'Registrar pagamento' }}</h2>
+    <p class="muted"><span data-bind="desc"></span></p>
+    <div class="grid-2">
+      <div class="field"><label class="lbl">Data</label><input class="input" type="date" name="data" value="{{ hoje_iso() }}" max="{{ hoje_iso() }}" required></div>
+      <div class="field"><label class="lbl">Forma de pagamento</label>
+        <select class="input" name="forma_pagamento" data-bind="forma">{% for fp in FORMAS_PAGAMENTO %}<option>{{ fp }}</option>{% endfor %}</select></div>
+    </div>
+    <div class="acoes"><button type="button" class="btn" data-close>Cancelar</button><button class="btn btn-primary">Confirmar</button></div>
+  </form>
+</dialog>
+
+<dialog id="dlg-nova">
+  <form method="post" action="{{ url_for('financeiro.nova') }}">{{ csrf() }}
+    <input type="hidden" name="tipo" value="{{ tipo }}">
+    <h2>Nova conta {{ 'a receber' if tipo == 'receber' else 'a pagar' }}</h2>
+    <p class="muted">{{ 'Para cobranças que não vêm de uma OS (contratos, parcelas…).' if tipo == 'receber' else 'Despesas com fornecedores, aluguel, serviços e impostos.' }}</p>
+    <div class="field"><label class="lbl">Descrição</label><input class="input" name="descricao" required placeholder="{{ 'Contrato de suporte mensal' if tipo == 'receber' else 'Internet empresarial' }}"></div>
+    {% if tipo == 'receber' %}
+      <div class="field"><label class="lbl">Cliente</label><select class="input" name="cliente_id" required><option value="">Selecione…</option>
+        {% for cl in clientes %}<option value="{{ cl.id }}">{{ cl.nome }}</option>{% endfor %}</select></div>
+    {% else %}
+      <div class="grid-2">
+        <div class="field"><label class="lbl">Fornecedor</label><input class="input" name="fornecedor" required></div>
+        <div class="field"><label class="lbl">Categoria</label><select class="input" name="categoria">{% for ct in CATEGORIAS_PAGAR %}<option>{{ ct }}</option>{% endfor %}</select></div>
+      </div>
+    {% endif %}
+    <div class="grid-2">
+      <div class="field"><label class="lbl">Valor (R$)</label><input class="input" name="valor" inputmode="decimal" required placeholder="0,00"></div>
+      <div class="field"><label class="lbl">Vencimento</label><input class="input" type="date" name="vencimento" required></div>
+    </div>
+    <div class="acoes"><button type="button" class="btn" data-close>Cancelar</button><button class="btn btn-primary">Lançar conta</button></div>
+  </form>
+</dialog>
+{% endblock %}

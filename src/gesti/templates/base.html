@@ -1,0 +1,73 @@
+{% from "_macros.html" import icon, csrf %}<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>{% block title %}GesTI{% endblock %} · GesTI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body>
+{% set secao = request.blueprint %}
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="{{ url_for('dashboard.index') }}"><span class="brand-mark">G</span> GesTI</a>
+    <div class="empresa">
+      <span class="logo">{{ config.EMPRESA_SIGLA }}</span>
+      <div><small>Empresa</small><strong>{{ config.EMPRESA }}</strong></div>
+    </div>
+    <nav class="nav">
+      <a href="{{ url_for('dashboard.index') }}" class="{{ 'active' if secao == 'dashboard' }}">{{ icon('dashboard') }} Dashboard</a>
+      <a href="{{ url_for('clientes.lista') }}" class="{{ 'active' if secao == 'clientes' }}">{{ icon('clientes') }} Clientes</a>
+      <a href="{{ url_for('orcamentos.lista') }}" class="{{ 'active' if secao == 'orcamentos' }}">{{ icon('orcamentos') }} Orçamentos
+        {% if nav_orcamentos %}<span class="count">{{ nav_orcamentos }}</span>{% endif %}</a>
+      <a href="{{ url_for('ordens.lista') }}" class="{{ 'active' if secao == 'ordens' }}">{{ icon('os') }} Ordens de Serviço
+        {% if nav_os %}<span class="count">{{ nav_os }}</span>{% endif %}</a>
+      <a href="{{ url_for('estoque.lista') }}" class="{{ 'active' if secao == 'estoque' }}">{{ icon('estoque') }} Estoque</a>
+      {% if pode('financeiro') %}
+      <a href="{{ url_for('financeiro.lista') }}" class="{{ 'active' if secao == 'financeiro' }}">{{ icon('financeiro') }} Financeiro</a>
+      {% endif %}
+      {% if pode('relatorios') %}
+      <a href="{{ url_for('relatorios.index') }}" class="{{ 'active' if secao == 'relatorios' }}">{{ icon('relatorios') }} Relatórios</a>
+      {% endif %}
+      {% if pode('configuracoes') %}
+      <a href="{{ url_for('configuracoes.index') }}" class="{{ 'active' if secao == 'configuracoes' }}">{{ icon('config') }} Configurações</a>
+      {% endif %}
+    </nav>
+    <div class="user-box">
+      <span class="avatar round">{{ g.user.nome|iniciais }}</span>
+      <div><div>{{ g.user.nome }}</div><small>{{ PERFIS[g.user.perfil] }}</small></div>
+      <form method="post" action="{{ url_for('auth.logout') }}">{{ csrf() }}
+        <button class="btn btn-ghost btn-sm" title="Sair">{{ icon('sair') }}</button>
+      </form>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="icon-btn menu-btn" type="button" data-toggle-nav aria-label="Abrir menu">{{ icon('menu') }}</button>
+      <nav class="crumbs">{% block crumbs %}{% endblock %}</nav>
+      <form class="busca" action="{{ url_for('busca.index') }}" role="search">
+        {{ icon('busca') }}
+        <input class="input" id="busca-global" name="q" value="{{ request.args.get('q', '') if request.endpoint == 'busca.index' else '' }}" placeholder="Buscar clientes, OS, orçamentos…" autocomplete="off">
+        <kbd>Ctrl K</kbd>
+      </form>
+      <a class="icon-btn" href="{{ url_for('estoque.lista', status='alerta') }}" title="Alertas de estoque">
+        {{ icon('sino') }}{% if nav_alertas %}<span class="dot">{{ nav_alertas }}</span>{% endif %}
+      </a>
+    </header>
+    <main class="content">
+      {% with msgs = get_flashed_messages(with_categories=true) %}
+        {% for cat, msg in msgs %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

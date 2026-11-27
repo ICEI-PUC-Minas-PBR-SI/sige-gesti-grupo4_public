@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% from "_macros.html" import field_error, csrf %}
+{% block title %}{{ 'Novo item' if novo else 'Editar item' }}{% endblock %}
+{% block crumbs %}<a href="{{ url_for('estoque.lista') }}">Estoque</a><span class="sep">›</span><span class="atual">{{ 'Novo item' if novo else i.descricao }}</span>{% endblock %}
+{% block content %}
+<form method="post" class="form-narrow" novalidate>
+  {{ csrf() }}
+  <div class="page-head" style="margin-bottom:0"><div><h1>{{ 'Novo item' if novo else 'Editar item' }}</h1>
+    <p>Peças e equipamentos usados em orçamentos e ordens de serviço.</p></div></div>
+  <div class="form-section" style="margin-top:28px">
+    <div><h3>Identificação</h3><p>O SKU é gerado automaticamente se ficar em branco.</p></div>
+    <div>
+      <div class="field"><label class="lbl" for="descricao">Descrição *</label>
+        <input class="input {{ 'erro' if erros.descricao }}" id="descricao" name="descricao" value="{{ i.descricao or '' }}" placeholder="Ex.: SSD 480 GB Kingston A400">{{ field_error(erros, 'descricao') }}</div>
+      <div class="grid-3">
+        <div class="field"><label class="lbl" for="categoria">Categoria *</label>
+          <select class="input {{ 'erro' if erros.categoria }}" id="categoria" name="categoria"><option value="">Selecione…</option>
+            {% for c in categorias %}<option {{ 'selected' if i.categoria == c }}>{{ c }}</option>{% endfor %}</select>{{ field_error(erros, 'categoria') }}</div>
+        <div class="field"><label class="lbl" for="sku">SKU</label>
+          <input class="input mono {{ 'erro' if erros.sku }}" id="sku" name="sku" value="{{ i.sku or '' }}" placeholder="Gerado se vazio">{{ field_error(erros, 'sku') }}</div>
+        <div class="field"><label class="lbl" for="fornecedor">Fornecedor</label>
+          <input class="input" id="fornecedor" name="fornecedor" value="{{ i.fornecedor or '' }}"></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div><h3>Quantidades e preço</h3><p>{{ 'A quantidade inicial gera uma entrada no histórico.' if novo else 'Para mudar o saldo, use "Registrar movimentação" na ficha do item.' }}</p></div>
+    <div class="grid-3">
+      {% if novo %}
+      <div class="field"><label class="lbl" for="quantidade">Quantidade inicial</label>
+        <input class="input {{ 'erro' if erros.quantidade }}" id="quantidade" name="quantidade" type="number" min="0" value="{{ i.quantidade }}">{{ field_error(erros, 'quantidade') }}</div>
+      {% else %}
+      <div class="field"><span class="lbl">Saldo atual</span><div class="input" style="display:flex; align-items:center; background:var(--soft)">{{ i.quantidade }} un.</div></div>
+      {% endif %}
+      <div class="field"><label class="lbl" for="estoque_minimo">Estoque mínimo *</label>
+        <input class="input {{ 'erro' if erros.estoque_minimo }}" id="estoque_minimo" name="estoque_minimo" type="number" min="0" value="{{ i.estoque_minimo }}">{{ field_error(erros, 'estoque_minimo') }}</div>
+      <div class="field"><label class="lbl" for="preco">Preço de venda (R$) *</label>
+        <input class="input {{ 'erro' if erros.preco }}" id="preco" name="preco" inputmode="decimal" value="{{ ('%.2f'|format(i.preco))|replace('.', ',') if i.preco is number else '' }}" placeholder="0,00">{{ field_error(erros, 'preco') }}</div>
+    </div>
+    {% if novo %}<div></div><div class="field" style="max-width:420px"><label class="lbl" for="documento">Documento da entrada inicial</label>
+      <input class="input" id="documento" name="documento" placeholder="Ex.: NF 4590 · Kingston"></div>{% endif %}
+  </div>
+  <div class="form-actions">
+    <a class="btn" href="{{ url_for('estoque.lista') if novo else url_for('estoque.detalhe', item_id=i.id) }}">Cancelar</a>
+    <button class="btn btn-primary">Salvar item</button>
+  </div>
+</form>
+{% endblock %}
