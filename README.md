@@ -29,7 +29,7 @@ O GesTI reúne em um único ambiente o cadastro de clientes, orçamentos e orden
 | `docs/etapa1/` | Etapa 1: tema, título e introdução |
 | `docs/etapa2/` | Etapa 2: introdução, problemática, justificativa, objetivos e esboço do protótipo |
 | `prototipo/` | Protótipo navegável (`interativo/`) e capturas das telas (`telas/`) |
-| `src/` | Código-fonte do aplicativo (a partir da 4ª etapa) |
+| `src/` | Etapa 4: código-fonte do aplicativo (Python + Flask + SQLite) |
 
 ## Cronograma de entregas
 
@@ -44,6 +44,18 @@ O GesTI reúne em um único ambiente o cadastro de clientes, orçamentos e orden
 ## Protótipo
 
 Protótipo navegável e capturas das telas em [prototipo/](prototipo/README.md).
+
+## Aplicativo (Etapa 4)
+
+Versão inicial do sistema, desenvolvida a partir das telas do protótipo. Para rodar:
+
+```bash
+cd src
+python -m pip install -r requirements.txt
+python run.py
+```
+
+Abra http://127.0.0.1:5000 e entre com `rodrigo@nexahertz.com.br` / `gesti123`. As instruções completas, a estrutura do código, o modelo de dados e os requisitos atendidos estão em [src/README.md](src/README.md).
 
 ## Como colaborar
 

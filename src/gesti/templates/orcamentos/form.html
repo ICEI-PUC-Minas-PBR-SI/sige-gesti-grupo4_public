@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf %}
+{% set titulo = 'Editar ' ~ codigo('ORC', orc.seq) if orc else 'Novo orçamento' %}
+{% block title %}{{ titulo }}{% endblock %}
+{% block crumbs %}<a href="{{ url_for('orcamentos.lista') }}">Orçamentos</a><span class="sep">›</span><span class="atual">{{ titulo }}</span>{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>{{ titulo }}</h1><p>Selecione o cliente e adicione serviços e peças do estoque.</p></div>
+</div>
+<form method="post" id="orc-builder" novalidate>
+  {{ csrf() }}
+  <input type="hidden" name="itens_json" id="itens_json">
+  <script type="application/json" id="orc-dados">{{ dados|tojson }}</script>
+  <div class="cols-main">
+    <div class="stack">
+      <section class="card">
+        <h2 style="margin-bottom:18px"><span class="step-num">1</span>Cliente</h2>
+        <div class="add-row" style="grid-template-columns: 1fr auto">
+          <select class="input" name="cliente_id" id="cliente_id" required>
+            <option value="">Selecione um cliente cadastrado…</option>
+            {% for c in clientes %}<option value="{{ c.id }}" {{ 'selected' if v.cliente_id == c.id|string }}>{{ c.nome }}{% if c.documento %} · {{ c.documento|doc }}{% endif %}</option>{% endfor %}
+          </select>
+          <a class="btn" href="{{ url_for('clientes.novo', voltar='orcamento') }}">+ Novo cliente</a>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label class="lbl" for="descricao">Descrição do orçamento</label>
+            <input class="input" id="descricao" name="descricao" value="{{ v.descricao or '' }}" placeholder="Ex.: Manutenção de notebook" required>
+          </div>
+          <div class="field">
+            <label class="lbl" for="equipamento_id">Equipamento</label>
+            <select class="input" id="equipamento_id" name="equipamento_id" data-atual="{{ v.equipamento_id or '' }}"></select>
+            <div class="hint">Equipamentos já cadastrados para o cliente.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head"><h2><span class="step-num">2</span>Serviços e peças</h2><span class="muted" id="orc-qtd">0 itens</span></div>
+        <div class="add-row">
+          <select class="input" id="add-servico">
+            <option value="">+ Adicionar serviço</option>
+          </select>
+          <select class="input" id="add-peca">
+            <option value="">+ Adicionar peça do estoque</option>
+          </select>
+          <button type="button" class="btn btn-dashed" id="add-avulso">Item avulso</button>
+        </div>
+        <div class="item-row muted small" style="background:var(--soft); border-radius:10px; padding:12px 16px; border:0">
+          <span>Descrição</span><span class="right">Qtd.</span><span class="right vu">Valor unitário</span><span class="right">Subtotal</span><span></span>
+        </div>
+        <div id="orc-itens"></div>
+        <div class="empty" id="orc-vazio">Adicione serviços e peças usando os campos acima.</div>
+      </section>
+
+      <section class="card">
+        <div class="grid-2" style="grid-template-columns: 260px 1fr">
+          <div class="field">
+            <label class="lbl" for="validade_dias">Validade do orçamento</label>
+            <select class="input" id="validade_dias" name="validade_dias">
+              {% for d in validades %}<option value="{{ d }}" {{ 'selected' if v.validade_dias == d|string }}>{{ d }} dias</option>{% endfor %}
+            </select>
+            <div class="hint" id="valido-ate"></div>
+          </div>
+          <div class="field">
+            <label class="lbl" for="observacoes">Observações</label>
+            <textarea class="input" id="observacoes" name="observacoes" placeholder="Condições, prazo de execução, garantia…" style="min-height:90px">{{ v.observacoes or '' }}</textarea>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="card summary">
+      <h2 style="margin-bottom:8px">Resumo</h2>
+      <div class="row">Subtotal <b id="sum-subtotal">R$ 0,00</b></div>
+      <div class="row">Desconto (R$) <input class="input money-input" name="desconto" id="desconto" inputmode="decimal" value="{{ v.desconto or '' }}" placeholder="0,00"></div>
+      <div class="erro-msg red small" id="desc-erro" hidden>O desconto não pode ser maior que o subtotal.</div>
+      <div class="row total"><span>Total</span><b id="sum-total">R$ 0,00</b></div>
+      <button class="btn btn-primary btn-block" name="acao" value="enviar" style="margin-top:14px">{{ 'Salvar e enviar' if orc else 'Criar orçamento' }}</button>
+      <button class="btn btn-block" name="acao" value="rascunho" style="margin-top:10px">Salvar rascunho</button>
+      <p class="muted small" style="text-align:center">"{{ 'Salvar e enviar' if orc else 'Criar orçamento' }}" deixa o orçamento aguardando aprovação do cliente.</p>
+      <a class="btn btn-ghost btn-block" href="{{ url_for('orcamentos.detalhe', orc_id=orc.id) if orc else url_for('orcamentos.lista') }}">Cancelar</a>
+    </aside>
+  </div>
+</form>
+{% endblock %}
+{% block scripts %}
+<script>
+  (function () {
+    const d = JSON.parse(document.getElementById('orc-dados').textContent);
+    const s = document.getElementById('add-servico'), p = document.getElementById('add-peca');
+    d.servicos.forEach((x) => s.add(new Option(`${x.descricao} — ${GesTI.brl(x.preco)}`, x.id)));
+    d.pecas.forEach((x) => {
+      const aviso = x.quantidade <= 0 ? ' · SEM ESTOQUE' : (x.quantidade <= x.minimo ? ' · estoque baixo' : '');
+      p.add(new Option(`${x.descricao} (${x.sku}) — ${GesTI.brl(x.preco)} · ${x.quantidade} un.${aviso}`, x.id));
+    });
+  })();
+</script>
+{% endblock %}

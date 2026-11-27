@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge, csrf %}
+{% set num = codigo('OS', o.seq) %}
+{% set ro = '' if editavel else 'disabled' %}
+{% block title %}{{ num }}{% endblock %}
+{% block crumbs %}<a href="{{ url_for('ordens.lista') }}">Ordens de Serviço</a><span class="sep">›</span><span class="atual">{{ num }}</span>{% endblock %}
+{% block content %}
+<form id="os-form" method="post" action="{{ url_for('ordens.salvar', os_id=o.id) }}">{{ csrf() }}</form>
+
+<div class="page-head">
+  <div class="titulo-det">
+    <div class="linha"><span class="mono muted">{{ num }}</span>{{ badge(STATUS_OS[o.status]) }}
+      {% if orc %}<a class="link link-u" href="{{ url_for('orcamentos.detalhe', orc_id=orc.id) }}">Origem: {{ codigo('ORC', orc.seq) }}</a>{% else %}<span class="muted small">OS avulsa</span>{% endif %}</div>
+    <h1>{{ o.titulo }}</h1>
+    <div class="muted"><b style="color:var(--ink); font-weight:500">{{ o.cliente }}</b> · Aberta em {{ o.abertura|data }}{% if o.responsavel %} · {{ o.responsavel }}{% endif %}</div>
+  </div>
+  <div class="actions" style="align-items:center">
+    <div class="segmented">
+      {% for k, par in STATUS_OS.items() if k != 'concluida' %}
+        <form method="post" action="{{ url_for('ordens.mudar_status', os_id=o.id) }}">{{ csrf() }}<input type="hidden" name="status" value="{{ k }}">
+          <button class="{{ 'on' if o.status == k }}" {{ ro }}>{{ par[0] }}</button></form>
+      {% endfor %}
+      <button type="button" class="{{ 'on' if o.status == 'concluida' }}" {{ 'disabled' if o.status == 'concluida' else '' }} data-dialog="dlg-finalizar">Concluída</button>
+    </div>
+    {% if o.status != 'concluida' %}
+      <button type="button" class="btn btn-primary" data-dialog="dlg-finalizar">{{ icon('check') }} Finalizar ordem de serviço</button>
+    {% endif %}
+  </div>
+</div>
+
+{% if o.status == 'concluida' %}
+<div class="flash {{ 'aviso' if editavel else 'ok' }}">
+  OS concluída em {{ o.conclusao|data }}.
+  {% if editavel %}Como administrador, você pode alterar ou reabrir esta OS (mude a situação acima). Reabrir não duplica a conta a receber.
+  {% else %}Somente o administrador pode alterá-la.{% endif %}
+</div>
+{% endif %}
+
+<div class="cols-main side-sm">
+  <div class="stack">
+    <section class="card">
+      <h2 style="margin-bottom:16px">Equipamento</h2>
+      <div class="grid-4">
+        <div class="field"><label class="lbl">Tipo</label><input class="input" form="os-form" name="equip_tipo" value="{{ o.equip_tipo or '' }}" {{ ro }}></div>
+        <div class="field"><label class="lbl">Marca / modelo</label><input class="input" form="os-form" name="equip_modelo" value="{{ o.equip_modelo or '' }}" {{ ro }}></div>
+        <div class="field"><label class="lbl">Nº de série</label><input class="input" form="os-form" name="equip_serie" value="{{ o.equip_serie or '' }}" {{ ro }}></div>
+        <div class="field"><label class="lbl">Acessórios</label><input class="input" form="os-form" name="equip_acessorios" value="{{ o.equip_acessorios or '' }}" {{ ro }}></div>
+      </div>
+    </section>
+    <div class="cols-2">
+      <section class="card"><h2 style="margin-bottom:14px">Problema relatado</h2>
+        <textarea class="input" form="os-form" name="problema" placeholder="Defeito informado pelo cliente" {{ ro }}>{{ o.problema or '' }}</textarea></section>
+      <section class="card"><h2 style="margin-bottom:14px">Serviço realizado (laudo)</h2>
+        <textarea class="input" form="os-form" name="laudo" placeholder="Diagnóstico e o que foi feito" {{ ro }}>{{ o.laudo or '' }}</textarea></section>
+    </div>
+
+    {% set servs = itens|rejectattr('tipo', 'equalto', 'peca')|list %}
+    {% set pcs = itens|selectattr('tipo', 'equalto', 'peca')|list %}
+    <section class="card" id="itens">
+      <div class="card-head"><h2>Serviços</h2>
+        {% if editavel %}
+        <form method="post" action="{{ url_for('ordens.adicionar_item', os_id=o.id) }}" style="display:flex; gap:8px; flex:0 1 460px">{{ csrf() }}
+          <input type="hidden" name="tipo" value="servico">
+          <select class="input" name="servico_id" required style="height:40px"><option value="">+ Adicionar serviço</option>
+            {% for s in servicos %}<option value="{{ s.id }}">{{ s.descricao }} — {{ s.preco|moeda }}</option>{% endfor %}</select>
+          <input class="input" name="quantidade" value="1" style="width:64px; height:40px" inputmode="decimal">
+          <button class="btn btn-sm" style="height:40px">Adicionar</button>
+        </form>
+        {% endif %}
+      </div>
+      {% for i in servs %}
+      <div class="item-row">
+        <span>{{ i.descricao }}{% if i.tipo == 'avulso' %} <span class="tag avulso">Avulso</span>{% endif %}</span>
+        <span class="q">{{ i.quantidade|num }} ×</span><span class="vu">{{ i.valor_unitario|moeda }}</span>
+        <span class="st">{{ (i.quantidade * i.valor_unitario)|moeda }}</span>
+        {% if editavel %}<form method="post" action="{{ url_for('ordens.remover_item', os_id=o.id, item_id=i.id) }}">{{ csrf() }}<button class="x-btn" title="Remover">×</button></form>{% else %}<span></span>{% endif %}
+      </div>
+      {% else %}<div class="empty" style="padding:18px">Nenhum serviço lançado.</div>{% endfor %}
+      {% if editavel %}
+      <details style="margin-top:14px"><summary class="link" style="cursor:pointer">+ Item avulso (serviço fora do catálogo)</summary>
+        <form method="post" action="{{ url_for('ordens.adicionar_item', os_id=o.id) }}" class="add-box"><input type="hidden" name="tipo" value="avulso">{{ csrf() }}
+          <div class="linha" style="grid-template-columns: 1fr 80px 130px auto">
+            <input class="input" name="descricao" placeholder="Descrição" required>
+            <input class="input" name="quantidade" value="1" inputmode="decimal">
+            <input class="input" name="valor" placeholder="Valor (R$)" inputmode="decimal" required>
+            <button class="btn btn-primary">Adicionar</button>
+          </div></form>
+      </details>
+      {% endif %}
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Peças utilizadas</h2><span class="muted small">Baixa automática no estoque</span></div>
+      {% for i in pcs %}
+      <div class="item-row">
+        <span>{{ i.descricao }}<div class="muted small"><span class="mono">{{ i.sku }}</span> · Saldo atual: {{ i.saldo }} un.</div></span>
+        <span class="q">{{ i.quantidade|num }} ×</span><span class="vu">{{ i.valor_unitario|moeda }}</span>
+        <span class="st">{{ (i.quantidade * i.valor_unitario)|moeda }}</span>
+        {% if editavel %}<form method="post" action="{{ url_for('ordens.remover_item', os_id=o.id, item_id=i.id) }}">{{ csrf() }}<button class="x-btn" title="Remover e devolver ao estoque">×</button></form>{% else %}<span></span>{% endif %}
+      </div>
+      {% else %}<div class="empty" style="padding:18px">Nenhuma peça lançada.</div>{% endfor %}
+      {% if editavel %}
+      <form method="post" action="{{ url_for('ordens.adicionar_item', os_id=o.id) }}" class="add-box">{{ csrf() }}
+        <input type="hidden" name="tipo" value="peca">
+        <div class="linha">
+          <select class="input" name="item_id" required><option value="">Selecione um item do estoque…</option>
+            {% for p in pecas %}<option value="{{ p.id }}" {{ 'disabled' if p.quantidade == 0 }}>{{ p.descricao }} ({{ p.sku }}) — {{ p.preco|moeda }} · {{ p.quantidade }} un.{{ ' · sem estoque' if p.quantidade == 0 else (' · estoque baixo' if p.quantidade <= p.estoque_minimo else '') }}</option>{% endfor %}
+          </select>
+          <input class="input" name="quantidade" type="number" min="1" step="1" value="1">
+          <button class="btn btn-primary">+ Adicionar peça</button>
+        </div>
+        <div class="muted small" style="margin-top:10px">Os itens vêm do cadastro de estoque. A quantidade usada é baixada automaticamente.</div>
+      </form>
+      {% endif %}
+    </section>
+
+    <section class="card"><h2 style="margin-bottom:14px">Observações</h2>
+      <textarea class="input" form="os-form" name="observacoes" placeholder="Anotações internas" {{ ro }}>{{ o.observacoes or '' }}</textarea></section>
+
+    {% if editavel %}
+    <div style="display:flex; justify-content:flex-end"><button class="btn btn-primary" form="os-form">Salvar alterações</button></div>
+    {% endif %}
+  </div>
+
+  <div class="stack">
+    <section class="card">
+      <div class="card-head"><h2>Cliente</h2><a class="link" href="{{ url_for('clientes.detalhe', cliente_id=cliente.id) }}">Ver cadastro →</a></div>
+      <div class="cel-cli" style="margin-bottom:16px"><span class="avatar">{{ cliente.nome|iniciais }}</span>
+        <div><div style="font-weight:500">{{ cliente.nome }}</div><div class="muted small">{{ cliente.documento|doc }}</div></div></div>
+      <dl class="def" style="grid-template-columns: 90px 1fr">
+        <dt>Contato</dt><dd>{{ cliente.contato or '—' }}</dd>
+        <dt>Telefone</dt><dd>{{ cliente.telefone|tel or '—' }}</dd>
+        <dt>Cidade</dt><dd>{{ cliente.cidade ~ ', ' ~ cliente.uf if cliente.cidade else '—' }}</dd>
+      </dl>
+    </section>
+    <section class="card">
+      <h2 style="margin-bottom:16px">Responsável e datas</h2>
+      <div class="field"><label class="lbl">Responsável</label>
+        <select class="input" form="os-form" name="responsavel_id" {{ ro }}><option value="">A definir</option>
+          {% for t in tecnicos %}<option value="{{ t.id }}" {{ 'selected' if o.responsavel_id == t.id }}>{{ t.nome }}</option>{% endfor %}</select></div>
+      <dl class="def" style="grid-template-columns: 110px 1fr; align-items:center">
+        <dt>Abertura</dt><dd>{{ o.abertura|data }}</dd>
+        <dt>Previsão</dt><dd><input class="input" type="date" form="os-form" name="previsao" value="{{ o.previsao or '' }}" {{ ro }} style="height:38px"></dd>
+        <dt>Conclusão</dt><dd>{{ o.conclusao|data }}</dd>
+      </dl>
+    </section>
+    <section class="card summary" style="position:static">
+      <h2 style="margin-bottom:8px">Valores</h2>
+      <div class="row">Serviços <b>{{ tot.servicos|moeda }}</b></div>
+      <div class="row">Peças <b>{{ tot.pecas|moeda }}</b></div>
+      <div class="row">Desconto (R$) <input class="input money-input" form="os-form" name="desconto" inputmode="decimal" value="{{ '%.2f'|format(o.desconto)|replace('.', ',') }}" {{ ro }}></div>
+      <div class="row total"><span>Total</span><b>{{ tot.total|moeda }}</b></div>
+    </section>
+    {% if conta and pode('financeiro') %}
+    <section class="card">
+      <div class="card-head"><h2>Conta a receber</h2><a class="link" href="{{ url_for('financeiro.lista', tipo='receber', q=codigo('CR', conta.seq)) }}">Abrir →</a></div>
+      <dl class="def" style="grid-template-columns: 110px 1fr">
+        <dt>Título</dt><dd class="mono">{{ codigo('CR', conta.seq) }}</dd>
+        <dt>Valor</dt><dd>{{ conta.valor|moeda }}</dd>
+        <dt>Vencimento</dt><dd>{{ conta.vencimento|data }}</dd>
+        <dt>Situação</dt><dd>{{ badge(STATUS_CONTA[status_conta(conta)]) }}</dd>
+      </dl>
+    </section>
+    {% endif %}
+    <section class="card">
+      <h2 style="margin-bottom:10px">Histórico</h2>
+      <ul class="timeline">
+        {% for h in historico %}
+        <li><span class="dot {{ STATUS_OS[h.status][1] }}"></span>
+          <div><div class="t1">{{ STATUS_OS[h.status][0] }}</div><div class="t2">{{ h.nome or '—' }}</div></div>
+          <span class="d">{{ h.data|data }}</span></li>
+        {% endfor %}
+      </ul>
+    </section>
+  </div>
+</div>
+
+{% if o.status != 'concluida' %}
+<dialog id="dlg-finalizar" data-open-if="finalizar">
+  <form method="post" action="{{ url_for('ordens.finalizar', os_id=o.id) }}">{{ csrf() }}
+    <h2>Finalizar {{ num }}</h2>
+    <p class="muted">Ao concluir, o sistema gera a conta a receber de <b>{{ tot.total|moeda }}</b> para {{ o.cliente }}. Salve as alterações pendentes antes.</p>
+    <div class="field"><label class="lbl">Laudo final</label>
+      <textarea class="input" name="laudo" style="min-height:80px" placeholder="O que foi feito">{{ o.laudo or '' }}</textarea></div>
+    <div class="grid-2">
+      <div class="field"><label class="lbl">Forma de pagamento</label>
+        <select class="input" name="forma_pagamento" required>{% for fp in FORMAS_PAGAMENTO %}<option>{{ fp }}</option>{% endfor %}</select></div>
+      <div class="field"><label class="lbl">Vencimento</label><input class="input" type="date" name="vencimento" value="{{ vencimento_padrao }}" required></div>
+    </div>
+    <div class="acoes"><button type="button" class="btn" data-close>Cancelar</button><button class="btn btn-primary">{{ icon('check') }} Concluir OS</button></div>
+  </form>
+</dialog>
+{% endif %}
+{% endblock %}

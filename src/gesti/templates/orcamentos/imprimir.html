@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ numero }} · {{ cliente.nome }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body>
+<div class="print-bar">
+  <a class="btn" href="{{ url_for('orcamentos.detalhe', orc_id=orc.id) }}">← Voltar</a>
+  <button class="btn btn-primary" onclick="window.print()">Imprimir / salvar em PDF</button>
+</div>
+<article class="doc">
+  <header>
+    <div>
+      <div class="brand" style="padding:0 0 8px"><span class="brand-mark">G</span> {{ config.EMPRESA }}</div>
+      <div class="muted small">Serviços em Tecnologia da Informação</div>
+    </div>
+    <div class="right">
+      <h1>Orçamento</h1>
+      <div class="mono">{{ numero }}</div>
+      <div class="muted small">Emitido em {{ orc.criado_em|data }} · Válido até {{ orc.validade|data }}</div>
+    </div>
+  </header>
+  <div class="bloco">
+    <h3>Cliente</h3>
+    <div style="font-weight:600">{{ cliente.nome }}</div>
+    <div class="muted small">{{ cliente.documento|doc }}{% if cliente.contato %} · {{ cliente.contato }}{% endif %}{% if cliente.telefone %} · {{ cliente.telefone|tel }}{% endif %}{% if cliente.email %} · {{ cliente.email }}{% endif %}</div>
+    {% if cliente.endereco %}<div class="muted small">{{ cliente.endereco }}{% if cliente.numero %}, {{ cliente.numero }}{% endif %}{% if cliente.complemento %} — {{ cliente.complemento }}{% endif %} · {{ cliente.cidade }}/{{ cliente.uf }} · CEP {{ cliente.cep|cep }}</div>{% endif %}
+  </div>
+  <div class="bloco">
+    <h3>Descrição</h3>
+    <div>{{ orc.descricao }}</div>
+  </div>
+  <table class="t">
+    <thead><tr><th>Item</th><th class="num">Qtd.</th><th class="num">Valor unitário</th><th class="num">Subtotal</th></tr></thead>
+    <tbody>{% for i in itens %}
+      <tr><td>{{ i.descricao }}</td><td class="num">{{ i.quantidade|num }}</td><td class="num">{{ i.valor_unitario|moeda }}</td><td class="num">{{ (i.quantidade * i.valor_unitario)|moeda }}</td></tr>
+    {% endfor %}</tbody>
+  </table>
+  <div class="tot">
+    <span class="l">Subtotal</span><span class="v">{{ subtotal|moeda }}</span>
+    {% if orc.desconto %}<span class="l">Desconto</span><span class="v">- {{ orc.desconto|moeda }}</span>{% endif %}
+    <span class="l" style="color:var(--ink); font-weight:600">Total</span><span class="v big">{{ orc.total|moeda }}</span>
+  </div>
+  {% if orc.observacoes or orc.condicoes %}
+  <div class="bloco" style="margin-top:28px">
+    <h3>Condições e observações</h3>
+    {% if orc.observacoes %}<p style="white-space:pre-line; margin:0 0 6px">{{ orc.observacoes }}</p>{% endif %}
+    {% if orc.condicoes %}<p style="margin:0">{{ orc.condicoes }}</p>{% endif %}
+  </div>
+  {% endif %}
+  <p class="muted small" style="margin-top:40px">Para aprovar, responda a este orçamento informando o número {{ numero }}.</p>
+</article>
+</body>
+</html>

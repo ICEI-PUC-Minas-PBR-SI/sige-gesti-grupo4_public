@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge %}
+{% block title %}Clientes{% endblock %}
+{% block crumbs %}<span class="atual">Clientes</span>{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Clientes <span class="count">{{ total }}</span></h1>
+  {% if pode('editar_cliente') %}<a class="btn btn-primary" href="{{ url_for('clientes.novo') }}">+ Novo cliente</a>{% endif %}
+</div>
+
+<div class="table-card">
+  <form class="toolbar" method="get">
+    <div class="search">{{ icon('busca') }}<input class="input" name="q" value="{{ q }}" placeholder="Buscar por nome, CPF/CNPJ ou e-mail"></div>
+    <select class="input" name="status" data-autosubmit>
+      <option value="">Status: Todos</option>
+      <option value="ativo" {{ 'selected' if status == 'ativo' }}>Status: Ativo</option>
+      <option value="inativo" {{ 'selected' if status == 'inativo' }}>Status: Inativo</option>
+    </select>
+    <select class="input" name="cidade" data-autosubmit>
+      <option value="">Cidade: Todas</option>
+      {% for cid in cidades %}<option value="{{ cid }}" {{ 'selected' if cidade == cid }}>Cidade: {{ cid }}</option>{% endfor %}
+    </select>
+    {% if q or status or cidade %}<a class="link" href="{{ url_for('clientes.lista') }}">Limpar filtros</a>{% endif %}
+    <span class="info">{{ clientes|length }} de {{ total }}</span>
+  </form>
+  <div class="table-wrap">
+  <table class="t">
+    <thead><tr><th>Cliente</th><th>Contato</th><th>Último atendimento</th><th>OS abertas</th><th>Status</th></tr></thead>
+    <tbody>
+    {% for c in clientes %}
+      <tr data-href="{{ url_for('clientes.detalhe', cliente_id=c.id) }}">
+        <td><div class="cel-cli"><span class="avatar">{{ c.nome|iniciais }}</span>
+          <div><a href="{{ url_for('clientes.detalhe', cliente_id=c.id) }}">{{ c.nome }}</a>
+          <div class="sub">{{ c.documento|doc or 'Sem documento' }}{% if c.cidade %} · {{ c.cidade }}, {{ c.uf }}{% endif %}</div></div></div></td>
+        <td>{{ c.contato or '—' }}<div class="sub">{{ c.telefone|tel }}</div></td>
+        <td>{{ c.ultimo|data }}</td>
+        <td class="{{ 'muted-2' if not c.os_abertas }}">{{ c.os_abertas }}</td>
+        <td>{{ badge(STATUS_CLIENTE[c.status]) }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="5" class="empty">Nenhum cliente encontrado com esses filtros.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+{% endblock %}

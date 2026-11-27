@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% from "_macros.html" import badge, csrf %}
+{% block title %}{{ c.nome }}{% endblock %}
+{% block crumbs %}<a href="{{ url_for('clientes.lista') }}">Clientes</a><span class="sep">›</span><span class="atual">{{ c.nome }}</span>{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div class="cel-cli" style="align-items:flex-start">
+    <span class="avatar lg">{{ c.nome|iniciais }}</span>
+    <div class="titulo-det">
+      <div class="linha"><h1>{{ c.nome }}</h1>{{ badge(STATUS_CLIENTE[c.status]) }}</div>
+      <div class="muted">{{ c.documento|doc or 'Sem documento' }}{% if c.cidade %} · {{ c.cidade }}, {{ c.uf }}{% endif %} · Cliente desde {{ c.criado_em|data }}</div>
+    </div>
+  </div>
+  <div class="actions">
+    {% if pode('editar_cliente') %}
+    <a class="btn" href="{{ url_for('clientes.editar', cliente_id=c.id) }}">Editar cliente</a>
+    {% endif %}
+    {% if c.status == 'ativo' %}
+      <a class="btn" href="{{ url_for('ordens.nova', cliente=c.id) }}">+ Nova OS</a>
+      {% if pode('orcamento') %}<a class="btn btn-primary" href="{{ url_for('orcamentos.novo', cliente=c.id) }}">+ Novo orçamento</a>{% endif %}
+    {% endif %}
+  </div>
+</div>
+
+<nav class="tabs">
+  <a href="?aba=visao" class="{{ 'on' if aba == 'visao' }}">Visão geral</a>
+  <a href="?aba=orcamentos" class="{{ 'on' if aba == 'orcamentos' }}">Orçamentos<span class="n">{{ orcs|length }}</span></a>
+  <a href="?aba=os" class="{{ 'on' if aba == 'os' }}">Ordens de serviço<span class="n">{{ oss|length }}</span></a>
+  {% if pode('financeiro') %}<a href="?aba=financeiro" class="{{ 'on' if aba == 'financeiro' }}">Financeiro<span class="n">{{ contas|length }}</span></a>{% endif %}
+  <a href="?aba=equipamentos" class="{{ 'on' if aba == 'equipamentos' }}">Equipamentos<span class="n">{{ equipamentos|length }}</span></a>
+</nav>
+
+{% if aba == 'visao' %}
+<div class="kpis">
+  <div class="kpi"><div class="label">Orçamentos</div><div class="valor">{{ stats.orcamentos }}</div></div>
+  <div class="kpi"><div class="label">OS abertas</div><div class="valor">{{ stats.os_abertas }}</div></div>
+  <div class="kpi"><div class="label">Total recebido</div><div class="valor">{{ stats.recebido|moeda if pode('financeiro') else '—' }}</div></div>
+  <div class="kpi"><div class="label">Em aberto</div><div class="valor">{{ stats.aberto|moeda if pode('financeiro') else '—' }}</div></div>
+</div>
+<div class="cols-2" style="align-items:start">
+  <section class="card">
+    <h2 style="margin-bottom:14px">Histórico de relacionamento</h2>
+    <ul class="timeline">
+      {% for data, t1, t2, cor, link in timeline %}
+      <li><span class="dot {{ cor }}"></span>
+        <div>{% if link %}<a class="t1" href="{{ link }}">{{ t1 }}</a>{% else %}<div class="t1">{{ t1 }}</div>{% endif %}
+          {% if t2 %}<div class="t2">{{ t2 }}</div>{% endif %}</div>
+        <span class="d">{{ data|data }}</span></li>
+      {% endfor %}
+    </ul>
+  </section>
+  <div class="stack">
+    <section class="card">
+      <h2 style="margin-bottom:18px">Dados de contato</h2>
+      <dl class="def">
+        <dt>Contato</dt><dd>{{ c.contato or '—' }}</dd>
+        <dt>E-mail</dt><dd>{{ c.email or '—' }}</dd>
+        <dt>Telefone</dt><dd>{{ c.telefone|tel or '—' }}</dd>
+        <dt>Endereço</dt><dd>{% if c.endereco %}{{ c.endereco }}{% if c.numero %}, {{ c.numero }}{% endif %}{% if c.complemento %} — {{ c.complemento }}{% endif %}{% else %}—{% endif %}</dd>
+        <dt>Cidade</dt><dd>{{ c.cidade ~ ', ' ~ c.uf if c.cidade else '—' }}</dd>
+        <dt>CEP</dt><dd>{{ c.cep|cep or '—' }}</dd>
+      </dl>
+      {% if c.anotacoes %}<p class="muted" style="margin:18px 0 0; white-space:pre-line">{{ c.anotacoes }}</p>{% endif %}
+    </section>
+    {% if pode('editar_cliente') %}
+    <section class="card">
+      <h2 style="margin-bottom:10px">Situação do cadastro</h2>
+      <p class="muted small" style="margin:0 0 16px">Clientes com orçamentos, OS ou lançamentos não são excluídos, apenas inativados (RN-07).</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap">
+        <form method="post" action="{{ url_for('clientes.alternar_status', cliente_id=c.id) }}">{{ csrf() }}
+          <button class="btn btn-sm">{{ 'Inativar cliente' if c.status == 'ativo' else 'Reativar cliente' }}</button></form>
+        {% if g.user.perfil == 'admin' %}
+          <form method="post" action="{{ url_for('clientes.excluir', cliente_id=c.id) }}" data-confirm="Clique de novo para excluir">{{ csrf() }}
+            <button class="btn btn-sm btn-danger">Excluir</button></form>
+          {% if c.status == 'inativo' %}
+          <form method="post" action="{{ url_for('clientes.anonimizar', cliente_id=c.id) }}" data-confirm="Clique de novo para anonimizar">{{ csrf() }}
+            <button class="btn btn-sm btn-danger" title="LGPD: remove os dados pessoais e mantém o histórico">Anonimizar (LGPD)</button></form>
+          {% endif %}
+        {% endif %}
+      </div>
+    </section>
+    {% endif %}
+  </div>
+</div>
+
+{% elif aba == 'orcamentos' %}
+<div class="table-card"><div class="table-wrap"><table class="t">
+  <thead><tr><th>Orçamento</th><th>Descrição</th><th>Valor</th><th>Data</th><th>Validade</th><th>Status</th></tr></thead>
+  <tbody>{% for o in orcs %}
+    <tr data-href="{{ url_for('orcamentos.detalhe', orc_id=o.id) }}"><td class="mono">{{ codigo('ORC', o.seq) }}</td><td>{{ o.descricao }}</td>
+      <td>{{ o.total|moeda }}</td><td>{{ o.criado_em|data }}</td><td>{{ o.validade|data }}</td><td>{{ badge(STATUS_ORCAMENTO[status_orcamento(o)]) }}</td></tr>
+  {% else %}<tr><td colspan="6" class="empty">Nenhum orçamento para este cliente.</td></tr>{% endfor %}</tbody>
+</table></div></div>
+
+{% elif aba == 'os' %}
+<div class="table-card"><div class="table-wrap"><table class="t">
+  <thead><tr><th>OS</th><th>Serviço</th><th>Responsável</th><th>Abertura</th><th>Valor</th><th>Status</th></tr></thead>
+  <tbody>{% for o in oss %}
+    <tr data-href="{{ url_for('ordens.detalhe', os_id=o.id) }}"><td class="mono">{{ codigo('OS', o.seq) }}</td><td>{{ o.titulo }}</td>
+      <td>{{ o.responsavel or '—' }}</td><td>{{ o.abertura|data }}</td><td>{{ o.total|moeda }}</td><td>{{ badge(STATUS_OS[o.status]) }}</td></tr>
+  {% else %}<tr><td colspan="6" class="empty">Nenhuma ordem de serviço para este cliente.</td></tr>{% endfor %}</tbody>
+</table></div></div>
+
+{% elif aba == 'financeiro' and pode('financeiro') %}
+<div class="table-card"><div class="table-wrap"><table class="t">
+  <thead><tr><th>Descrição</th><th>Vencimento</th><th>Valor</th><th>Status</th><th></th></tr></thead>
+  <tbody>{% for x in contas %}
+    <tr><td>{{ x.descricao }}<div class="sub mono">{{ codigo('CR', x.seq) }}</div></td><td>{{ x.vencimento|data }}</td>
+      <td>{{ x.valor|moeda }}</td><td>{{ badge(STATUS_CONTA[status_conta(x)]) }}</td>
+      <td class="muted small">{% if x.pago_em %}Pago em {{ x.pago_em|data }}{% endif %}</td></tr>
+  {% else %}<tr><td colspan="5" class="empty">Nenhum lançamento financeiro para este cliente.</td></tr>{% endfor %}</tbody>
+</table></div></div>
+
+{% elif aba == 'equipamentos' %}
+<div class="cols-main side-sm">
+  <div class="table-card"><div class="table-wrap"><table class="t">
+    <thead><tr><th>Tipo</th><th>Marca / modelo</th><th>Nº de série</th><th>Cadastrado em</th></tr></thead>
+    <tbody>{% for e in equipamentos %}
+      <tr><td>{{ e.tipo }}</td><td>{{ e.marca_modelo or '—' }}</td><td class="mono">{{ e.numero_serie or '—' }}</td><td>{{ e.criado_em|data }}</td></tr>
+    {% else %}<tr><td colspan="4" class="empty">Nenhum equipamento cadastrado.</td></tr>{% endfor %}</tbody>
+  </table></div></div>
+  <form class="card" method="post" action="{{ url_for('clientes.novo_equipamento', cliente_id=c.id) }}">{{ csrf() }}
+    <h2 style="margin-bottom:6px">Adicionar equipamento</h2>
+    <p class="muted small" style="margin:0 0 18px">Fica disponível para novos orçamentos e OS deste cliente.</p>
+    <div class="field"><label class="lbl">Tipo *</label><input class="input" name="tipo" placeholder="Notebook, Desktop, Impressora…" required></div>
+    <div class="field"><label class="lbl">Marca / modelo</label><input class="input" name="marca_modelo" placeholder="Dell Inspiron 15 3520"></div>
+    <div class="field"><label class="lbl">Nº de série</label><input class="input" name="numero_serie"></div>
+    <button class="btn btn-primary btn-block">Adicionar</button>
+  </form>
+</div>
+{% endif %}
+{% endblock %}

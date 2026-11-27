@@ -1,0 +1,38 @@
+{% from "_macros.html" import csrf %}<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrar · GesTI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body>
+<div class="login-wrap">
+  <form class="login" method="post">
+    {{ csrf() }}
+    <div class="brand"><span class="brand-mark">G</span> GesTI</div>
+    <h1>Entrar</h1>
+    <p class="muted" style="margin:0 0 24px">Gestão integrada de clientes, orçamentos, OS, estoque e financeiro.</p>
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in msgs %}<div class="flash {{ cat }}">{{ msg }}</div>{% endfor %}
+    {% endwith %}
+    <div class="field">
+      <label class="lbl" for="email">E-mail</label>
+      <input class="input" id="email" name="email" type="email" value="{{ email }}" required autofocus autocomplete="username">
+    </div>
+    <div class="field">
+      <label class="lbl" for="senha">Senha</label>
+      <input class="input" id="senha" name="senha" type="password" required autocomplete="current-password">
+    </div>
+    <button class="btn btn-primary btn-block">Entrar</button>
+    <div class="demo">
+      <b>Acesso de demonstração</b> (senha <span class="mono">gesti123</span>)<br>
+      Administrador: rodrigo@nexahertz.com.br<br>
+      Técnico: ana@nexahertz.com.br<br>
+      Atendente: juliana@nexahertz.com.br
+    </div>
+  </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% from "_macros.html" import icon, badge %}
+{% block title %}Orçamentos{% endblock %}
+{% block crumbs %}<span class="atual">Orçamentos</span>{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Orçamentos <span class="count">{{ total }}</span></h1>
+    <p>{{ aguardando.n }} aguardando aprovação · {{ aguardando.v|moeda }}</p>
+  </div>
+  {% if pode('orcamento') %}<a class="btn btn-primary" href="{{ url_for('orcamentos.novo') }}">+ Novo orçamento</a>{% endif %}
+</div>
+<div class="table-card">
+  <form class="toolbar" method="get">
+    <div class="search">{{ icon('busca') }}<input class="input" name="q" value="{{ q }}" placeholder="Buscar orçamento ou cliente"></div>
+    <select class="input" name="status" data-autosubmit>
+      <option value="">Status: Todos</option>
+      {% for k, par in STATUS_ORCAMENTO.items() %}<option value="{{ k }}" {{ 'selected' if status == k }}>Status: {{ par[0] }}</option>{% endfor %}
+    </select>
+    <select class="input" name="periodo" data-autosubmit>
+      <option value="0">Qualquer data</option>
+      {% for d in [7, 30, 90] %}<option value="{{ d }}" {{ 'selected' if periodo == d }}>Últimos {{ d }} dias</option>{% endfor %}
+    </select>
+    {% if q or status or periodo %}<a class="link" href="{{ url_for('orcamentos.lista') }}">Limpar filtros</a>{% endif %}
+    <span class="info">{{ orcs|length }} de {{ total }}</span>
+  </form>
+  <div class="table-wrap">
+  <table class="t">
+    <thead><tr><th>Orçamento</th><th>Cliente</th><th>Descrição</th><th>Valor</th><th>Data</th><th>Validade</th><th>Status</th></tr></thead>
+    <tbody>
+    {% for o in orcs %}
+      <tr data-href="{{ url_for('orcamentos.detalhe', orc_id=o.id) }}">
+        <td class="mono"><a href="{{ url_for('orcamentos.detalhe', orc_id=o.id) }}">{{ codigo('ORC', o.seq) }}</a></td>
+        <td style="font-weight:500">{{ o.cliente }}</td>
+        <td>{{ o.descricao }}</td>
+        <td class="nowrap">{{ o.total|moeda }}</td>
+        <td>{{ o.criado_em|data }}</td>
+        <td>{{ o.validade|data }}</td>
+        <td>{{ badge(STATUS_ORCAMENTO[status_orcamento(o)]) }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="7" class="empty">Nenhum orçamento encontrado.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+{% endblock %}

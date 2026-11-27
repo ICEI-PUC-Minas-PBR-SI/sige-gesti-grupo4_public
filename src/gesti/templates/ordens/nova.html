@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% from "_macros.html" import csrf %}
+{% block title %}Nova ordem de serviço{% endblock %}
+{% block crumbs %}<a href="{{ url_for('ordens.lista') }}">Ordens de Serviço</a><span class="sep">›</span><span class="atual">Nova OS</span>{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div><h1>Nova ordem de serviço</h1>
+    <p>OS avulsa, sem orçamento. Para OS a partir de orçamento, aprove o orçamento e use "Gerar ordem de serviço".</p></div>
+</div>
+<form method="post" class="form-narrow" novalidate>
+  {{ csrf() }}
+  <script type="application/json" id="os-dados">{{ equips|tojson }}</script>
+  <div class="form-section">
+    <div><h3>Cliente e serviço</h3><p>O cliente precisa estar cadastrado e ativo.</p></div>
+    <div>
+      <div class="grid-2">
+        <div class="field"><label class="lbl" for="os-cliente">Cliente *</label>
+          <select class="input" name="cliente_id" id="os-cliente" required>
+            <option value="">Selecione…</option>
+            {% for c in clientes %}<option value="{{ c.id }}" {{ 'selected' if v.cliente_id == c.id|string }}>{{ c.nome }}</option>{% endfor %}
+          </select></div>
+        <div class="field"><label class="lbl" for="titulo">Serviço *</label>
+          <input class="input" id="titulo" name="titulo" value="{{ v.titulo or '' }}" placeholder="Ex.: Troca de SSD 480 GB" required></div>
+      </div>
+      <div class="grid-2">
+        <div class="field"><label class="lbl">Responsável técnico</label>
+          <select class="input" name="responsavel_id"><option value="">A definir</option>
+            {% for t in tecnicos %}<option value="{{ t.id }}" {{ 'selected' if v.responsavel_id == t.id|string }}>{{ t.nome }}</option>{% endfor %}
+          </select></div>
+        <div class="field"><label class="lbl">Previsão de entrega</label>
+          <input class="input" type="date" name="previsao" value="{{ v.previsao or '' }}" min="{{ hoje_iso() }}"></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div><h3>Equipamento recebido</h3><p>Escolha um equipamento já cadastrado do cliente ou informe um novo — ele fica salvo para os próximos atendimentos.</p></div>
+    <div>
+      <div class="field"><label class="lbl">Equipamento do cliente</label><select class="input" id="os-equip" name="equipamento_id"></select></div>
+      <div class="grid-4">
+        <div class="field"><label class="lbl">Tipo</label><input class="input" name="equip_tipo" value="{{ v.equip_tipo or '' }}" placeholder="Notebook"></div>
+        <div class="field"><label class="lbl">Marca / modelo</label><input class="input" name="equip_modelo" value="{{ v.equip_modelo or '' }}"></div>
+        <div class="field"><label class="lbl">Nº de série</label><input class="input" name="equip_serie" value="{{ v.equip_serie or '' }}"></div>
+        <div class="field"><label class="lbl">Acessórios</label><input class="input" name="equip_acessorios" value="{{ v.equip_acessorios or '' }}" placeholder="Carregador"></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div><h3>Problema relatado</h3><p>O defeito descrito pelo cliente no recebimento.</p></div>
+    <div class="field"><textarea class="input" name="problema" placeholder="Ex.: Notebook muito lento, travando ao abrir programas.">{{ v.problema or '' }}</textarea></div>
+  </div>
+  <div class="form-actions">
+    <a class="btn" href="{{ url_for('ordens.lista') }}">Cancelar</a>
+    <button class="btn btn-primary">Abrir ordem de serviço</button>
+  </div>
+</form>
+{% endblock %}
